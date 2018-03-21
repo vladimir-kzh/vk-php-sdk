@@ -3,7 +3,7 @@
 namespace VK\Actions;
 
 use VK\Actions\Enums\StoriesGetPhotoUploadServerLinkText;
-use VK\Client\VKApiRequest;
+use VK\Client\VKHttpClient;
 use VK\Exceptions\Api\VKApiBlockedException;
 use VK\Exceptions\VKApiException;
 use VK\Exceptions\Api\VKApiIncorrectReplyPrivacyException;
@@ -14,22 +14,22 @@ use VK\Exceptions\VKClientException;
 class Stories {
 
     /**
-     * @var VKApiRequest
+     * @var VKHttpClient
      */
-    private $request;
+    private $http;
 
     /**
      * Stories constructor.
-     * @param VKApiRequest $request
+     * @param VKHttpClient $http
      */
-    public function __construct(VKApiRequest $request) {
-        $this->request = $request;
+    public function __construct(VKHttpClient $http) {
+        $this->http = $http;
     }
 
     /**
      * Allows to hide stories from chosen sources from current user's feed.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - array owners_ids: List of sources IDs
      *
@@ -38,14 +38,14 @@ class Stories {
      * @throws VKApiException in case of API error
      *
      */
-    public function banOwner(string $access_token, array $params = array()) {
-        return $this->request->post('stories.banOwner', $access_token, $params);
+    public function banOwner(array $params = array()) {
+        return $this->http->post('stories.banOwner', $params);
     }
 
     /**
      * Allows to delete story.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: Story owner's ID. Current user id is used by default.
      *      - integer story_id: Story ID.
@@ -55,14 +55,14 @@ class Stories {
      * @throws VKApiException in case of API error
      *
      */
-    public function delete(string $access_token, array $params = array()) {
-        return $this->request->post('stories.delete', $access_token, $params);
+    public function delete(array $params = array()) {
+        return $this->http->post('stories.delete', $params);
     }
 
     /**
      * Returns stories available for current user.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: Owner ID.
      *      - boolean extended: '1' — to return additional fields for users and communities. Default value is 0.
@@ -72,14 +72,14 @@ class Stories {
      * @throws VKApiException in case of API error
      *
      */
-    public function get(string $access_token, array $params = array()) {
-        return $this->request->post('stories.get', $access_token, $params);
+    public function get(array $params = array()) {
+        return $this->http->post('stories.get', $params);
     }
 
     /**
      * Returns list of sources hidden from current user's feed.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - array fields: Additional fields to return
      *      - boolean extended: '1' — to return additional fields for users and communities. Default value is 0.
@@ -89,14 +89,14 @@ class Stories {
      * @throws VKApiException in case of API error
      *
      */
-    public function getBanned(string $access_token, array $params = array()) {
-        return $this->request->post('stories.getBanned', $access_token, $params);
+    public function getBanned(array $params = array()) {
+        return $this->http->post('stories.getBanned', $params);
     }
 
     /**
      * Returns story by its ID.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - array stories: Stories IDs separated by commas. Use format {owner_id}+'_'+{story_id}, for example,
      *        12345_54331.
@@ -109,14 +109,14 @@ class Stories {
      * @throws VKApiStoryExpiredException Story has already expired
      *
      */
-    public function getById(string $access_token, array $params = array()) {
-        return $this->request->post('stories.getById', $access_token, $params);
+    public function getById(array $params = array()) {
+        return $this->http->post('stories.getById', $params);
     }
 
     /**
      * Returns URL for uploading a story with photo.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - boolean add_to_news: 1 — to add the story to friend's feed.
      *      - array user_ids: List of users IDs who can see the story.
@@ -135,14 +135,14 @@ class Stories {
      * @throws VKApiIncorrectReplyPrivacyException Incorrect reply privacy
      *
      */
-    public function getPhotoUploadServer(string $access_token, array $params = array()) {
-        return $this->request->post('stories.getPhotoUploadServer', $access_token, $params);
+    public function getPhotoUploadServer(array $params = array()) {
+        return $this->http->post('stories.getPhotoUploadServer', $params);
     }
 
     /**
      * Returns replies to the story.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: Story owner ID.
      *      - integer story_id: Story ID.
@@ -155,14 +155,14 @@ class Stories {
      * @throws VKApiException in case of API error
      *
      */
-    public function getReplies(string $access_token, array $params = array()) {
-        return $this->request->post('stories.getReplies', $access_token, $params);
+    public function getReplies(array $params = array()) {
+        return $this->http->post('stories.getReplies', $params);
     }
 
     /**
      * Returns stories available for current user.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: Story owner ID.
      *      - integer story_id: Story ID.
@@ -172,14 +172,14 @@ class Stories {
      * @throws VKApiException in case of API error
      *
      */
-    public function getStats(string $access_token, array $params = array()) {
-        return $this->request->post('stories.getStats', $access_token, $params);
+    public function getStats(array $params = array()) {
+        return $this->http->post('stories.getStats', $params);
     }
 
     /**
      * Allows to receive URL for uploading story with video.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - boolean add_to_news: 1 — to add the story to friend's feed.
      *      - array user_ids: List of users IDs who can see the story.
@@ -197,14 +197,14 @@ class Stories {
      * @throws VKApiIncorrectReplyPrivacyException Incorrect reply privacy
      *
      */
-    public function getVideoUploadServer(string $access_token, array $params = array()) {
-        return $this->request->post('stories.getVideoUploadServer', $access_token, $params);
+    public function getVideoUploadServer(array $params = array()) {
+        return $this->http->post('stories.getVideoUploadServer', $params);
     }
 
     /**
      * Returns a list of story viewers.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: Story owner ID.
      *      - integer story_id: Story ID.
@@ -218,14 +218,14 @@ class Stories {
      * @throws VKApiStoryExpiredException Story has already expired
      *
      */
-    public function getViewers(string $access_token, array $params = array()) {
-        return $this->request->post('stories.getViewers', $access_token, $params);
+    public function getViewers(array $params = array()) {
+        return $this->http->post('stories.getViewers', $params);
     }
 
     /**
      * Hides all replies in the last 24 hours from the user to current user's stories.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: ID of the user whose replies should be hidden.
      *
@@ -234,14 +234,14 @@ class Stories {
      * @throws VKApiException in case of API error
      *
      */
-    public function hideAllReplies(string $access_token, array $params = array()) {
-        return $this->request->post('stories.hideAllReplies', $access_token, $params);
+    public function hideAllReplies(array $params = array()) {
+        return $this->http->post('stories.hideAllReplies', $params);
     }
 
     /**
      * Hides the reply to the current user's story.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: ID of the user whose replies should be hidden.
      *      - integer story_id: Story ID.
@@ -252,14 +252,14 @@ class Stories {
      * @throws VKApiException in case of API error
      *
      */
-    public function hideReply(string $access_token, array $params = array()) {
-        return $this->request->post('stories.hideReply', $access_token, $params);
+    public function hideReply(array $params = array()) {
+        return $this->http->post('stories.hideReply', $params);
     }
 
     /**
      * Allows to show stories from hidden sources in current user's feed.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - array owners_ids: List of hidden sources to show stories from.
      *
@@ -268,7 +268,7 @@ class Stories {
      * @throws VKApiException in case of API error
      *
      */
-    public function unbanOwner(string $access_token, array $params = array()) {
-        return $this->request->post('stories.unbanOwner', $access_token, $params);
+    public function unbanOwner(array $params = array()) {
+        return $this->http->post('stories.unbanOwner', $params);
     }
 }

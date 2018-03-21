@@ -5,29 +5,29 @@ namespace VK\Actions;
 use VK\Actions\Enums\BoardGetCommentsSort;
 use VK\Actions\Enums\BoardGetTopicsOrder;
 use VK\Actions\Enums\BoardGetTopicsPreview;
-use VK\Client\VKApiRequest;
+use VK\Client\VKHttpClient;
 use VK\Exceptions\VKApiException;
 use VK\Exceptions\VKClientException;
 
 class Board {
 
     /**
-     * @var VKApiRequest
+     * @var VKHttpClient
      */
-    private $request;
+    private $http;
 
     /**
      * Board constructor.
-     * @param VKApiRequest $request
+     * @param VKHttpClient $http
      */
-    public function __construct(VKApiRequest $request) {
-        $this->request = $request;
+    public function __construct(VKHttpClient $http) {
+        $this->http = $http;
     }
 
     /**
      * Returns a list of topics on a community's discussion board.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer group_id: ID of the community that owns the discussion board.
      *      - array topic_ids: IDs of topics to be returned (100 maximum). By default, all topics are returned. If
@@ -52,14 +52,14 @@ class Board {
      * @throws VKApiException in case of API error
      *
      */
-    public function getTopics(string $access_token, array $params = array()) {
-        return $this->request->post('board.getTopics', $access_token, $params);
+    public function getTopics(array $params = array()) {
+        return $this->http->post('board.getTopics', $params);
     }
 
     /**
      * Returns a list of comments on a topic on a community's discussion board.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer group_id: ID of the community that owns the discussion board.
      *      - integer topic_id: Topic ID.
@@ -79,14 +79,14 @@ class Board {
      * @throws VKApiException in case of API error
      *
      */
-    public function getComments(string $access_token, array $params = array()) {
-        return $this->request->post('board.getComments', $access_token, $params);
+    public function getComments(array $params = array()) {
+        return $this->http->post('board.getComments', $params);
     }
 
     /**
      * Creates a new topic on a community's discussion board.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer group_id: ID of the community that owns the discussion board.
      *      - string title: Topic title.
@@ -104,14 +104,14 @@ class Board {
      * @throws VKApiException in case of API error
      *
      */
-    public function addTopic(string $access_token, array $params = array()) {
-        return $this->request->post('board.addTopic', $access_token, $params);
+    public function addTopic(array $params = array()) {
+        return $this->http->post('board.addTopic', $params);
     }
 
     /**
      * Adds a comment on a topic on a community's discussion board.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer group_id: ID of the community that owns the discussion board.
      *      - integer topic_id: ID of the topic to be commented on.
@@ -130,14 +130,14 @@ class Board {
      * @throws VKApiException in case of API error
      *
      */
-    public function createComment(string $access_token, array $params = array()) {
-        return $this->request->post('board.createComment', $access_token, $params);
+    public function createComment(array $params = array()) {
+        return $this->http->post('board.createComment', $params);
     }
 
     /**
      * Deletes a topic from a community's discussion board.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer group_id: ID of the community that owns the discussion board.
      *      - integer topic_id: Topic ID.
@@ -147,14 +147,14 @@ class Board {
      * @throws VKApiException in case of API error
      *
      */
-    public function deleteTopic(string $access_token, array $params = array()) {
-        return $this->request->post('board.deleteTopic', $access_token, $params);
+    public function deleteTopic(array $params = array()) {
+        return $this->http->post('board.deleteTopic', $params);
     }
 
     /**
      * Edits the title of a topic on a community's discussion board.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer group_id: ID of the community that owns the discussion board.
      *      - integer topic_id: Topic ID.
@@ -165,14 +165,14 @@ class Board {
      * @throws VKApiException in case of API error
      *
      */
-    public function editTopic(string $access_token, array $params = array()) {
-        return $this->request->post('board.editTopic', $access_token, $params);
+    public function editTopic(array $params = array()) {
+        return $this->http->post('board.editTopic', $params);
     }
 
     /**
      * Edits a comment on a topic on a community's discussion board.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer group_id: ID of the community that owns the discussion board.
      *      - integer topic_id: Topic ID.
@@ -188,14 +188,14 @@ class Board {
      * @throws VKApiException in case of API error
      *
      */
-    public function editComment(string $access_token, array $params = array()) {
-        return $this->request->post('board.editComment', $access_token, $params);
+    public function editComment(array $params = array()) {
+        return $this->http->post('board.editComment', $params);
     }
 
     /**
      * Restores a comment deleted from a topic on a community's discussion board.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer group_id: ID of the community that owns the discussion board.
      *      - integer topic_id: Topic ID.
@@ -206,14 +206,14 @@ class Board {
      * @throws VKApiException in case of API error
      *
      */
-    public function restoreComment(string $access_token, array $params = array()) {
-        return $this->request->post('board.restoreComment', $access_token, $params);
+    public function restoreComment(array $params = array()) {
+        return $this->http->post('board.restoreComment', $params);
     }
 
     /**
      * Deletes a comment on a topic on a community's discussion board.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer group_id: ID of the community that owns the discussion board.
      *      - integer topic_id: Topic ID.
@@ -224,14 +224,14 @@ class Board {
      * @throws VKApiException in case of API error
      *
      */
-    public function deleteComment(string $access_token, array $params = array()) {
-        return $this->request->post('board.deleteComment', $access_token, $params);
+    public function deleteComment(array $params = array()) {
+        return $this->http->post('board.deleteComment', $params);
     }
 
     /**
      * Re-opens a previously closed topic on a community's discussion board.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer group_id: ID of the community that owns the discussion board.
      *      - integer topic_id: Topic ID.
@@ -241,14 +241,14 @@ class Board {
      * @throws VKApiException in case of API error
      *
      */
-    public function openTopic(string $access_token, array $params = array()) {
-        return $this->request->post('board.openTopic', $access_token, $params);
+    public function openTopic(array $params = array()) {
+        return $this->http->post('board.openTopic', $params);
     }
 
     /**
      * Closes a topic on a community's discussion board so that comments cannot be posted.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer group_id: ID of the community that owns the discussion board.
      *      - integer topic_id: Topic ID.
@@ -258,14 +258,14 @@ class Board {
      * @throws VKApiException in case of API error
      *
      */
-    public function closeTopic(string $access_token, array $params = array()) {
-        return $this->request->post('board.closeTopic', $access_token, $params);
+    public function closeTopic(array $params = array()) {
+        return $this->http->post('board.closeTopic', $params);
     }
 
     /**
      * Pins a topic (fixes its place) to the top of a community's discussion board.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer group_id: ID of the community that owns the discussion board.
      *      - integer topic_id: Topic ID.
@@ -275,14 +275,14 @@ class Board {
      * @throws VKApiException in case of API error
      *
      */
-    public function fixTopic(string $access_token, array $params = array()) {
-        return $this->request->post('board.fixTopic', $access_token, $params);
+    public function fixTopic(array $params = array()) {
+        return $this->http->post('board.fixTopic', $params);
     }
 
     /**
      * Unpins a pinned topic from the top of a community's discussion board.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer group_id: ID of the community that owns the discussion board.
      *      - integer topic_id: Topic ID.
@@ -292,7 +292,7 @@ class Board {
      * @throws VKApiException in case of API error
      *
      */
-    public function unfixTopic(string $access_token, array $params = array()) {
-        return $this->request->post('board.unfixTopic', $access_token, $params);
+    public function unfixTopic(array $params = array()) {
+        return $this->http->post('board.unfixTopic', $params);
     }
 }

@@ -7,29 +7,29 @@ use VK\Actions\Enums\LikesDeleteType;
 use VK\Actions\Enums\LikesGetListFilter;
 use VK\Actions\Enums\LikesGetListType;
 use VK\Actions\Enums\LikesIsLikedType;
-use VK\Client\VKApiRequest;
+use VK\Client\VKHttpClient;
 use VK\Exceptions\VKApiException;
 use VK\Exceptions\VKClientException;
 
 class Likes {
 
     /**
-     * @var VKApiRequest
+     * @var VKHttpClient
      */
-    private $request;
+    private $http;
 
     /**
      * Likes constructor.
-     * @param VKApiRequest $request
+     * @param VKHttpClient $http
      */
-    public function __construct(VKApiRequest $request) {
-        $this->request = $request;
+    public function __construct(VKHttpClient $http) {
+        $this->http = $http;
     }
 
     /**
      * Returns a list of IDs of users who added the specified object to their 'Likes' list.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - LikesGetListType type: , Object type: 'post' — post on user or community wall, 'comment' —
      *        comment on a wall post, 'photo' — photo, 'audio' — audio, 'video' — video, 'note' — note,
@@ -64,14 +64,14 @@ class Likes {
      * @throws VKApiException in case of API error
      *
      */
-    public function getList(string $access_token, array $params = array()) {
-        return $this->request->post('likes.getList', $access_token, $params);
+    public function getList(array $params = array()) {
+        return $this->http->post('likes.getList', $params);
     }
 
     /**
      * Adds the specified object to the 'Likes' list of the current user.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - LikesAddType type: Object type: 'post' — post on user or community wall, 'comment' — comment on a
      *        wall post, 'photo' — photo, 'audio' — audio, 'video' — video, 'note' — note, 'photo_comment' —
@@ -87,14 +87,14 @@ class Likes {
      * @throws VKApiException in case of API error
      *
      */
-    public function add(string $access_token, array $params = array()) {
-        return $this->request->post('likes.add', $access_token, $params);
+    public function add(array $params = array()) {
+        return $this->http->post('likes.add', $params);
     }
 
     /**
      * Deletes the specified object from the 'Likes' list of the current user.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - LikesDeleteType type: Object type: 'post' — post on user or community wall, 'comment' — comment
      *        on a wall post, 'photo' — photo, 'audio' — audio, 'video' — video, 'note' — note, 'photo_comment'
@@ -109,14 +109,14 @@ class Likes {
      * @throws VKApiException in case of API error
      *
      */
-    public function delete(string $access_token, array $params = array()) {
-        return $this->request->post('likes.delete', $access_token, $params);
+    public function delete(array $params = array()) {
+        return $this->http->post('likes.delete', $params);
     }
 
     /**
      * Checks for the object in the 'Likes' list of the specified user.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer user_id: User ID.
      *      - LikesIsLikedType type: Object type: 'post' — post on user or community wall, 'comment' — comment
@@ -132,7 +132,7 @@ class Likes {
      * @throws VKApiException in case of API error
      *
      */
-    public function isLiked(string $access_token, array $params = array()) {
-        return $this->request->post('likes.isLiked', $access_token, $params);
+    public function isLiked(array $params = array()) {
+        return $this->http->post('likes.isLiked', $params);
     }
 }

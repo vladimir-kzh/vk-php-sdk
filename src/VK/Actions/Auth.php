@@ -3,7 +3,7 @@
 namespace VK\Actions;
 
 use VK\Actions\Enums\AuthSignupSex;
-use VK\Client\VKApiRequest;
+use VK\Client\VKHttpClient;
 use VK\Exceptions\Api\VKApiAuthDelayException;
 use VK\Exceptions\Api\VKApiAuthFloodException;
 use VK\Exceptions\Api\VKApiAuthParamCodeException;
@@ -16,22 +16,22 @@ use VK\Exceptions\VKClientException;
 class Auth {
 
     /**
-     * @var VKApiRequest
+     * @var VKHttpClient
      */
-    private $request;
+    private $http;
 
     /**
      * Auth constructor.
-     * @param VKApiRequest $request
+     * @param VKHttpClient $http
      */
-    public function __construct(VKApiRequest $request) {
-        $this->request = $request;
+    public function __construct(VKHttpClient $http) {
+        $this->http = $http;
     }
 
     /**
      * Checks a user's phone number for correctness.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - string phone: Phone number.
      *      - integer client_id: User ID.
@@ -46,14 +46,14 @@ class Auth {
      * @throws VKApiParamPhoneException Invalid phone number
      *
      */
-    public function checkPhone(string $access_token, array $params = array()) {
-        return $this->request->post('auth.checkPhone', $access_token, $params);
+    public function checkPhone(array $params = array()) {
+        return $this->http->post('auth.checkPhone', $params);
     }
 
     /**
      * Registers a new user by phone number.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - string first_name: User's first name.
      *      - string last_name: User's surname.
@@ -80,15 +80,15 @@ class Auth {
      * @throws VKApiParamPhoneException Invalid phone number
      *
      */
-    public function signup(string $access_token, array $params = array()) {
-        return $this->request->post('auth.signup', $access_token, $params);
+    public function signup(array $params = array()) {
+        return $this->http->post('auth.signup', $params);
     }
 
     /**
      * Completes a user's registration (begun with the [vk.com/dev/auth.signup|auth.signup] method) using an
      * authorization code.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer client_id:
      *      - string client_secret:
@@ -105,15 +105,15 @@ class Auth {
      * @throws VKApiAuthParamCodeException Incorrect code
      *
      */
-    public function confirm(string $access_token, array $params = array()) {
-        return $this->request->post('auth.confirm', $access_token, $params);
+    public function confirm(array $params = array()) {
+        return $this->http->post('auth.confirm', $params);
     }
 
     /**
      * Allows to restore account access using a code received via SMS. " This method is only available for apps with
      * [vk.com/dev/auth_direct|Direct authorization] access. "
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - string phone: User phone number.
      *      - string last_name: User last name.
@@ -124,7 +124,7 @@ class Auth {
      * @throws VKApiAuthFloodException Too many auth attempts, try again later
      *
      */
-    public function restore(string $access_token, array $params = array()) {
-        return $this->request->post('auth.restore', $access_token, $params);
+    public function restore(array $params = array()) {
+        return $this->http->post('auth.restore', $params);
     }
 }

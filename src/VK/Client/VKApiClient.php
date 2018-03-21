@@ -43,9 +43,9 @@ class VKApiClient {
     protected const API_HOST = 'https://api.vk.com/method';
 
     /**
-     * @var VKApiRequest
+     * @var VKHttpClient
      */
-    private $request;
+    private $httpClient;
 
     /**
      * @var Account
@@ -224,47 +224,46 @@ class VKApiClient {
 
     /**
      * VKApiClient constructor.
-     * @param string $api_version
-     * @param string|null $language
+     * @param VKHttpClient $httpClient
      */
-    public function __construct(string $api_version = self::API_VERSION, ?string $language = null) {
-        $this->request = new VKApiRequest($api_version, $language, self::API_HOST);
+    public function __construct(VKHttpClient $httpClient) {
+        $this->httpClient = $httpClient;
 
-        $this->account = new Account($this->request);
-        $this->ads = new Ads($this->request);
-        $this->apps = new Apps($this->request);
-        $this->auth = new Auth($this->request);
-        $this->board = new Board($this->request);
-        $this->database = new Database($this->request);
-        $this->docs = new Docs($this->request);
-        $this->fave = new Fave($this->request);
-        $this->friends = new Friends($this->request);
-        $this->gifts = new Gifts($this->request);
-        $this->groups = new Groups($this->request);
-        $this->leads = new Leads($this->request);
-        $this->likes = new Likes($this->request);
-        $this->market = new Market($this->request);
-        $this->messages = new Messages($this->request);
-        $this->newsfeed = new Newsfeed($this->request);
-        $this->notes = new Notes($this->request);
-        $this->notifications = new Notifications($this->request);
-        $this->orders = new Orders($this->request);
-        $this->pages = new Pages($this->request);
-        $this->photos = new Photos($this->request);
-        $this->places = new Places($this->request);
-        $this->polls = new Polls($this->request);
-        $this->search = new Search($this->request);
-        $this->secure = new Secure($this->request);
-        $this->stats = new Stats($this->request);
-        $this->status = new Status($this->request);
-        $this->storage = new Storage($this->request);
-        $this->stories = new Stories($this->request);
-        $this->streaming = new Streaming($this->request);
-        $this->users = new Users($this->request);
-        $this->utils = new Utils($this->request);
-        $this->video = new Video($this->request);
-        $this->wall = new Wall($this->request);
-        $this->widgets = new Widgets($this->request);
+        $this->account = new Account($this->httpClient);
+        $this->ads = new Ads($this->httpClient);
+        $this->apps = new Apps($this->httpClient);
+        $this->auth = new Auth($this->httpClient);
+        $this->board = new Board($this->httpClient);
+        $this->database = new Database($this->httpClient);
+        $this->docs = new Docs($this->httpClient);
+        $this->fave = new Fave($this->httpClient);
+        $this->friends = new Friends($this->httpClient);
+        $this->gifts = new Gifts($this->httpClient);
+        $this->groups = new Groups($this->httpClient);
+        $this->leads = new Leads($this->httpClient);
+        $this->likes = new Likes($this->httpClient);
+        $this->market = new Market($this->httpClient);
+        $this->messages = new Messages($this->httpClient);
+        $this->newsfeed = new Newsfeed($this->httpClient);
+        $this->notes = new Notes($this->httpClient);
+        $this->notifications = new Notifications($this->httpClient);
+        $this->orders = new Orders($this->httpClient);
+        $this->pages = new Pages($this->httpClient);
+        $this->photos = new Photos($this->httpClient);
+        $this->places = new Places($this->httpClient);
+        $this->polls = new Polls($this->httpClient);
+        $this->search = new Search($this->httpClient);
+        $this->secure = new Secure($this->httpClient);
+        $this->stats = new Stats($this->httpClient);
+        $this->status = new Status($this->httpClient);
+        $this->storage = new Storage($this->httpClient);
+        $this->stories = new Stories($this->httpClient);
+        $this->streaming = new Streaming($this->httpClient);
+        $this->users = new Users($this->httpClient);
+        $this->utils = new Utils($this->httpClient);
+        $this->video = new Video($this->httpClient);
+        $this->wall = new Wall($this->httpClient);
+        $this->widgets = new Widgets($this->httpClient);
     }
 
     /**

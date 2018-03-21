@@ -8,7 +8,7 @@ use VK\Actions\Enums\AppsGetLeaderboardType;
 use VK\Actions\Enums\AppsGetNameCase;
 use VK\Actions\Enums\AppsGetPlatform;
 use VK\Actions\Enums\AppsSendRequestType;
-use VK\Client\VKApiRequest;
+use VK\Client\VKHttpClient;
 use VK\Exceptions\VKApiException;
 use VK\Exceptions\Api\VKApiFloodException;
 use VK\Exceptions\VKClientException;
@@ -16,22 +16,22 @@ use VK\Exceptions\VKClientException;
 class Apps {
 
     /**
-     * @var VKApiRequest
+     * @var VKHttpClient
      */
-    private $request;
+    private $http;
 
     /**
      * Apps constructor.
-     * @param VKApiRequest $request
+     * @param VKHttpClient $http
      */
-    public function __construct(VKApiRequest $request) {
-        $this->request = $request;
+    public function __construct(VKHttpClient $http) {
+        $this->http = $http;
     }
 
     /**
      * Returns a list of applications (apps) available to users in the App Catalog.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - AppsGetCatalogSort sort: Sort order: 'popular_today' — popular for one day (default), 'visitors'
      *        — by visitors number , 'create_date' — by creation date, 'growth_rate' — by growth rate,
@@ -55,14 +55,14 @@ class Apps {
      * @throws VKApiException in case of API error
      *
      */
-    public function getCatalog(string $access_token, array $params = array()) {
-        return $this->request->post('apps.getCatalog', $access_token, $params);
+    public function getCatalog(array $params = array()) {
+        return $this->http->post('apps.getCatalog', $params);
     }
 
     /**
      * Returns applications data.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer app_id: Application ID
      *      - array app_ids: List of application ID
@@ -83,14 +83,14 @@ class Apps {
      * @throws VKApiException in case of API error
      *
      */
-    public function get(string $access_token, array $params = array()) {
-        return $this->request->post('apps.get', $access_token, $params);
+    public function get(array $params = array()) {
+        return $this->http->post('apps.get', $params);
     }
 
     /**
      * Sends a request to another user in an app that uses VK authorization.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer user_id: id of the user to send a request
      *      - string text: request text
@@ -107,14 +107,14 @@ class Apps {
      * @throws VKApiFloodException Flood control
      *
      */
-    public function sendRequest(string $access_token, array $params = array()) {
-        return $this->request->post('apps.sendRequest', $access_token, $params);
+    public function sendRequest(array $params = array()) {
+        return $this->http->post('apps.sendRequest', $params);
     }
 
     /**
      * Deletes all request notifications from the current app.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *
      * @return mixed
@@ -122,14 +122,14 @@ class Apps {
      * @throws VKApiException in case of API error
      *
      */
-    public function deleteAppRequests(string $access_token, array $params = array()) {
-        return $this->request->post('apps.deleteAppRequests', $access_token, $params);
+    public function deleteAppRequests(array $params = array()) {
+        return $this->http->post('apps.deleteAppRequests', $params);
     }
 
     /**
      * Creates friends list for requests and invites in current app.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer count: List size.
      *      - AppsGetFriendsListType type: List type. Possible values: * 'invite' — available for invites (don't
@@ -142,14 +142,14 @@ class Apps {
      * @throws VKApiException in case of API error
      *
      */
-    public function getFriendsList(string $access_token, array $params = array()) {
-        return $this->request->post('apps.getFriendsList', $access_token, $params);
+    public function getFriendsList(array $params = array()) {
+        return $this->http->post('apps.getFriendsList', $params);
     }
 
     /**
      * Returns players rating in the game.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - AppsGetLeaderboardType type: Leaderboard type. Possible values: *'level' — by level,, *'points' —
      *        by mission points,, *'score' — by score ().
@@ -163,14 +163,14 @@ class Apps {
      * @throws VKApiException in case of API error
      *
      */
-    public function getLeaderboard(string $access_token, array $params = array()) {
-        return $this->request->post('apps.getLeaderboard', $access_token, $params);
+    public function getLeaderboard(array $params = array()) {
+        return $this->http->post('apps.getLeaderboard', $params);
     }
 
     /**
      * Returns user score in app
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer user_id:
      *
@@ -179,7 +179,7 @@ class Apps {
      * @throws VKApiException in case of API error
      *
      */
-    public function getScore(string $access_token, array $params = array()) {
-        return $this->request->post('apps.getScore', $access_token, $params);
+    public function getScore(array $params = array()) {
+        return $this->http->post('apps.getScore', $params);
     }
 }

@@ -2,7 +2,7 @@
 
 namespace VK\Actions;
 
-use VK\Client\VKApiRequest;
+use VK\Client\VKHttpClient;
 use VK\Exceptions\VKApiException;
 use VK\Exceptions\Api\VKApiLimitsException;
 use VK\Exceptions\VKClientException;
@@ -10,22 +10,22 @@ use VK\Exceptions\VKClientException;
 class Storage {
 
     /**
-     * @var VKApiRequest
+     * @var VKHttpClient
      */
-    private $request;
+    private $http;
 
     /**
      * Storage constructor.
-     * @param VKApiRequest $request
+     * @param VKHttpClient $http
      */
-    public function __construct(VKApiRequest $request) {
-        $this->request = $request;
+    public function __construct(VKHttpClient $http) {
+        $this->http = $http;
     }
 
     /**
      * Returns a value of variable with the name set by key parameter.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - string key:
      *      - array keys:
@@ -36,14 +36,14 @@ class Storage {
      * @throws VKApiException in case of API error
      *
      */
-    public function get(string $access_token, array $params = array()) {
-        return $this->request->post('storage.get', $access_token, $params);
+    public function get(array $params = array()) {
+        return $this->http->post('storage.get', $params);
     }
 
     /**
      * Saves a value of variable with the name set by 'key' parameter.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - string key:
      *      - string value:
@@ -55,14 +55,14 @@ class Storage {
      * @throws VKApiLimitsException Out of limits
      *
      */
-    public function set(string $access_token, array $params = array()) {
-        return $this->request->post('storage.set', $access_token, $params);
+    public function set(array $params = array()) {
+        return $this->http->post('storage.set', $params);
     }
 
     /**
      * Returns the names of all variables.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer user_id: user id, whose variables names are returned if they were requested with a server
      *        method.
@@ -73,7 +73,7 @@ class Storage {
      * @throws VKApiException in case of API error
      *
      */
-    public function getKeys(string $access_token, array $params = array()) {
-        return $this->request->post('storage.getKeys', $access_token, $params);
+    public function getKeys(array $params = array()) {
+        return $this->http->post('storage.getKeys', $params);
     }
 }

@@ -6,7 +6,7 @@ use VK\Actions\Enums\AccountLookupContactsService;
 use VK\Actions\Enums\AccountSaveProfileInfoBdateVisibility;
 use VK\Actions\Enums\AccountSaveProfileInfoRelation;
 use VK\Actions\Enums\AccountSaveProfileInfoSex;
-use VK\Client\VKApiRequest;
+use VK\Client\VKHttpClient;
 use VK\Exceptions\Api\VKApiAccessMenuException;
 use VK\Exceptions\VKApiException;
 use VK\Exceptions\Api\VKApiInvalidAddressException;
@@ -15,22 +15,22 @@ use VK\Exceptions\VKClientException;
 class Account {
 
     /**
-     * @var VKApiRequest
+     * @var VKHttpClient
      */
-    private $request;
+    private $http;
 
     /**
      * Account constructor.
-     * @param VKApiRequest $request
+     * @param VKHttpClient $http
      */
-    public function __construct(VKApiRequest $request) {
-        $this->request = $request;
+    public function __construct(VKHttpClient $http) {
+        $this->http = $http;
     }
 
     /**
      * Returns non-null values of user counters.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - array filter: Counters to be returned.
      *
@@ -39,14 +39,14 @@ class Account {
      * @throws VKApiException in case of API error
      *
      */
-    public function getCounters(string $access_token, array $params = array()) {
-        return $this->request->post('account.getCounters', $access_token, $params);
+    public function getCounters(array $params = array()) {
+        return $this->http->post('account.getCounters', $params);
     }
 
     /**
      * Sets an application screen name (up to 17 characters), that is shown to the user in the left menu.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer user_id: User ID.
      *      - string name: Application screen name.
@@ -57,14 +57,14 @@ class Account {
      * @throws VKApiAccessMenuException Access to the menu of the user denied
      *
      */
-    public function setNameInMenu(string $access_token, array $params = array()) {
-        return $this->request->post('account.setNameInMenu', $access_token, $params);
+    public function setNameInMenu(array $params = array()) {
+        return $this->http->post('account.setNameInMenu', $params);
     }
 
     /**
      * Marks the current user as online for 15 minutes.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - boolean voip: '1' if videocalls are available for current device.
      *
@@ -73,14 +73,14 @@ class Account {
      * @throws VKApiException in case of API error
      *
      */
-    public function setOnline(string $access_token, array $params = array()) {
-        return $this->request->post('account.setOnline', $access_token, $params);
+    public function setOnline(array $params = array()) {
+        return $this->http->post('account.setOnline', $params);
     }
 
     /**
      * Marks a current user as offline.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *
      * @return mixed
@@ -88,14 +88,14 @@ class Account {
      * @throws VKApiException in case of API error
      *
      */
-    public function setOffline(string $access_token, array $params = array()) {
-        return $this->request->post('account.setOffline', $access_token, $params);
+    public function setOffline(array $params = array()) {
+        return $this->http->post('account.setOffline', $params);
     }
 
     /**
      * Allows to search the VK users using phone numbers, e-mail addresses and user IDs on other services.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - array contacts: List of contacts separated with commas
      *      - AccountLookupContactsService service: String identifier of a service which contacts are used for
@@ -114,14 +114,14 @@ class Account {
      * @throws VKApiException in case of API error
      *
      */
-    public function lookupContacts(string $access_token, array $params = array()) {
-        return $this->request->post('account.lookupContacts', $access_token, $params);
+    public function lookupContacts(array $params = array()) {
+        return $this->http->post('account.lookupContacts', $params);
     }
 
     /**
      * Subscribes an iOS/Android/Windows Phone-based device to receive push notifications
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - string token: Device token used to send notifications. (for mpns, the token shall be URL for sending
      *        of notifications)
@@ -136,14 +136,14 @@ class Account {
      * @throws VKApiException in case of API error
      *
      */
-    public function registerDevice(string $access_token, array $params = array()) {
-        return $this->request->post('account.registerDevice', $access_token, $params);
+    public function registerDevice(array $params = array()) {
+        return $this->http->post('account.registerDevice', $params);
     }
 
     /**
      * Unsubscribes a device from push notifications.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - string device_id: Unique device ID.
      *
@@ -152,14 +152,14 @@ class Account {
      * @throws VKApiException in case of API error
      *
      */
-    public function unregisterDevice(string $access_token, array $params = array()) {
-        return $this->request->post('account.unregisterDevice', $access_token, $params);
+    public function unregisterDevice(array $params = array()) {
+        return $this->http->post('account.unregisterDevice', $params);
     }
 
     /**
      * Mutes push notifications for the set period of time.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - string device_id: Unique device ID.
      *      - integer time: Time in seconds for what notifications should be disabled. '-1' to disable forever.
@@ -173,14 +173,14 @@ class Account {
      * @throws VKApiException in case of API error
      *
      */
-    public function setSilenceMode(string $access_token, array $params = array()) {
-        return $this->request->post('account.setSilenceMode', $access_token, $params);
+    public function setSilenceMode(array $params = array()) {
+        return $this->http->post('account.setSilenceMode', $params);
     }
 
     /**
      * Gets settings of push notifications.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - string device_id: Unique device ID.
      *
@@ -189,14 +189,14 @@ class Account {
      * @throws VKApiException in case of API error
      *
      */
-    public function getPushSettings(string $access_token, array $params = array()) {
-        return $this->request->post('account.getPushSettings', $access_token, $params);
+    public function getPushSettings(array $params = array()) {
+        return $this->http->post('account.getPushSettings', $params);
     }
 
     /**
      * Change push settings.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - string device_id: Unique device ID.
      *      - string settings: Push settings in a [vk.com/dev/push_settings|special format].
@@ -208,14 +208,14 @@ class Account {
      * @throws VKApiException in case of API error
      *
      */
-    public function setPushSettings(string $access_token, array $params = array()) {
-        return $this->request->post('account.setPushSettings', $access_token, $params);
+    public function setPushSettings(array $params = array()) {
+        return $this->http->post('account.setPushSettings', $params);
     }
 
     /**
      * Gets settings of the user in this application.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer user_id: User ID whose settings information shall be got. By default: current user.
      *
@@ -224,15 +224,15 @@ class Account {
      * @throws VKApiException in case of API error
      *
      */
-    public function getAppPermissions(string $access_token, array $params = array()) {
-        return $this->request->post('account.getAppPermissions', $access_token, $params);
+    public function getAppPermissions(array $params = array()) {
+        return $this->http->post('account.getAppPermissions', $params);
     }
 
     /**
      * Returns a list of active ads (offers) which executed by the user will bring him/her respective number of votes
      * to his balance in the application.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer count: Number of results to return.
      *
@@ -241,14 +241,14 @@ class Account {
      * @throws VKApiException in case of API error
      *
      */
-    public function getActiveOffers(string $access_token, array $params = array()) {
-        return $this->request->post('account.getActiveOffers', $access_token, $params);
+    public function getActiveOffers(array $params = array()) {
+        return $this->http->post('account.getActiveOffers', $params);
     }
 
     /**
      * Adds user to the banlist.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer user_id: User ID.
      *
@@ -257,14 +257,14 @@ class Account {
      * @throws VKApiException in case of API error
      *
      */
-    public function banUser(string $access_token, array $params = array()) {
-        return $this->request->post('account.banUser', $access_token, $params);
+    public function banUser(array $params = array()) {
+        return $this->http->post('account.banUser', $params);
     }
 
     /**
      * Deletes user from the blacklist.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer user_id: User ID.
      *
@@ -273,14 +273,14 @@ class Account {
      * @throws VKApiException in case of API error
      *
      */
-    public function unbanUser(string $access_token, array $params = array()) {
-        return $this->request->post('account.unbanUser', $access_token, $params);
+    public function unbanUser(array $params = array()) {
+        return $this->http->post('account.unbanUser', $params);
     }
 
     /**
      * Returns a user's blacklist.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer offset: Offset needed to return a specific subset of results.
      *      - integer count: Number of results to return.
@@ -290,14 +290,14 @@ class Account {
      * @throws VKApiException in case of API error
      *
      */
-    public function getBanned(string $access_token, array $params = array()) {
-        return $this->request->post('account.getBanned', $access_token, $params);
+    public function getBanned(array $params = array()) {
+        return $this->http->post('account.getBanned', $params);
     }
 
     /**
      * Returns current account info.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - array fields: Fields to return. Possible values: *'country' — user country,, *'https_required' —
      *        is "HTTPS only" option enabled,, *'own_posts_default' — is "Show my posts only" option is enabled,,
@@ -309,14 +309,14 @@ class Account {
      * @throws VKApiException in case of API error
      *
      */
-    public function getInfo(string $access_token, array $params = array()) {
-        return $this->request->post('account.getInfo', $access_token, $params);
+    public function getInfo(array $params = array()) {
+        return $this->http->post('account.getInfo', $params);
     }
 
     /**
      * Allows to edit the current account info.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - string name: Setting name.
      *      - string value: Setting value.
@@ -326,15 +326,15 @@ class Account {
      * @throws VKApiException in case of API error
      *
      */
-    public function setInfo(string $access_token, array $params = array()) {
-        return $this->request->post('account.setInfo', $access_token, $params);
+    public function setInfo(array $params = array()) {
+        return $this->http->post('account.setInfo', $params);
     }
 
     /**
      * Changes a user password after access is successfully restored with the [vk.com/dev/auth.restore|auth.restore]
      * method.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - string restore_sid: Session id received after the [vk.com/dev/auth.restore|auth.restore] method is
      *        executed. (If the password is changed right after the access was restored)
@@ -348,14 +348,14 @@ class Account {
      * @throws VKApiException in case of API error
      *
      */
-    public function changePassword(string $access_token, array $params = array()) {
-        return $this->request->post('account.changePassword', $access_token, $params);
+    public function changePassword(array $params = array()) {
+        return $this->http->post('account.changePassword', $params);
     }
 
     /**
      * Returns the current account info.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *
      * @return mixed
@@ -363,14 +363,14 @@ class Account {
      * @throws VKApiException in case of API error
      *
      */
-    public function getProfileInfo(string $access_token, array $params = array()) {
-        return $this->request->post('account.getProfileInfo', $access_token, $params);
+    public function getProfileInfo(array $params = array()) {
+        return $this->http->post('account.getProfileInfo', $params);
     }
 
     /**
      * Edits current profile info.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - string first_name: User first name.
      *      - string last_name: User last name.
@@ -400,7 +400,7 @@ class Account {
      * @throws VKApiInvalidAddressException Invalid screen name
      *
      */
-    public function saveProfileInfo(string $access_token, array $params = array()) {
-        return $this->request->post('account.saveProfileInfo', $access_token, $params);
+    public function saveProfileInfo(array $params = array()) {
+        return $this->http->post('account.saveProfileInfo', $params);
     }
 }

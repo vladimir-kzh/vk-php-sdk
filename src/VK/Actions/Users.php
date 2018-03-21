@@ -10,29 +10,29 @@ use VK\Actions\Enums\UsersReportType;
 use VK\Actions\Enums\UsersSearchSex;
 use VK\Actions\Enums\UsersSearchSort;
 use VK\Actions\Enums\UsersSearchStatus;
-use VK\Client\VKApiRequest;
+use VK\Client\VKHttpClient;
 use VK\Exceptions\VKApiException;
 use VK\Exceptions\VKClientException;
 
 class Users {
 
     /**
-     * @var VKApiRequest
+     * @var VKHttpClient
      */
-    private $request;
+    private $http;
 
     /**
      * Users constructor.
-     * @param VKApiRequest $request
+     * @param VKHttpClient $http
      */
-    public function __construct(VKApiRequest $request) {
-        $this->request = $request;
+    public function __construct(VKHttpClient $http) {
+        $this->http = $http;
     }
 
     /**
      * Returns detailed information on users.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - array user_ids: User IDs or screen names ('screen_name'). By default, current user ID.
      *      - array fields: Profile fields to return. Sample values: 'nickname', 'screen_name', 'sex', 'bdate'
@@ -49,14 +49,14 @@ class Users {
      * @throws VKApiException in case of API error
      *
      */
-    public function get(string $access_token, array $params = array()) {
-        return $this->request->post('users.get', $access_token, $params);
+    public function get(array $params = array()) {
+        return $this->http->post('users.get', $params);
     }
 
     /**
      * Returns a list of users matching the search criteria.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - string q: Search query string (e.g., 'Vasya Babich').
      *      - UsersSearchSort sort: Sort order: '1' — by date registered, '0' — by rating
@@ -103,14 +103,14 @@ class Users {
      * @throws VKApiException in case of API error
      *
      */
-    public function search(string $access_token, array $params = array()) {
-        return $this->request->post('users.search', $access_token, $params);
+    public function search(array $params = array()) {
+        return $this->http->post('users.search', $params);
     }
 
     /**
      * Returns information whether a user installed the application.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer user_id:
      *
@@ -119,14 +119,14 @@ class Users {
      * @throws VKApiException in case of API error
      *
      */
-    public function isAppUser(string $access_token, array $params = array()) {
-        return $this->request->post('users.isAppUser', $access_token, $params);
+    public function isAppUser(array $params = array()) {
+        return $this->http->post('users.isAppUser', $params);
     }
 
     /**
      * Returns a list of IDs of users and communities followed by the user.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer user_id: User ID.
      *      - boolean extended: '1' — to return a combined list of users and communities, '0' — to return
@@ -140,14 +140,14 @@ class Users {
      * @throws VKApiException in case of API error
      *
      */
-    public function getSubscriptions(string $access_token, array $params = array()) {
-        return $this->request->post('users.getSubscriptions', $access_token, $params);
+    public function getSubscriptions(array $params = array()) {
+        return $this->http->post('users.getSubscriptions', $params);
     }
 
     /**
      * Returns a list of IDs of followers of the user in question, sorted by date added, most recent first.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer user_id: User ID.
      *      - integer offset: Offset needed to return a specific subset of followers.
@@ -165,14 +165,14 @@ class Users {
      * @throws VKApiException in case of API error
      *
      */
-    public function getFollowers(string $access_token, array $params = array()) {
-        return $this->request->post('users.getFollowers', $access_token, $params);
+    public function getFollowers(array $params = array()) {
+        return $this->http->post('users.getFollowers', $params);
     }
 
     /**
      * Reports (submits a complain about) a user.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer user_id: ID of the user about whom a complaint is being made.
      *      - UsersReportType type: Type of complaint: 'porn' – pornography, 'spam' – spamming, 'insult' –
@@ -185,14 +185,14 @@ class Users {
      * @throws VKApiException in case of API error
      *
      */
-    public function report(string $access_token, array $params = array()) {
-        return $this->request->post('users.report', $access_token, $params);
+    public function report(array $params = array()) {
+        return $this->http->post('users.report', $params);
     }
 
     /**
      * Indexes current user location and returns nearby users.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - number latitude: geographic latitude of the place a user is located, in degrees (from -90 to 90)
      *      - number longitude: geographic longitude of the place a user is located, in degrees (from -180 to 180)
@@ -216,7 +216,7 @@ class Users {
      * @throws VKApiException in case of API error
      *
      */
-    public function getNearby(string $access_token, array $params = array()) {
-        return $this->request->post('users.getNearby', $access_token, $params);
+    public function getNearby(array $params = array()) {
+        return $this->http->post('users.getNearby', $params);
     }
 }

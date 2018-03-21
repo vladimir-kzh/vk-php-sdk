@@ -2,7 +2,7 @@
 
 namespace VK\Actions;
 
-use VK\Client\VKApiRequest;
+use VK\Client\VKHttpClient;
 use VK\Exceptions\VKApiException;
 use VK\Exceptions\Api\VKApiWallAccessPostException;
 use VK\Exceptions\VKClientException;
@@ -10,22 +10,22 @@ use VK\Exceptions\VKClientException;
 class Stats {
 
     /**
-     * @var VKApiRequest
+     * @var VKHttpClient
      */
-    private $request;
+    private $http;
 
     /**
      * Stats constructor.
-     * @param VKApiRequest $request
+     * @param VKHttpClient $http
      */
-    public function __construct(VKApiRequest $request) {
-        $this->request = $request;
+    public function __construct(VKHttpClient $http) {
+        $this->http = $http;
     }
 
     /**
      * Returns statistics of a community or an application.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer group_id: Community ID.
      *      - integer app_id: Application ID.
@@ -37,14 +37,14 @@ class Stats {
      * @throws VKApiException in case of API error
      *
      */
-    public function get(string $access_token, array $params = array()) {
-        return $this->request->post('stats.get', $access_token, $params);
+    public function get(array $params = array()) {
+        return $this->http->post('stats.get', $params);
     }
 
     /**
      *
      *
-     * @param $access_token string
+     *
      * @param $params array
      *
      * @return mixed
@@ -52,14 +52,14 @@ class Stats {
      * @throws VKApiException in case of API error
      *
      */
-    public function trackVisitor(string $access_token, array $params = array()) {
-        return $this->request->post('stats.trackVisitor', $access_token, $params);
+    public function trackVisitor(array $params = array()) {
+        return $this->http->post('stats.trackVisitor', $params);
     }
 
     /**
      * Returns stats for a wall post.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: post owner community id. Specify with "-" sign.
      *      - integer post_id: wall post id. Note that stats are available only for '300' last (newest) posts on a
@@ -71,7 +71,7 @@ class Stats {
      * @throws VKApiWallAccessPostException Access to wall's post denied
      *
      */
-    public function getPostReach(string $access_token, array $params = array()) {
-        return $this->request->post('stats.getPostReach', $access_token, $params);
+    public function getPostReach(array $params = array()) {
+        return $this->http->post('stats.getPostReach', $params);
     }
 }

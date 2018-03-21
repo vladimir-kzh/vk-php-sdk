@@ -6,7 +6,7 @@ use VK\Actions\Enums\WallGetCommentsSort;
 use VK\Actions\Enums\WallGetFilter;
 use VK\Actions\Enums\WallReportCommentReason;
 use VK\Actions\Enums\WallReportPostReason;
-use VK\Client\VKApiRequest;
+use VK\Client\VKHttpClient;
 use VK\Exceptions\Api\VKApiBlockedException;
 use VK\Exceptions\VKApiException;
 use VK\Exceptions\Api\VKApiUserDeletedException;
@@ -24,22 +24,22 @@ use VK\Exceptions\VKClientException;
 class Wall {
 
     /**
-     * @var VKApiRequest
+     * @var VKHttpClient
      */
-    private $request;
+    private $http;
 
     /**
      * Wall constructor.
-     * @param VKApiRequest $request
+     * @param VKHttpClient $http
      */
-    public function __construct(VKApiRequest $request) {
-        $this->request = $request;
+    public function __construct(VKHttpClient $http) {
+        $this->http = $http;
     }
 
     /**
      * Returns a list of posts on a user wall or community wall.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: ID of the user or community that owns the wall. By default, current user ID. Use a
      *        negative value to designate a community ID.
@@ -61,14 +61,14 @@ class Wall {
      * @throws VKApiUserDeletedException User was deleted or banned
      *
      */
-    public function get(string $access_token, array $params = array()) {
-        return $this->request->post('wall.get', $access_token, $params);
+    public function get(array $params = array()) {
+        return $this->http->post('wall.get', $params);
     }
 
     /**
      * Allows to search posts on user or community walls.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: user or community id. "Remember that for a community 'owner_id' must be negative."
      *      - string domain: user or community screen name.
@@ -86,14 +86,14 @@ class Wall {
      * @throws VKApiUserDeletedException User was deleted or banned
      *
      */
-    public function search(string $access_token, array $params = array()) {
-        return $this->request->post('wall.search', $access_token, $params);
+    public function search(array $params = array()) {
+        return $this->http->post('wall.search', $params);
     }
 
     /**
      * Returns a list of posts from user or community walls by their IDs.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - array posts: User or community IDs and post IDs, separated by underscores. Use a negative value to
      *        designate a community ID. Example: "93388_21539,93388_20904,2943_4276,-1_1"
@@ -108,14 +108,14 @@ class Wall {
      * @throws VKApiException in case of API error
      *
      */
-    public function getById(string $access_token, array $params = array()) {
-        return $this->request->post('wall.getById', $access_token, $params);
+    public function getById(array $params = array()) {
+        return $this->http->post('wall.getById', $params);
     }
 
     /**
      * Adds a new post on a user wall or community wall. Can also be used to publish suggested or scheduled posts.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: User ID or community ID. Use a negative value to designate a community ID.
      *      - boolean friends_only: '1' — post will be available to friends only, '0' — post will be available
@@ -153,14 +153,14 @@ class Wall {
      * @throws VKApiWallAdsPostLimitReachedException Too many ads posts
      *
      */
-    public function post(string $access_token, array $params = array()) {
-        return $this->request->post('wall.post', $access_token, $params);
+    public function post(array $params = array()) {
+        return $this->http->post('wall.post', $params);
     }
 
     /**
      * Reposts (copies) an object to a user wall or community wall.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - string object: ID of the object to be reposted on the wall. Example: "wall66748_3675"
      *      - string message: Comment to be added along with the reposted object.
@@ -175,14 +175,14 @@ class Wall {
      * @throws VKApiWallAdsPostLimitReachedException Too many ads posts
      *
      */
-    public function repost(string $access_token, array $params = array()) {
-        return $this->request->post('wall.repost', $access_token, $params);
+    public function repost(array $params = array()) {
+        return $this->http->post('wall.repost', $params);
     }
 
     /**
      * Returns information about reposts of a post on user wall or community wall.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: User ID or community ID. By default, current user ID. Use a negative value to
      *        designate a community ID.
@@ -195,14 +195,14 @@ class Wall {
      * @throws VKApiException in case of API error
      *
      */
-    public function getReposts(string $access_token, array $params = array()) {
-        return $this->request->post('wall.getReposts', $access_token, $params);
+    public function getReposts(array $params = array()) {
+        return $this->http->post('wall.getReposts', $params);
     }
 
     /**
      * Edits a post on a user wall or community wall.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: User ID or community ID. Use a negative value to designate a community ID.
      *      - integer post_id: Post ID.
@@ -233,14 +233,14 @@ class Wall {
      * @throws VKApiWallAdsPostLimitReachedException Too many ads posts
      *
      */
-    public function edit(string $access_token, array $params = array()) {
-        return $this->request->post('wall.edit', $access_token, $params);
+    public function edit(array $params = array()) {
+        return $this->http->post('wall.edit', $params);
     }
 
     /**
      * Deletes a post from a user wall or community wall.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: User ID or community ID. Use a negative value to designate a community ID.
      *      - integer post_id: ID of the post to be deleted.
@@ -251,14 +251,14 @@ class Wall {
      * @throws VKApiWallAccessPostException Access to wall's post denied
      *
      */
-    public function delete(string $access_token, array $params = array()) {
-        return $this->request->post('wall.delete', $access_token, $params);
+    public function delete(array $params = array()) {
+        return $this->http->post('wall.delete', $params);
     }
 
     /**
      * Restores a post deleted from a user wall or community wall.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: User ID or community ID from whose wall the post was deleted. Use a negative value
      *        to designate a community ID.
@@ -271,14 +271,14 @@ class Wall {
      * @throws VKApiWallAddPostException Access to adding post denied
      *
      */
-    public function restore(string $access_token, array $params = array()) {
-        return $this->request->post('wall.restore', $access_token, $params);
+    public function restore(array $params = array()) {
+        return $this->http->post('wall.restore', $params);
     }
 
     /**
      * Pins the post on wall.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: ID of the user or community that owns the wall. By default, current user ID. Use a
      *        negative value to designate a community ID.
@@ -289,14 +289,14 @@ class Wall {
      * @throws VKApiException in case of API error
      *
      */
-    public function pin(string $access_token, array $params = array()) {
-        return $this->request->post('wall.pin', $access_token, $params);
+    public function pin(array $params = array()) {
+        return $this->http->post('wall.pin', $params);
     }
 
     /**
      * Unpins the post on wall.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: ID of the user or community that owns the wall. By default, current user ID. Use a
      *        negative value to designate a community ID.
@@ -307,14 +307,14 @@ class Wall {
      * @throws VKApiException in case of API error
      *
      */
-    public function unpin(string $access_token, array $params = array()) {
-        return $this->request->post('wall.unpin', $access_token, $params);
+    public function unpin(array $params = array()) {
+        return $this->http->post('wall.unpin', $params);
     }
 
     /**
      * Returns a list of comments on a post on a user wall or community wall.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: User ID or community ID. Use a negative value to designate a community ID.
      *      - integer post_id: Post ID.
@@ -335,14 +335,14 @@ class Wall {
      * @throws VKApiWallAccessRepliesException Access to post comments denied
      *
      */
-    public function getComments(string $access_token, array $params = array()) {
-        return $this->request->post('wall.getComments', $access_token, $params);
+    public function getComments(array $params = array()) {
+        return $this->http->post('wall.getComments', $params);
     }
 
     /**
      * Adds a comment to a post on a user wall or community wall.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: User ID or community ID. Use a negative value to designate a community ID.
      *      - integer post_id: Post ID.
@@ -362,14 +362,14 @@ class Wall {
      * @throws VKApiWallAccessAddReplyException Access to status replies denied
      *
      */
-    public function createComment(string $access_token, array $params = array()) {
-        return $this->request->post('wall.createComment', $access_token, $params);
+    public function createComment(array $params = array()) {
+        return $this->http->post('wall.createComment', $params);
     }
 
     /**
      * Edits a comment on a user wall or community wall.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: User ID or community ID. Use a negative value to designate a community ID.
      *      - integer comment_id: Comment ID.
@@ -384,14 +384,14 @@ class Wall {
      * @throws VKApiException in case of API error
      *
      */
-    public function editComment(string $access_token, array $params = array()) {
-        return $this->request->post('wall.editComment', $access_token, $params);
+    public function editComment(array $params = array()) {
+        return $this->http->post('wall.editComment', $params);
     }
 
     /**
      * Deletes a comment on a post on a user wall or community wall.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: User ID or community ID. Use a negative value to designate a community ID.
      *      - integer comment_id: Comment ID.
@@ -402,14 +402,14 @@ class Wall {
      * @throws VKApiWallAccessCommentException Access to wall's comment denied
      *
      */
-    public function deleteComment(string $access_token, array $params = array()) {
-        return $this->request->post('wall.deleteComment', $access_token, $params);
+    public function deleteComment(array $params = array()) {
+        return $this->http->post('wall.deleteComment', $params);
     }
 
     /**
      * Restores a comment deleted from a user wall or community wall.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: User ID or community ID. Use a negative value to designate a community ID.
      *      - integer comment_id: Comment ID.
@@ -420,14 +420,14 @@ class Wall {
      * @throws VKApiWallAccessCommentException Access to wall's comment denied
      *
      */
-    public function restoreComment(string $access_token, array $params = array()) {
-        return $this->request->post('wall.restoreComment', $access_token, $params);
+    public function restoreComment(array $params = array()) {
+        return $this->http->post('wall.restoreComment', $params);
     }
 
     /**
      * Reports (submits a complaint about) a post on a user wall or community wall.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: ID of the user or community that owns the wall.
      *      - integer post_id: Post ID.
@@ -440,14 +440,14 @@ class Wall {
      * @throws VKApiException in case of API error
      *
      */
-    public function reportPost(string $access_token, array $params = array()) {
-        return $this->request->post('wall.reportPost', $access_token, $params);
+    public function reportPost(array $params = array()) {
+        return $this->http->post('wall.reportPost', $params);
     }
 
     /**
      * Reports (submits a complaint about) a comment on a post on a user wall or community wall.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: ID of the user or community that owns the wall.
      *      - integer comment_id: Comment ID.
@@ -460,7 +460,7 @@ class Wall {
      * @throws VKApiException in case of API error
      *
      */
-    public function reportComment(string $access_token, array $params = array()) {
-        return $this->request->post('wall.reportComment', $access_token, $params);
+    public function reportComment(array $params = array()) {
+        return $this->http->post('wall.reportComment', $params);
     }
 }

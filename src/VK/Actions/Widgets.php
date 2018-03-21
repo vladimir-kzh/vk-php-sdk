@@ -2,29 +2,29 @@
 
 namespace VK\Actions;
 
-use VK\Client\VKApiRequest;
+use VK\Client\VKHttpClient;
 use VK\Exceptions\VKApiException;
 use VK\Exceptions\VKClientException;
 
 class Widgets {
 
     /**
-     * @var VKApiRequest
+     * @var VKHttpClient
      */
-    private $request;
+    private $http;
 
     /**
      * Widgets constructor.
-     * @param VKApiRequest $request
+     * @param VKHttpClient $http
      */
-    public function __construct(VKApiRequest $request) {
-        $this->request = $request;
+    public function __construct(VKHttpClient $http) {
+        $this->http = $http;
     }
 
     /**
      * Gets a list of comments for the page added through the [vk.com/dev/Comments|Comments widget].
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer widget_api_id:
      *      - string url:
@@ -38,15 +38,15 @@ class Widgets {
      * @throws VKApiException in case of API error
      *
      */
-    public function getComments(string $access_token, array $params = array()) {
-        return $this->request->post('widgets.getComments', $access_token, $params);
+    public function getComments(array $params = array()) {
+        return $this->http->post('widgets.getComments', $params);
     }
 
     /**
      * Gets a list of application/site pages where the [vk.com/dev/Comments|Comments widget] or [vk.com/dev/Like|Like
      * widget] is installed.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer widget_api_id:
      *      - string order:
@@ -58,7 +58,7 @@ class Widgets {
      * @throws VKApiException in case of API error
      *
      */
-    public function getPages(string $access_token, array $params = array()) {
-        return $this->request->post('widgets.getPages', $access_token, $params);
+    public function getPages(array $params = array()) {
+        return $this->http->post('widgets.getPages', $params);
     }
 }

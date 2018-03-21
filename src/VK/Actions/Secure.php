@@ -2,7 +2,7 @@
 
 namespace VK\Actions;
 
-use VK\Client\VKApiRequest;
+use VK\Client\VKHttpClient;
 use VK\Exceptions\Api\VKApiAccessMenuException;
 use VK\Exceptions\Api\VKApiAppsAlreadyUnlockedException;
 use VK\Exceptions\VKApiException;
@@ -13,22 +13,22 @@ use VK\Exceptions\VKClientException;
 class Secure {
 
     /**
-     * @var VKApiRequest
+     * @var VKHttpClient
      */
-    private $request;
+    private $http;
 
     /**
      * Secure constructor.
-     * @param VKApiRequest $request
+     * @param VKHttpClient $http
      */
-    public function __construct(VKApiRequest $request) {
-        $this->request = $request;
+    public function __construct(VKHttpClient $http) {
+        $this->http = $http;
     }
 
     /**
      * Returns payment balance of the application in hundredth of a vote.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *
      * @return mixed
@@ -36,14 +36,14 @@ class Secure {
      * @throws VKApiException in case of API error
      *
      */
-    public function getAppBalance(string $access_token, array $params = array()) {
-        return $this->request->post('secure.getAppBalance', $access_token, $params);
+    public function getAppBalance(array $params = array()) {
+        return $this->http->post('secure.getAppBalance', $params);
     }
 
     /**
      * Shows history of votes transaction between users and the application.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *
      * @return mixed
@@ -51,15 +51,15 @@ class Secure {
      * @throws VKApiException in case of API error
      *
      */
-    public function getTransactionsHistory(string $access_token, array $params = array()) {
-        return $this->request->post('secure.getTransactionsHistory', $access_token, $params);
+    public function getTransactionsHistory(array $params = array()) {
+        return $this->http->post('secure.getTransactionsHistory', $params);
     }
 
     /**
      * Shows a list of SMS notifications sent by the application using
      * [vk.com/dev/secure.sendSMSNotification|secure.sendSMSNotification] method.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer user_id:
      *      - integer date_from: filter by start date. It is set as UNIX-time.
@@ -71,14 +71,14 @@ class Secure {
      * @throws VKApiException in case of API error
      *
      */
-    public function getSMSHistory(string $access_token, array $params = array()) {
-        return $this->request->post('secure.getSMSHistory', $access_token, $params);
+    public function getSMSHistory(array $params = array()) {
+        return $this->http->post('secure.getSMSHistory', $params);
     }
 
     /**
      * Sends 'SMS' notification to a user's mobile device.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer user_id: ID of the user to whom SMS notification is sent. The user shall allow the
      *        application to send him/her notifications (, +1).
@@ -92,14 +92,14 @@ class Secure {
      * @throws VKApiMobileNotActivatedException The mobile number of the user is unknown
      *
      */
-    public function sendSMSNotification(string $access_token, array $params = array()) {
-        return $this->request->post('secure.sendSMSNotification', $access_token, $params);
+    public function sendSMSNotification(array $params = array()) {
+        return $this->http->post('secure.sendSMSNotification', $params);
     }
 
     /**
      * Sends notification to the user.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - array user_ids:
      *      - integer user_id:
@@ -111,14 +111,14 @@ class Secure {
      * @throws VKApiException in case of API error
      *
      */
-    public function sendNotification(string $access_token, array $params = array()) {
-        return $this->request->post('secure.sendNotification', $access_token, $params);
+    public function sendNotification(array $params = array()) {
+        return $this->http->post('secure.sendNotification', $params);
     }
 
     /**
      * Sets a counter which is shown to the user in bold in the left menu.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - array counters:
      *      - integer user_id:
@@ -130,14 +130,14 @@ class Secure {
      * @throws VKApiAccessMenuException Access to the menu of the user denied
      *
      */
-    public function setCounter(string $access_token, array $params = array()) {
-        return $this->request->post('secure.setCounter', $access_token, $params);
+    public function setCounter(array $params = array()) {
+        return $this->http->post('secure.setCounter', $params);
     }
 
     /**
      * Sets user game level in the application which can be seen by his/her friends.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - array levels:
      *      - integer user_id:
@@ -148,14 +148,14 @@ class Secure {
      * @throws VKApiException in case of API error
      *
      */
-    public function setUserLevel(string $access_token, array $params = array()) {
-        return $this->request->post('secure.setUserLevel', $access_token, $params);
+    public function setUserLevel(array $params = array()) {
+        return $this->http->post('secure.setUserLevel', $params);
     }
 
     /**
      * Returns one of the previously set game levels of one or more users in the application.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - array user_ids:
      *
@@ -164,14 +164,14 @@ class Secure {
      * @throws VKApiException in case of API error
      *
      */
-    public function getUserLevel(string $access_token, array $params = array()) {
-        return $this->request->post('secure.getUserLevel', $access_token, $params);
+    public function getUserLevel(array $params = array()) {
+        return $this->http->post('secure.getUserLevel', $params);
     }
 
     /**
      * Adds user activity information to an application
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer user_id: ID of a user to save the data
      *      - integer activity_id: there are 2 default activities: , * 1 – level. Works similar to ,, * 2 –
@@ -185,14 +185,14 @@ class Secure {
      * @throws VKApiAppsAlreadyUnlockedException This achievement is already unlocked
      *
      */
-    public function addAppEvent(string $access_token, array $params = array()) {
-        return $this->request->post('secure.addAppEvent', $access_token, $params);
+    public function addAppEvent(array $params = array()) {
+        return $this->http->post('secure.addAppEvent', $params);
     }
 
     /**
      * Checks the user authentication in 'IFrame' and 'Flash' apps using the 'access_token' parameter.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - string token: client 'access_token'
      *      - string ip: user 'ip address'. Note that user may access using the 'ipv6' address, in this case it is
@@ -203,7 +203,7 @@ class Secure {
      * @throws VKApiException in case of API error
      *
      */
-    public function checkToken(string $access_token, array $params = array()) {
-        return $this->request->post('secure.checkToken', $access_token, $params);
+    public function checkToken(array $params = array()) {
+        return $this->http->post('secure.checkToken', $params);
     }
 }

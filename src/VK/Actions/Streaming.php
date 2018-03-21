@@ -2,29 +2,29 @@
 
 namespace VK\Actions;
 
-use VK\Client\VKApiRequest;
+use VK\Client\VKHttpClient;
 use VK\Exceptions\VKApiException;
 use VK\Exceptions\VKClientException;
 
 class Streaming {
 
     /**
-     * @var VKApiRequest
+     * @var VKHttpClient
      */
-    private $request;
+    private $http;
 
     /**
      * Streaming constructor.
-     * @param VKApiRequest $request
+     * @param VKHttpClient $http
      */
-    public function __construct(VKApiRequest $request) {
-        $this->request = $request;
+    public function __construct(VKHttpClient $http) {
+        $this->http = $http;
     }
 
     /**
      * Allows to receive data for the connection to Streaming API.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *
      * @return mixed
@@ -32,7 +32,7 @@ class Streaming {
      * @throws VKApiException in case of API error
      *
      */
-    public function getServerUrl(string $access_token, array $params = array()) {
-        return $this->request->post('streaming.getServerUrl', $access_token, $params);
+    public function getServerUrl(array $params = array()) {
+        return $this->http->post('streaming.getServerUrl', $params);
     }
 }

@@ -6,7 +6,7 @@ use VK\Actions\Enums\PhotosGetAlbumId;
 use VK\Actions\Enums\PhotosGetCommentsSort;
 use VK\Actions\Enums\PhotosReportCommentReason;
 use VK\Actions\Enums\PhotosReportReason;
-use VK\Client\VKApiRequest;
+use VK\Client\VKHttpClient;
 use VK\Exceptions\Api\VKApiAlbumsLimitException;
 use VK\Exceptions\Api\VKApiBlockedException;
 use VK\Exceptions\VKApiException;
@@ -20,22 +20,22 @@ use VK\Exceptions\VKClientException;
 class Photos {
 
     /**
-     * @var VKApiRequest
+     * @var VKHttpClient
      */
-    private $request;
+    private $http;
 
     /**
      * Photos constructor.
-     * @param VKApiRequest $request
+     * @param VKHttpClient $http
      */
-    public function __construct(VKApiRequest $request) {
-        $this->request = $request;
+    public function __construct(VKHttpClient $http) {
+        $this->http = $http;
     }
 
     /**
      * Creates an empty photo album.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - string title: Album title.
      *      - integer group_id: ID of the community in which the album will be created.
@@ -51,14 +51,14 @@ class Photos {
      * @throws VKApiAlbumsLimitException Albums number limit is reached
      *
      */
-    public function createAlbum(string $access_token, array $params = array()) {
-        return $this->request->post('photos.createAlbum', $access_token, $params);
+    public function createAlbum(array $params = array()) {
+        return $this->http->post('photos.createAlbum', $params);
     }
 
     /**
      * Edits information about a photo album.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer album_id: ID of the photo album to be edited.
      *      - string title: New album title.
@@ -75,14 +75,14 @@ class Photos {
      * @throws VKApiParamAlbumIdException Invalid album id
      *
      */
-    public function editAlbum(string $access_token, array $params = array()) {
-        return $this->request->post('photos.editAlbum', $access_token, $params);
+    public function editAlbum(array $params = array()) {
+        return $this->http->post('photos.editAlbum', $params);
     }
 
     /**
      * Returns a list of a user's or community's photo albums.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: ID of the user or community that owns the albums.
      *      - array album_ids: Album IDs.
@@ -97,14 +97,14 @@ class Photos {
      * @throws VKApiException in case of API error
      *
      */
-    public function getAlbums(string $access_token, array $params = array()) {
-        return $this->request->post('photos.getAlbums', $access_token, $params);
+    public function getAlbums(array $params = array()) {
+        return $this->http->post('photos.getAlbums', $params);
     }
 
     /**
      * Returns a list of a user's or community's photos.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: ID of the user or community that owns the photos. Use a negative value to designate
      *        a community ID.
@@ -128,14 +128,14 @@ class Photos {
      * @throws VKApiException in case of API error
      *
      */
-    public function get(string $access_token, array $params = array()) {
-        return $this->request->post('photos.get', $access_token, $params);
+    public function get(array $params = array()) {
+        return $this->http->post('photos.get', $params);
     }
 
     /**
      * Returns the number of photo albums belonging to a user or community.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer user_id: User ID.
      *      - integer group_id: Community ID.
@@ -145,14 +145,14 @@ class Photos {
      * @throws VKApiException in case of API error
      *
      */
-    public function getAlbumsCount(string $access_token, array $params = array()) {
-        return $this->request->post('photos.getAlbumsCount', $access_token, $params);
+    public function getAlbumsCount(array $params = array()) {
+        return $this->http->post('photos.getAlbumsCount', $params);
     }
 
     /**
      * Returns information about photos by their IDs.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - array photos: IDs separated with a comma, that are IDs of users who posted photos and IDs of photos
      *        themselves with an underscore character between such IDs. To get information about a photo in the group
@@ -166,14 +166,14 @@ class Photos {
      * @throws VKApiException in case of API error
      *
      */
-    public function getById(string $access_token, array $params = array()) {
-        return $this->request->post('photos.getById', $access_token, $params);
+    public function getById(array $params = array()) {
+        return $this->http->post('photos.getById', $params);
     }
 
     /**
      * Returns the server address for photo upload.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer album_id: Album ID.
      *      - integer group_id: ID of community that owns the album (if the photo will be uploaded to a community
@@ -184,14 +184,14 @@ class Photos {
      * @throws VKApiException in case of API error
      *
      */
-    public function getUploadServer(string $access_token, array $params = array()) {
-        return $this->request->post('photos.getUploadServer', $access_token, $params);
+    public function getUploadServer(array $params = array()) {
+        return $this->http->post('photos.getUploadServer', $params);
     }
 
     /**
      * Returns the server address for owner cover upload.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer group_id: ID of community that owns the album (if the photo will be uploaded to a community
      *        album).
@@ -205,14 +205,14 @@ class Photos {
      * @throws VKApiException in case of API error
      *
      */
-    public function getOwnerCoverPhotoUploadServer(string $access_token, array $params = array()) {
-        return $this->request->post('photos.getOwnerCoverPhotoUploadServer', $access_token, $params);
+    public function getOwnerCoverPhotoUploadServer(array $params = array()) {
+        return $this->http->post('photos.getOwnerCoverPhotoUploadServer', $params);
     }
 
     /**
      * Returns an upload server address for a profile or community photo.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: identifier of a community or current user. "Note that community id must be
      *        negative. 'owner_id=1' – user, 'owner_id=-1' – community, "
@@ -222,14 +222,14 @@ class Photos {
      * @throws VKApiException in case of API error
      *
      */
-    public function getOwnerPhotoUploadServer(string $access_token, array $params = array()) {
-        return $this->request->post('photos.getOwnerPhotoUploadServer', $access_token, $params);
+    public function getOwnerPhotoUploadServer(array $params = array()) {
+        return $this->http->post('photos.getOwnerPhotoUploadServer', $params);
     }
 
     /**
      * Returns an upload link for chat cover pictures.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer chat_id: ID of the chat for which you want to upload a cover photo.
      *      - integer crop_x:
@@ -241,14 +241,14 @@ class Photos {
      * @throws VKApiException in case of API error
      *
      */
-    public function getChatUploadServer(string $access_token, array $params = array()) {
-        return $this->request->post('photos.getChatUploadServer', $access_token, $params);
+    public function getChatUploadServer(array $params = array()) {
+        return $this->http->post('photos.getChatUploadServer', $params);
     }
 
     /**
      * Returns the server address for market photo upload.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer group_id: Community ID.
      *      - boolean main_photo: '1' if you want to upload the main item photo.
@@ -261,14 +261,14 @@ class Photos {
      * @throws VKApiException in case of API error
      *
      */
-    public function getMarketUploadServer(string $access_token, array $params = array()) {
-        return $this->request->post('photos.getMarketUploadServer', $access_token, $params);
+    public function getMarketUploadServer(array $params = array()) {
+        return $this->http->post('photos.getMarketUploadServer', $params);
     }
 
     /**
      * Returns the server address for market album photo upload.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer group_id: Community ID.
      *
@@ -277,14 +277,14 @@ class Photos {
      * @throws VKApiException in case of API error
      *
      */
-    public function getMarketAlbumUploadServer(string $access_token, array $params = array()) {
-        return $this->request->post('photos.getMarketAlbumUploadServer', $access_token, $params);
+    public function getMarketAlbumUploadServer(array $params = array()) {
+        return $this->http->post('photos.getMarketAlbumUploadServer', $params);
     }
 
     /**
      * Saves market photos after successful uploading.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer group_id: Community ID.
      *      - string photo: Parameter returned when photos are [vk.com/dev/upload_files|uploaded to server].
@@ -300,14 +300,14 @@ class Photos {
      * @throws VKApiParamPhotoException Invalid photo
      *
      */
-    public function saveMarketPhoto(string $access_token, array $params = array()) {
-        return $this->request->post('photos.saveMarketPhoto', $access_token, $params);
+    public function saveMarketPhoto(array $params = array()) {
+        return $this->http->post('photos.saveMarketPhoto', $params);
     }
 
     /**
      * Saves cover photo after successful uploading.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - string photo: Parameter returned when photos are [vk.com/dev/upload_files|uploaded to server].
      *      - string hash: Parameter returned when photos are [vk.com/dev/upload_files|uploaded to server].
@@ -318,14 +318,14 @@ class Photos {
      * @throws VKApiParamPhotoException Invalid photo
      *
      */
-    public function saveOwnerCoverPhoto(string $access_token, array $params = array()) {
-        return $this->request->post('photos.saveOwnerCoverPhoto', $access_token, $params);
+    public function saveOwnerCoverPhoto(array $params = array()) {
+        return $this->http->post('photos.saveOwnerCoverPhoto', $params);
     }
 
     /**
      * Saves market album photos after successful uploading.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer group_id: Community ID.
      *      - string photo: Parameter returned when photos are [vk.com/dev/upload_files|uploaded to server].
@@ -339,15 +339,15 @@ class Photos {
      * @throws VKApiParamPhotoException Invalid photo
      *
      */
-    public function saveMarketAlbumPhoto(string $access_token, array $params = array()) {
-        return $this->request->post('photos.saveMarketAlbumPhoto', $access_token, $params);
+    public function saveMarketAlbumPhoto(array $params = array()) {
+        return $this->http->post('photos.saveMarketAlbumPhoto', $params);
     }
 
     /**
      * Saves a profile or community photo. Upload URL can be got with the
      * [vk.com/dev/photos.getOwnerPhotoUploadServer|photos.getOwnerPhotoUploadServer] method.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - string server: parameter returned after [vk.com/dev/upload_files|photo upload].
      *      - string hash: parameter returned after [vk.com/dev/upload_files|photo upload].
@@ -359,14 +359,14 @@ class Photos {
      * @throws VKApiParamPhotoException Invalid photo
      *
      */
-    public function saveOwnerPhoto(string $access_token, array $params = array()) {
-        return $this->request->post('photos.saveOwnerPhoto', $access_token, $params);
+    public function saveOwnerPhoto(array $params = array()) {
+        return $this->http->post('photos.saveOwnerPhoto', $params);
     }
 
     /**
      * Saves a photo to a user's or community's wall after being uploaded.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer user_id: ID of the user on whose wall the photo will be saved.
      *      - integer group_id: ID of community on whose wall the photo will be saved.
@@ -386,14 +386,14 @@ class Photos {
      * @throws VKApiParamHashException Invalid hash
      *
      */
-    public function saveWallPhoto(string $access_token, array $params = array()) {
-        return $this->request->post('photos.saveWallPhoto', $access_token, $params);
+    public function saveWallPhoto(array $params = array()) {
+        return $this->http->post('photos.saveWallPhoto', $params);
     }
 
     /**
      * Returns the server address for photo upload onto a user's wall.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer group_id: ID of community to whose wall the photo will be uploaded.
      *
@@ -402,14 +402,14 @@ class Photos {
      * @throws VKApiException in case of API error
      *
      */
-    public function getWallUploadServer(string $access_token, array $params = array()) {
-        return $this->request->post('photos.getWallUploadServer', $access_token, $params);
+    public function getWallUploadServer(array $params = array()) {
+        return $this->http->post('photos.getWallUploadServer', $params);
     }
 
     /**
      * Returns the server address for photo upload in a private message for a user.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *
      * @return mixed
@@ -417,15 +417,15 @@ class Photos {
      * @throws VKApiException in case of API error
      *
      */
-    public function getMessagesUploadServer(string $access_token, array $params = array()) {
-        return $this->request->post('photos.getMessagesUploadServer', $access_token, $params);
+    public function getMessagesUploadServer(array $params = array()) {
+        return $this->http->post('photos.getMessagesUploadServer', $params);
     }
 
     /**
      * Saves a photo after being successfully uploaded. URL obtained with
      * [vk.com/dev/photos.getMessagesUploadServer|photos.getMessagesUploadServer] method.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - string photo: Parameter returned when the photo is [vk.com/dev/upload_files|uploaded to the server].
      *      - integer server:
@@ -439,14 +439,14 @@ class Photos {
      * @throws VKApiParamHashException Invalid hash
      *
      */
-    public function saveMessagesPhoto(string $access_token, array $params = array()) {
-        return $this->request->post('photos.saveMessagesPhoto', $access_token, $params);
+    public function saveMessagesPhoto(array $params = array()) {
+        return $this->http->post('photos.saveMessagesPhoto', $params);
     }
 
     /**
      * Reports (submits a complaint about) a photo.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: ID of the user or community that owns the photo.
      *      - integer photo_id: Photo ID.
@@ -459,14 +459,14 @@ class Photos {
      * @throws VKApiException in case of API error
      *
      */
-    public function report(string $access_token, array $params = array()) {
-        return $this->request->post('photos.report', $access_token, $params);
+    public function report(array $params = array()) {
+        return $this->http->post('photos.report', $params);
     }
 
     /**
      * Reports (submits a complaint about) a comment on a photo.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: ID of the user or community that owns the photo.
      *      - integer comment_id: ID of the comment being reported.
@@ -479,14 +479,14 @@ class Photos {
      * @throws VKApiException in case of API error
      *
      */
-    public function reportComment(string $access_token, array $params = array()) {
-        return $this->request->post('photos.reportComment', $access_token, $params);
+    public function reportComment(array $params = array()) {
+        return $this->http->post('photos.reportComment', $params);
     }
 
     /**
      * Returns a list of photos.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - string q: Search query string.
      *      - number lat: Geographical latitude, in degrees (from '-90' to '90').
@@ -504,14 +504,14 @@ class Photos {
      * @throws VKApiException in case of API error
      *
      */
-    public function search(string $access_token, array $params = array()) {
-        return $this->request->post('photos.search', $access_token, $params);
+    public function search(array $params = array()) {
+        return $this->http->post('photos.search', $params);
     }
 
     /**
      * Saves photos after successful uploading.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer album_id: ID of the album to save photos to.
      *      - integer group_id: ID of the community to save photos to.
@@ -530,14 +530,14 @@ class Photos {
      * @throws VKApiParamHashException Invalid hash
      *
      */
-    public function save(string $access_token, array $params = array()) {
-        return $this->request->post('photos.save', $access_token, $params);
+    public function save(array $params = array()) {
+        return $this->http->post('photos.save', $params);
     }
 
     /**
      * Allows to copy a photo to the "Saved photos" album
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: photo's owner ID
      *      - integer photo_id: photo ID
@@ -548,14 +548,14 @@ class Photos {
      * @throws VKApiException in case of API error
      *
      */
-    public function copy(string $access_token, array $params = array()) {
-        return $this->request->post('photos.copy', $access_token, $params);
+    public function copy(array $params = array()) {
+        return $this->http->post('photos.copy', $params);
     }
 
     /**
      * Edits the caption of a photo.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: ID of the user or community that owns the photo.
      *      - integer photo_id: Photo ID.
@@ -572,14 +572,14 @@ class Photos {
      * @throws VKApiException in case of API error
      *
      */
-    public function edit(string $access_token, array $params = array()) {
-        return $this->request->post('photos.edit', $access_token, $params);
+    public function edit(array $params = array()) {
+        return $this->http->post('photos.edit', $params);
     }
 
     /**
      * Moves a photo from one album to another.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: ID of the user or community that owns the photo.
      *      - integer target_album_id: ID of the album to which the photo will be moved.
@@ -590,14 +590,14 @@ class Photos {
      * @throws VKApiException in case of API error
      *
      */
-    public function move(string $access_token, array $params = array()) {
-        return $this->request->post('photos.move', $access_token, $params);
+    public function move(array $params = array()) {
+        return $this->http->post('photos.move', $params);
     }
 
     /**
      * Makes a photo into an album cover.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: ID of the user or community that owns the photo.
      *      - integer photo_id: Photo ID.
@@ -608,14 +608,14 @@ class Photos {
      * @throws VKApiException in case of API error
      *
      */
-    public function makeCover(string $access_token, array $params = array()) {
-        return $this->request->post('photos.makeCover', $access_token, $params);
+    public function makeCover(array $params = array()) {
+        return $this->http->post('photos.makeCover', $params);
     }
 
     /**
      * Reorders the album in the list of user albums.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: ID of the user or community that owns the album.
      *      - integer album_id: Album ID.
@@ -627,14 +627,14 @@ class Photos {
      * @throws VKApiException in case of API error
      *
      */
-    public function reorderAlbums(string $access_token, array $params = array()) {
-        return $this->request->post('photos.reorderAlbums', $access_token, $params);
+    public function reorderAlbums(array $params = array()) {
+        return $this->http->post('photos.reorderAlbums', $params);
     }
 
     /**
      * Reorders the photo in the list of photos of the user album.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: ID of the user or community that owns the photo.
      *      - integer photo_id: Photo ID.
@@ -647,14 +647,14 @@ class Photos {
      * @throws VKApiParamPhotosException Invalid photos
      *
      */
-    public function reorderPhotos(string $access_token, array $params = array()) {
-        return $this->request->post('photos.reorderPhotos', $access_token, $params);
+    public function reorderPhotos(array $params = array()) {
+        return $this->http->post('photos.reorderPhotos', $params);
     }
 
     /**
      * Returns a list of photos belonging to a user or community, in reverse chronological order.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: ID of a user or community that owns the photos. Use a negative value to designate a
      *        community ID.
@@ -675,14 +675,14 @@ class Photos {
      * @throws VKApiBlockedException Content blocked
      *
      */
-    public function getAll(string $access_token, array $params = array()) {
-        return $this->request->post('photos.getAll', $access_token, $params);
+    public function getAll(array $params = array()) {
+        return $this->http->post('photos.getAll', $params);
     }
 
     /**
      * Returns a list of photos in which a user is tagged.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer user_id: User ID.
      *      - integer offset: Offset needed to return a specific subset of photos. By default, '0'.
@@ -696,14 +696,14 @@ class Photos {
      * @throws VKApiException in case of API error
      *
      */
-    public function getUserPhotos(string $access_token, array $params = array()) {
-        return $this->request->post('photos.getUserPhotos', $access_token, $params);
+    public function getUserPhotos(array $params = array()) {
+        return $this->http->post('photos.getUserPhotos', $params);
     }
 
     /**
      * Deletes a photo album belonging to the current user.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer album_id: Album ID.
      *      - integer group_id: ID of the community that owns the album.
@@ -714,14 +714,14 @@ class Photos {
      * @throws VKApiParamAlbumIdException Invalid album id
      *
      */
-    public function deleteAlbum(string $access_token, array $params = array()) {
-        return $this->request->post('photos.deleteAlbum', $access_token, $params);
+    public function deleteAlbum(array $params = array()) {
+        return $this->http->post('photos.deleteAlbum', $params);
     }
 
     /**
      * Deletes a photo.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: ID of the user or community that owns the photo.
      *      - integer photo_id: Photo ID.
@@ -731,14 +731,14 @@ class Photos {
      * @throws VKApiException in case of API error
      *
      */
-    public function delete(string $access_token, array $params = array()) {
-        return $this->request->post('photos.delete', $access_token, $params);
+    public function delete(array $params = array()) {
+        return $this->http->post('photos.delete', $params);
     }
 
     /**
      * Restores a deleted photo.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: ID of the user or community that owns the photo.
      *      - integer photo_id: Photo ID.
@@ -748,14 +748,14 @@ class Photos {
      * @throws VKApiException in case of API error
      *
      */
-    public function restore(string $access_token, array $params = array()) {
-        return $this->request->post('photos.restore', $access_token, $params);
+    public function restore(array $params = array()) {
+        return $this->http->post('photos.restore', $params);
     }
 
     /**
      * Confirms a tag on a photo.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: ID of the user or community that owns the photo.
      *      - string photo_id: Photo ID.
@@ -766,14 +766,14 @@ class Photos {
      * @throws VKApiException in case of API error
      *
      */
-    public function confirmTag(string $access_token, array $params = array()) {
-        return $this->request->post('photos.confirmTag', $access_token, $params);
+    public function confirmTag(array $params = array()) {
+        return $this->http->post('photos.confirmTag', $params);
     }
 
     /**
      * Returns a list of comments on a photo.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: ID of the user or community that owns the photo.
      *      - integer photo_id: Photo ID.
@@ -792,15 +792,15 @@ class Photos {
      * @throws VKApiException in case of API error
      *
      */
-    public function getComments(string $access_token, array $params = array()) {
-        return $this->request->post('photos.getComments', $access_token, $params);
+    public function getComments(array $params = array()) {
+        return $this->http->post('photos.getComments', $params);
     }
 
     /**
      * Returns a list of comments on a specific photo album or all albums of the user sorted in reverse chronological
      * order.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: ID of the user or community that owns the album(s).
      *      - integer album_id: Album ID. If the parameter is not set, comments on all of the user's albums will be
@@ -815,14 +815,14 @@ class Photos {
      * @throws VKApiParamAlbumIdException Invalid album id
      *
      */
-    public function getAllComments(string $access_token, array $params = array()) {
-        return $this->request->post('photos.getAllComments', $access_token, $params);
+    public function getAllComments(array $params = array()) {
+        return $this->http->post('photos.getAllComments', $params);
     }
 
     /**
      * Adds a new comment on the photo.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: ID of the user or community that owns the photo.
      *      - integer photo_id: Photo ID.
@@ -842,14 +842,14 @@ class Photos {
      * @throws VKApiException in case of API error
      *
      */
-    public function createComment(string $access_token, array $params = array()) {
-        return $this->request->post('photos.createComment', $access_token, $params);
+    public function createComment(array $params = array()) {
+        return $this->http->post('photos.createComment', $params);
     }
 
     /**
      * Deletes a comment on the photo.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: ID of the user or community that owns the photo.
      *      - integer comment_id: Comment ID.
@@ -859,14 +859,14 @@ class Photos {
      * @throws VKApiException in case of API error
      *
      */
-    public function deleteComment(string $access_token, array $params = array()) {
-        return $this->request->post('photos.deleteComment', $access_token, $params);
+    public function deleteComment(array $params = array()) {
+        return $this->http->post('photos.deleteComment', $params);
     }
 
     /**
      * Restores a deleted comment on a photo.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: ID of the user or community that owns the photo.
      *      - integer comment_id: ID of the deleted comment.
@@ -876,14 +876,14 @@ class Photos {
      * @throws VKApiException in case of API error
      *
      */
-    public function restoreComment(string $access_token, array $params = array()) {
-        return $this->request->post('photos.restoreComment', $access_token, $params);
+    public function restoreComment(array $params = array()) {
+        return $this->http->post('photos.restoreComment', $params);
     }
 
     /**
      * Edits a comment on a photo.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: ID of the user or community that owns the photo.
      *      - integer comment_id: Comment ID.
@@ -898,14 +898,14 @@ class Photos {
      * @throws VKApiException in case of API error
      *
      */
-    public function editComment(string $access_token, array $params = array()) {
-        return $this->request->post('photos.editComment', $access_token, $params);
+    public function editComment(array $params = array()) {
+        return $this->http->post('photos.editComment', $params);
     }
 
     /**
      * Returns a list of tags on a photo.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: ID of the user or community that owns the photo.
      *      - integer photo_id: Photo ID.
@@ -916,14 +916,14 @@ class Photos {
      * @throws VKApiException in case of API error
      *
      */
-    public function getTags(string $access_token, array $params = array()) {
-        return $this->request->post('photos.getTags', $access_token, $params);
+    public function getTags(array $params = array()) {
+        return $this->http->post('photos.getTags', $params);
     }
 
     /**
      * Adds a tag on the photo.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: ID of the user or community that owns the photo.
      *      - integer photo_id: Photo ID.
@@ -938,14 +938,14 @@ class Photos {
      * @throws VKApiException in case of API error
      *
      */
-    public function putTag(string $access_token, array $params = array()) {
-        return $this->request->post('photos.putTag', $access_token, $params);
+    public function putTag(array $params = array()) {
+        return $this->http->post('photos.putTag', $params);
     }
 
     /**
      * Removes a tag from a photo.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: ID of the user or community that owns the photo.
      *      - integer photo_id: Photo ID.
@@ -956,14 +956,14 @@ class Photos {
      * @throws VKApiException in case of API error
      *
      */
-    public function removeTag(string $access_token, array $params = array()) {
-        return $this->request->post('photos.removeTag', $access_token, $params);
+    public function removeTag(array $params = array()) {
+        return $this->http->post('photos.removeTag', $params);
     }
 
     /**
      * Returns a list of photos with tags that have not been viewed.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer offset: Offset needed to return a specific subset of photos.
      *      - integer count: Number of photos to return.
@@ -973,7 +973,7 @@ class Photos {
      * @throws VKApiException in case of API error
      *
      */
-    public function getNewTags(string $access_token, array $params = array()) {
-        return $this->request->post('photos.getNewTags', $access_token, $params);
+    public function getNewTags(array $params = array()) {
+        return $this->http->post('photos.getNewTags', $params);
     }
 }

@@ -2,29 +2,29 @@
 
 namespace VK\Actions;
 
-use VK\Client\VKApiRequest;
+use VK\Client\VKHttpClient;
 use VK\Exceptions\VKApiException;
 use VK\Exceptions\VKClientException;
 
 class Notifications {
 
     /**
-     * @var VKApiRequest
+     * @var VKHttpClient
      */
-    private $request;
+    private $http;
 
     /**
      * Notifications constructor.
-     * @param VKApiRequest $request
+     * @param VKHttpClient $http
      */
-    public function __construct(VKApiRequest $request) {
-        $this->request = $request;
+    public function __construct(VKHttpClient $http) {
+        $this->http = $http;
     }
 
     /**
      * Returns a list of notifications about other users' feedback to the current user's wall posts.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer count: Number of notifications to return.
      *      - string start_from:
@@ -42,14 +42,14 @@ class Notifications {
      * @throws VKApiException in case of API error
      *
      */
-    public function get(string $access_token, array $params = array()) {
-        return $this->request->post('notifications.get', $access_token, $params);
+    public function get(array $params = array()) {
+        return $this->http->post('notifications.get', $params);
     }
 
     /**
      * Resets the counter of new notifications about other users' feedback to the current user's wall posts.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *
      * @return mixed
@@ -57,7 +57,7 @@ class Notifications {
      * @throws VKApiException in case of API error
      *
      */
-    public function markAsViewed(string $access_token, array $params = array()) {
-        return $this->request->post('notifications.markAsViewed', $access_token, $params);
+    public function markAsViewed(array $params = array()) {
+        return $this->http->post('notifications.markAsViewed', $params);
     }
 }

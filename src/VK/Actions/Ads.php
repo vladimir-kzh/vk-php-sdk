@@ -11,7 +11,7 @@ use VK\Actions\Enums\AdsGetSuggestionsLang;
 use VK\Actions\Enums\AdsGetSuggestionsSection;
 use VK\Actions\Enums\AdsGetTargetingStatsAdFormat;
 use VK\Actions\Enums\AdsGetUploadURLAdFormat;
-use VK\Client\VKApiRequest;
+use VK\Client\VKHttpClient;
 use VK\Exceptions\Api\VKApiAdsPartialSuccessException;
 use VK\Exceptions\Api\VKApiAdsPermissionException;
 use VK\Exceptions\VKApiException;
@@ -21,22 +21,22 @@ use VK\Exceptions\VKClientException;
 class Ads {
 
     /**
-     * @var VKApiRequest
+     * @var VKHttpClient
      */
-    private $request;
+    private $http;
 
     /**
      * Ads constructor.
-     * @param VKApiRequest $request
+     * @param VKHttpClient $http
      */
-    public function __construct(VKApiRequest $request) {
-        $this->request = $request;
+    public function __construct(VKHttpClient $http) {
+        $this->http = $http;
     }
 
     /**
      * Returns a list of advertising accounts.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *
      * @return mixed
@@ -44,14 +44,14 @@ class Ads {
      * @throws VKApiException in case of API error
      *
      */
-    public function getAccounts(string $access_token, array $params = array()) {
-        return $this->request->post('ads.getAccounts', $access_token, $params);
+    public function getAccounts(array $params = array()) {
+        return $this->http->post('ads.getAccounts', $params);
     }
 
     /**
      * Returns a list of advertising agency's clients.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer account_id: Advertising account ID.
      *
@@ -61,14 +61,14 @@ class Ads {
      * @throws VKApiWeightedFloodException Permission denied. You have requested too many actions this day. Try later.
      *
      */
-    public function getClients(string $access_token, array $params = array()) {
-        return $this->request->post('ads.getClients', $access_token, $params);
+    public function getClients(array $params = array()) {
+        return $this->http->post('ads.getClients', $params);
     }
 
     /**
      * Creates clients of an advertising agency.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer account_id: Advertising account ID.
      *      - string data: Serialized JSON array of objects that describe created campaigns. Description of
@@ -81,14 +81,14 @@ class Ads {
      * @throws VKApiWeightedFloodException Permission denied. You have requested too many actions this day. Try later.
      *
      */
-    public function createClients(string $access_token, array $params = array()) {
-        return $this->request->post('ads.createClients', $access_token, $params);
+    public function createClients(array $params = array()) {
+        return $this->http->post('ads.createClients', $params);
     }
 
     /**
      * Edits clients of an advertising agency.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer account_id: Advertising account ID.
      *      - string data: Serialized JSON array of objects that describe changes in clients. Description of
@@ -100,14 +100,14 @@ class Ads {
      * @throws VKApiWeightedFloodException Permission denied. You have requested too many actions this day. Try later.
      *
      */
-    public function updateClients(string $access_token, array $params = array()) {
-        return $this->request->post('ads.updateClients', $access_token, $params);
+    public function updateClients(array $params = array()) {
+        return $this->http->post('ads.updateClients', $params);
     }
 
     /**
      * Archives clients of an advertising agency.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer account_id: Advertising account ID.
      *      - string ids: Serialized JSON array with IDs of deleted clients.
@@ -118,14 +118,14 @@ class Ads {
      * @throws VKApiWeightedFloodException Permission denied. You have requested too many actions this day. Try later.
      *
      */
-    public function deleteClients(string $access_token, array $params = array()) {
-        return $this->request->post('ads.deleteClients', $access_token, $params);
+    public function deleteClients(array $params = array()) {
+        return $this->http->post('ads.deleteClients', $params);
     }
 
     /**
      * Returns a list of campaigns in an advertising account.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer account_id: Advertising account ID.
      *      - integer client_id: 'For advertising agencies'. ID of the client advertising campaigns are retrieved
@@ -142,14 +142,14 @@ class Ads {
      * @throws VKApiWeightedFloodException Permission denied. You have requested too many actions this day. Try later.
      *
      */
-    public function getCampaigns(string $access_token, array $params = array()) {
-        return $this->request->post('ads.getCampaigns', $access_token, $params);
+    public function getCampaigns(array $params = array()) {
+        return $this->http->post('ads.getCampaigns', $params);
     }
 
     /**
      * Creates advertising campaigns.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer account_id: Advertising account ID.
      *      - string data: Serialized JSON array of objects that describe created campaigns. Description of
@@ -162,14 +162,14 @@ class Ads {
      * @throws VKApiWeightedFloodException Permission denied. You have requested too many actions this day. Try later.
      *
      */
-    public function createCampaigns(string $access_token, array $params = array()) {
-        return $this->request->post('ads.createCampaigns', $access_token, $params);
+    public function createCampaigns(array $params = array()) {
+        return $this->http->post('ads.createCampaigns', $params);
     }
 
     /**
      * Edits advertising campaigns.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer account_id: Advertising account ID.
      *      - string data: Serialized JSON array of objects that describe changes in campaigns. Description of
@@ -182,14 +182,14 @@ class Ads {
      * @throws VKApiWeightedFloodException Permission denied. You have requested too many actions this day. Try later.
      *
      */
-    public function updateCampaigns(string $access_token, array $params = array()) {
-        return $this->request->post('ads.updateCampaigns', $access_token, $params);
+    public function updateCampaigns(array $params = array()) {
+        return $this->http->post('ads.updateCampaigns', $params);
     }
 
     /**
      * Archives advertising campaigns.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer account_id: Advertising account ID.
      *      - string ids: Serialized JSON array with IDs of deleted campaigns.
@@ -200,14 +200,14 @@ class Ads {
      * @throws VKApiWeightedFloodException Permission denied. You have requested too many actions this day. Try later.
      *
      */
-    public function deleteCampaigns(string $access_token, array $params = array()) {
-        return $this->request->post('ads.deleteCampaigns', $access_token, $params);
+    public function deleteCampaigns(array $params = array()) {
+        return $this->http->post('ads.deleteCampaigns', $params);
     }
 
     /**
      * Returns number of ads.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer account_id: Advertising account ID.
      *      - integer client_id: 'Available and required for advertising agencies.' ID of the client ads are
@@ -228,14 +228,14 @@ class Ads {
      * @throws VKApiWeightedFloodException Permission denied. You have requested too many actions this day. Try later.
      *
      */
-    public function getAds(string $access_token, array $params = array()) {
-        return $this->request->post('ads.getAds', $access_token, $params);
+    public function getAds(array $params = array()) {
+        return $this->http->post('ads.getAds', $params);
     }
 
     /**
      * Returns descriptions of ad layouts.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer account_id: Advertising account ID.
      *      - integer client_id: 'For advertising agencies.' ID of the client ads are retrieved from.
@@ -255,14 +255,14 @@ class Ads {
      * @throws VKApiWeightedFloodException Permission denied. You have requested too many actions this day. Try later.
      *
      */
-    public function getAdsLayout(string $access_token, array $params = array()) {
-        return $this->request->post('ads.getAdsLayout', $access_token, $params);
+    public function getAdsLayout(array $params = array()) {
+        return $this->http->post('ads.getAdsLayout', $params);
     }
 
     /**
      * Returns ad targeting parameters.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer account_id: Advertising account ID.
      *      - integer client_id: 'For advertising agencies.' ID of the client ads are retrieved from.
@@ -282,14 +282,14 @@ class Ads {
      * @throws VKApiWeightedFloodException Permission denied. You have requested too many actions this day. Try later.
      *
      */
-    public function getAdsTargeting(string $access_token, array $params = array()) {
-        return $this->request->post('ads.getAdsTargeting', $access_token, $params);
+    public function getAdsTargeting(array $params = array()) {
+        return $this->http->post('ads.getAdsTargeting', $params);
     }
 
     /**
      * Creates ads.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer account_id: Advertising account ID.
      *      - string data: Serialized JSON array of objects that describe created ads. Description of
@@ -302,14 +302,14 @@ class Ads {
      * @throws VKApiWeightedFloodException Permission denied. You have requested too many actions this day. Try later.
      *
      */
-    public function createAds(string $access_token, array $params = array()) {
-        return $this->request->post('ads.createAds', $access_token, $params);
+    public function createAds(array $params = array()) {
+        return $this->http->post('ads.createAds', $params);
     }
 
     /**
      * Edits ads.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer account_id: Advertising account ID.
      *      - string data: Serialized JSON array of objects that describe changes in ads. Description of
@@ -321,14 +321,14 @@ class Ads {
      * @throws VKApiWeightedFloodException Permission denied. You have requested too many actions this day. Try later.
      *
      */
-    public function updateAds(string $access_token, array $params = array()) {
-        return $this->request->post('ads.updateAds', $access_token, $params);
+    public function updateAds(array $params = array()) {
+        return $this->http->post('ads.updateAds', $params);
     }
 
     /**
      * Archives ads.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer account_id: Advertising account ID.
      *      - string ids: Serialized JSON array with ad IDs.
@@ -339,14 +339,14 @@ class Ads {
      * @throws VKApiWeightedFloodException Permission denied. You have requested too many actions this day. Try later.
      *
      */
-    public function deleteAds(string $access_token, array $params = array()) {
-        return $this->request->post('ads.deleteAds', $access_token, $params);
+    public function deleteAds(array $params = array()) {
+        return $this->http->post('ads.deleteAds', $params);
     }
 
     /**
      * Allows to check the ad link.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer account_id: Advertising account ID.
      *      - AdsCheckLinkLinkType link_type: Object type: *'community' — community,, *'post' — community
@@ -360,14 +360,14 @@ class Ads {
      * @throws VKApiException in case of API error
      *
      */
-    public function checkLink(string $access_token, array $params = array()) {
-        return $this->request->post('ads.checkLink', $access_token, $params);
+    public function checkLink(array $params = array()) {
+        return $this->http->post('ads.checkLink', $params);
     }
 
     /**
      * Returns statistics of performance indicators for ads, campaigns, clients or the whole account.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer account_id: Advertising account ID.
      *      - AdsGetStatisticsIdsType ids_type: Type of requested objects listed in 'ids' parameter: *ad — ads,,
@@ -392,14 +392,14 @@ class Ads {
      * @throws VKApiWeightedFloodException Permission denied. You have requested too many actions this day. Try later.
      *
      */
-    public function getStatistics(string $access_token, array $params = array()) {
-        return $this->request->post('ads.getStatistics', $access_token, $params);
+    public function getStatistics(array $params = array()) {
+        return $this->http->post('ads.getStatistics', $params);
     }
 
     /**
      * Returns demographics for ads or campaigns.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer account_id: Advertising account ID.
      *      - AdsGetDemographicsIdsType ids_type: Type of requested objects listed in 'ids' parameter: *ad —
@@ -424,14 +424,14 @@ class Ads {
      * @throws VKApiWeightedFloodException Permission denied. You have requested too many actions this day. Try later.
      *
      */
-    public function getDemographics(string $access_token, array $params = array()) {
-        return $this->request->post('ads.getDemographics', $access_token, $params);
+    public function getDemographics(array $params = array()) {
+        return $this->http->post('ads.getDemographics', $params);
     }
 
     /**
      * Allows to get detailed information about the ad post reach.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer account_id: Advertising account ID.
      *      - string ads_ids: Ads IDS separated by comma.
@@ -443,14 +443,14 @@ class Ads {
      * @throws VKApiAdsPermissionException Permission denied. You have no access to operations specified with given object(s)
      *
      */
-    public function getAdsPostsReach(string $access_token, array $params = array()) {
-        return $this->request->post('ads.getAdsPostsReach', $access_token, $params);
+    public function getAdsPostsReach(array $params = array()) {
+        return $this->http->post('ads.getAdsPostsReach', $params);
     }
 
     /**
      * Returns current budget of the advertising account.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer account_id: Advertising account ID.
      *
@@ -460,14 +460,14 @@ class Ads {
      * @throws VKApiWeightedFloodException Permission denied. You have requested too many actions this day. Try later.
      *
      */
-    public function getBudget(string $access_token, array $params = array()) {
-        return $this->request->post('ads.getBudget', $access_token, $params);
+    public function getBudget(array $params = array()) {
+        return $this->http->post('ads.getBudget', $params);
     }
 
     /**
      * Returns a list of managers and supervisors of advertising account.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer account_id: Advertising account ID.
      *
@@ -477,14 +477,14 @@ class Ads {
      * @throws VKApiWeightedFloodException Permission denied. You have requested too many actions this day. Try later.
      *
      */
-    public function getOfficeUsers(string $access_token, array $params = array()) {
-        return $this->request->post('ads.getOfficeUsers', $access_token, $params);
+    public function getOfficeUsers(array $params = array()) {
+        return $this->http->post('ads.getOfficeUsers', $params);
     }
 
     /**
      * Adds managers and/or supervisors to advertising account.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer account_id: Advertising account ID.
      *      - string data: Serialized JSON array of objects that describe added managers. Description of
@@ -496,14 +496,14 @@ class Ads {
      * @throws VKApiWeightedFloodException Permission denied. You have requested too many actions this day. Try later.
      *
      */
-    public function addOfficeUsers(string $access_token, array $params = array()) {
-        return $this->request->post('ads.addOfficeUsers', $access_token, $params);
+    public function addOfficeUsers(array $params = array()) {
+        return $this->http->post('ads.addOfficeUsers', $params);
     }
 
     /**
      * Removes managers and/or supervisors from advertising account.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer account_id: Advertising account ID.
      *      - string ids: Serialized JSON array with IDs of deleted managers.
@@ -514,14 +514,14 @@ class Ads {
      * @throws VKApiWeightedFloodException Permission denied. You have requested too many actions this day. Try later.
      *
      */
-    public function removeOfficeUsers(string $access_token, array $params = array()) {
-        return $this->request->post('ads.removeOfficeUsers', $access_token, $params);
+    public function removeOfficeUsers(array $params = array()) {
+        return $this->http->post('ads.removeOfficeUsers', $params);
     }
 
     /**
      * Returns the size of targeting audience, and also recommended values for CPC and CPM.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer account_id: Advertising account ID.
      *      - string criteria: Serialized JSON object that describes targeting parameters. Description of
@@ -543,14 +543,14 @@ class Ads {
      * @throws VKApiWeightedFloodException Permission denied. You have requested too many actions this day. Try later.
      *
      */
-    public function getTargetingStats(string $access_token, array $params = array()) {
-        return $this->request->post('ads.getTargetingStats', $access_token, $params);
+    public function getTargetingStats(array $params = array()) {
+        return $this->http->post('ads.getTargetingStats', $params);
     }
 
     /**
      * Returns a set of auto-suggestions for various targeting parameters.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - AdsGetSuggestionsSection section: Section, suggestions are retrieved in. Available values: *countries
      *        — request of a list of countries. If q is not set or blank, a short list of countries is shown. Otherwise,
@@ -578,14 +578,14 @@ class Ads {
      * @throws VKApiException in case of API error
      *
      */
-    public function getSuggestions(string $access_token, array $params = array()) {
-        return $this->request->post('ads.getSuggestions', $access_token, $params);
+    public function getSuggestions(array $params = array()) {
+        return $this->http->post('ads.getSuggestions', $params);
     }
 
     /**
      * Returns a list of possible ad categories.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - string lang: Language. The full list of supported languages is [vk.com/dev/api_requests|here].
      *
@@ -594,14 +594,14 @@ class Ads {
      * @throws VKApiException in case of API error
      *
      */
-    public function getCategories(string $access_token, array $params = array()) {
-        return $this->request->post('ads.getCategories', $access_token, $params);
+    public function getCategories(array $params = array()) {
+        return $this->http->post('ads.getCategories', $params);
     }
 
     /**
      * Returns URL to upload an ad photo to.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - AdsGetUploadURLAdFormat ad_format: Ad format: *1 — image and text,, *2 — big image,, *3 —
      *        exclusive format,, *4 — community, square image,, *7 — special app format.
@@ -612,14 +612,14 @@ class Ads {
      * @throws VKApiException in case of API error
      *
      */
-    public function getUploadURL(string $access_token, array $params = array()) {
-        return $this->request->post('ads.getUploadURL', $access_token, $params);
+    public function getUploadURL(array $params = array()) {
+        return $this->http->post('ads.getUploadURL', $params);
     }
 
     /**
      * Returns URL to upload an ad video to.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *
      * @return mixed
@@ -627,15 +627,15 @@ class Ads {
      * @throws VKApiException in case of API error
      *
      */
-    public function getVideoUploadURL(string $access_token, array $params = array()) {
-        return $this->request->post('ads.getVideoUploadURL', $access_token, $params);
+    public function getVideoUploadURL(array $params = array()) {
+        return $this->http->post('ads.getVideoUploadURL', $params);
     }
 
     /**
      * Returns information about current state of a counter — number of remaining runs of methods and time to the
      * next counter nulling in seconds.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer account_id: Advertising account ID.
      *
@@ -644,14 +644,14 @@ class Ads {
      * @throws VKApiException in case of API error
      *
      */
-    public function getFloodStats(string $access_token, array $params = array()) {
-        return $this->request->post('ads.getFloodStats', $access_token, $params);
+    public function getFloodStats(array $params = array()) {
+        return $this->http->post('ads.getFloodStats', $params);
     }
 
     /**
      * Returns a reason of ad rejection for pre-moderation.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer account_id: Advertising account ID.
      *      - integer ad_id: Ad ID.
@@ -662,15 +662,15 @@ class Ads {
      * @throws VKApiWeightedFloodException Permission denied. You have requested too many actions this day. Try later.
      *
      */
-    public function getRejectionReason(string $access_token, array $params = array()) {
-        return $this->request->post('ads.getRejectionReason', $access_token, $params);
+    public function getRejectionReason(array $params = array()) {
+        return $this->http->post('ads.getRejectionReason', $params);
     }
 
     /**
      * Creates a group to re-target ads for users who visited advertiser's site (viewed information about the product,
      * registered, etc.).
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer account_id: Advertising account ID.
      *      - integer client_id: 'Only for advertising agencies.', ID of the client with the advertising account
@@ -686,14 +686,14 @@ class Ads {
      * @throws VKApiWeightedFloodException Permission denied. You have requested too many actions this day. Try later.
      *
      */
-    public function createTargetGroup(string $access_token, array $params = array()) {
-        return $this->request->post('ads.createTargetGroup', $access_token, $params);
+    public function createTargetGroup(array $params = array()) {
+        return $this->http->post('ads.createTargetGroup', $params);
     }
 
     /**
      * Edits a retarget group.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer account_id: Advertising account ID.
      *      - integer client_id: 'Only for advertising agencies.' , ID of the client with the advertising account
@@ -711,14 +711,14 @@ class Ads {
      * @throws VKApiWeightedFloodException Permission denied. You have requested too many actions this day. Try later.
      *
      */
-    public function updateTargetGroup(string $access_token, array $params = array()) {
-        return $this->request->post('ads.updateTargetGroup', $access_token, $params);
+    public function updateTargetGroup(array $params = array()) {
+        return $this->http->post('ads.updateTargetGroup', $params);
     }
 
     /**
      * Deletes a retarget group.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer account_id: Advertising account ID.
      *      - integer client_id: 'Only for advertising agencies.' , ID of the client with the advertising account
@@ -731,14 +731,14 @@ class Ads {
      * @throws VKApiWeightedFloodException Permission denied. You have requested too many actions this day. Try later.
      *
      */
-    public function deleteTargetGroup(string $access_token, array $params = array()) {
-        return $this->request->post('ads.deleteTargetGroup', $access_token, $params);
+    public function deleteTargetGroup(array $params = array()) {
+        return $this->http->post('ads.deleteTargetGroup', $params);
     }
 
     /**
      * Returns a list of target groups.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer account_id: Advertising account ID.
      *      - integer client_id: 'Only for advertising agencies.', ID of the client with the advertising account
@@ -751,14 +751,14 @@ class Ads {
      * @throws VKApiWeightedFloodException Permission denied. You have requested too many actions this day. Try later.
      *
      */
-    public function getTargetGroups(string $access_token, array $params = array()) {
-        return $this->request->post('ads.getTargetGroups', $access_token, $params);
+    public function getTargetGroups(array $params = array()) {
+        return $this->http->post('ads.getTargetGroups', $params);
     }
 
     /**
      * Imports a list of advertiser's contacts to count VK registered users against the target group.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer account_id: Advertising account ID.
      *      - integer client_id: 'Only for advertising agencies.' , ID of the client with the advertising account
@@ -772,7 +772,7 @@ class Ads {
      * @throws VKApiWeightedFloodException Permission denied. You have requested too many actions this day. Try later.
      *
      */
-    public function importTargetContacts(string $access_token, array $params = array()) {
-        return $this->request->post('ads.importTargetContacts', $access_token, $params);
+    public function importTargetContacts(array $params = array()) {
+        return $this->http->post('ads.importTargetContacts', $params);
     }
 }

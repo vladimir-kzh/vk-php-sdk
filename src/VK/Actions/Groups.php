@@ -22,7 +22,7 @@ use VK\Actions\Enums\GroupsGetMembersFilter;
 use VK\Actions\Enums\GroupsGetMembersSort;
 use VK\Actions\Enums\GroupsSearchSort;
 use VK\Actions\Enums\GroupsSearchType;
-use VK\Client\VKApiRequest;
+use VK\Client\VKHttpClient;
 use VK\Exceptions\Api\VKApiAccessGroupsException;
 use VK\Exceptions\Api\VKApiCommunitiesCatalogDisabledException;
 use VK\Exceptions\Api\VKApiCommunitiesCategoriesDisabledException;
@@ -39,22 +39,22 @@ use VK\Exceptions\VKClientException;
 class Groups {
 
     /**
-     * @var VKApiRequest
+     * @var VKHttpClient
      */
-    private $request;
+    private $http;
 
     /**
      * Groups constructor.
-     * @param VKApiRequest $request
+     * @param VKHttpClient $http
      */
-    public function __construct(VKApiRequest $request) {
-        $this->request = $request;
+    public function __construct(VKHttpClient $http) {
+        $this->http = $http;
     }
 
     /**
      * Returns information specifying whether a user is a member of a community.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - string group_id: ID or screen name of the community.
      *      - integer user_id: User ID.
@@ -66,14 +66,14 @@ class Groups {
      * @throws VKApiException in case of API error
      *
      */
-    public function isMember(string $access_token, array $params = array()) {
-        return $this->request->post('groups.isMember', $access_token, $params);
+    public function isMember(array $params = array()) {
+        return $this->http->post('groups.isMember', $params);
     }
 
     /**
      * Returns information about communities by their IDs.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - array group_ids: IDs or screen names of communities.
      *      - string group_id: ID or screen name of the community.
@@ -84,14 +84,14 @@ class Groups {
      * @throws VKApiException in case of API error
      *
      */
-    public function getById(string $access_token, array $params = array()) {
-        return $this->request->post('groups.getById', $access_token, $params);
+    public function getById(array $params = array()) {
+        return $this->http->post('groups.getById', $params);
     }
 
     /**
      * Returns a list of the communities to which a user belongs.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer user_id: User ID.
      *      - boolean extended: '1' — to return complete information about a user's communities, '0' — to
@@ -110,14 +110,14 @@ class Groups {
      * @throws VKApiAccessGroupsException Access to the groups list is denied due to the user's privacy settings
      *
      */
-    public function get(string $access_token, array $params = array()) {
-        return $this->request->post('groups.get', $access_token, $params);
+    public function get(array $params = array()) {
+        return $this->http->post('groups.get', $params);
     }
 
     /**
      * Returns a list of community members.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - string group_id: ID or screen name of the community.
      *      - GroupsGetMembersSort sort: Sort order. Available values: 'id_asc', 'id_desc', 'time_asc',
@@ -141,14 +141,14 @@ class Groups {
      * @throws VKApiParamGroupIdException Invalid group id
      *
      */
-    public function getMembers(string $access_token, array $params = array()) {
-        return $this->request->post('groups.getMembers', $access_token, $params);
+    public function getMembers(array $params = array()) {
+        return $this->http->post('groups.getMembers', $params);
     }
 
     /**
      * With this method you can join the group or public page, and also confirm your participation in an event.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer group_id: ID or screen name of the community.
      *      - string not_sure: Optional parameter which is taken into account when 'gid' belongs to the event: '1'
@@ -160,14 +160,14 @@ class Groups {
      * @throws VKApiLimitsException Out of limits
      *
      */
-    public function join(string $access_token, array $params = array()) {
-        return $this->request->post('groups.join', $access_token, $params);
+    public function join(array $params = array()) {
+        return $this->http->post('groups.join', $params);
     }
 
     /**
      * With this method you can leave a group, public page, or event.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer group_id: ID or screen name of the community.
      *
@@ -176,14 +176,14 @@ class Groups {
      * @throws VKApiException in case of API error
      *
      */
-    public function leave(string $access_token, array $params = array()) {
-        return $this->request->post('groups.leave', $access_token, $params);
+    public function leave(array $params = array()) {
+        return $this->http->post('groups.leave', $params);
     }
 
     /**
      * Returns a list of communities matching the search criteria.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - string q: Search query string.
      *      - GroupsSearchType type: Community type. Possible values: 'group, page, event.'
@@ -206,14 +206,14 @@ class Groups {
      * @throws VKApiException in case of API error
      *
      */
-    public function search(string $access_token, array $params = array()) {
-        return $this->request->post('groups.search', $access_token, $params);
+    public function search(array $params = array()) {
+        return $this->http->post('groups.search', $params);
     }
 
     /**
      * Returns communities list for a catalog category.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer category_id: Category id received from
      *        [vk.com/dev/groups.getCatalogInfo|groups.getCatalogInfo].
@@ -227,14 +227,14 @@ class Groups {
      * @throws VKApiCommunitiesCategoriesDisabledException Catalog categories are not available for this user
      *
      */
-    public function getCatalog(string $access_token, array $params = array()) {
-        return $this->request->post('groups.getCatalog', $access_token, $params);
+    public function getCatalog(array $params = array()) {
+        return $this->http->post('groups.getCatalog', $params);
     }
 
     /**
      * Returns categories list for communities catalog
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - boolean extended: 1 – to return communities count and three communities for preview. By default: 0.
      *      - boolean subcategories: 1 – to return subcategories info. By default: 0.
@@ -244,14 +244,14 @@ class Groups {
      * @throws VKApiException in case of API error
      *
      */
-    public function getCatalogInfo(string $access_token, array $params = array()) {
-        return $this->request->post('groups.getCatalogInfo', $access_token, $params);
+    public function getCatalogInfo(array $params = array()) {
+        return $this->http->post('groups.getCatalogInfo', $params);
     }
 
     /**
      * Returns a list of invitations to join communities and events.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer offset: Offset needed to return a specific subset of invitations.
      *      - integer count: Number of invitations to return.
@@ -262,14 +262,14 @@ class Groups {
      * @throws VKApiException in case of API error
      *
      */
-    public function getInvites(string $access_token, array $params = array()) {
-        return $this->request->post('groups.getInvites', $access_token, $params);
+    public function getInvites(array $params = array()) {
+        return $this->http->post('groups.getInvites', $params);
     }
 
     /**
      * Returns invited users list of a community
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer group_id: Group ID to return invited users for.
      *      - integer offset: Offset needed to return a specific subset of results.
@@ -289,14 +289,14 @@ class Groups {
      * @throws VKApiException in case of API error
      *
      */
-    public function getInvitedUsers(string $access_token, array $params = array()) {
-        return $this->request->post('groups.getInvitedUsers', $access_token, $params);
+    public function getInvitedUsers(array $params = array()) {
+        return $this->http->post('groups.getInvitedUsers', $params);
     }
 
     /**
      * Adds a user to a community blacklist.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer group_id: Community ID.
      *      - integer user_id: User ID.
@@ -313,14 +313,14 @@ class Groups {
      * @throws VKApiException in case of API error
      *
      */
-    public function banUser(string $access_token, array $params = array()) {
-        return $this->request->post('groups.banUser', $access_token, $params);
+    public function banUser(array $params = array()) {
+        return $this->http->post('groups.banUser', $params);
     }
 
     /**
      * Removes a user from a community blacklist.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer group_id: Community ID.
      *      - integer user_id: User ID.
@@ -330,14 +330,14 @@ class Groups {
      * @throws VKApiException in case of API error
      *
      */
-    public function unbanUser(string $access_token, array $params = array()) {
-        return $this->request->post('groups.unbanUser', $access_token, $params);
+    public function unbanUser(array $params = array()) {
+        return $this->http->post('groups.unbanUser', $params);
     }
 
     /**
      * Returns a list of users on a community blacklist.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer group_id: Community ID.
      *      - integer offset: Offset needed to return a specific subset of users.
@@ -351,14 +351,14 @@ class Groups {
      * @throws VKApiNotFoundException Not found
      *
      */
-    public function getBanned(string $access_token, array $params = array()) {
-        return $this->request->post('groups.getBanned', $access_token, $params);
+    public function getBanned(array $params = array()) {
+        return $this->http->post('groups.getBanned', $params);
     }
 
     /**
      * Creates a new community.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - string title: Community title.
      *      - string description: Community description (ignored for 'type' = 'public').
@@ -377,14 +377,14 @@ class Groups {
      * @throws VKApiLimitsException Out of limits
      *
      */
-    public function create(string $access_token, array $params = array()) {
-        return $this->request->post('groups.create', $access_token, $params);
+    public function create(array $params = array()) {
+        return $this->http->post('groups.create', $params);
     }
 
     /**
      * Edits a community.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer group_id: Community ID.
      *      - string title: Community title.
@@ -473,14 +473,14 @@ class Groups {
      * @throws VKApiInvalidAddressException Invalid screen name
      *
      */
-    public function edit(string $access_token, array $params = array()) {
-        return $this->request->post('groups.edit', $access_token, $params);
+    public function edit(array $params = array()) {
+        return $this->http->post('groups.edit', $params);
     }
 
     /**
      * Edits the place in community.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer group_id: Community ID.
      *      - string title: Place title.
@@ -495,14 +495,14 @@ class Groups {
      * @throws VKApiException in case of API error
      *
      */
-    public function editPlace(string $access_token, array $params = array()) {
-        return $this->request->post('groups.editPlace', $access_token, $params);
+    public function editPlace(array $params = array()) {
+        return $this->http->post('groups.editPlace', $params);
     }
 
     /**
      * Returns community settings.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer group_id: Community ID.
      *
@@ -511,14 +511,14 @@ class Groups {
      * @throws VKApiException in case of API error
      *
      */
-    public function getSettings(string $access_token, array $params = array()) {
-        return $this->request->post('groups.getSettings', $access_token, $params);
+    public function getSettings(array $params = array()) {
+        return $this->http->post('groups.getSettings', $params);
     }
 
     /**
      * Returns a list of requests to the community.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer group_id: Community ID.
      *      - integer offset: Offset needed to return a specific subset of results.
@@ -530,14 +530,14 @@ class Groups {
      * @throws VKApiException in case of API error
      *
      */
-    public function getRequests(string $access_token, array $params = array()) {
-        return $this->request->post('groups.getRequests', $access_token, $params);
+    public function getRequests(array $params = array()) {
+        return $this->http->post('groups.getRequests', $params);
     }
 
     /**
      * Allows to add, remove or edit the community manager.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer group_id: Community ID.
      *      - integer user_id: User ID.
@@ -557,14 +557,14 @@ class Groups {
      * @throws VKApiGroupTooManyOfficersException Too many officers in club
      *
      */
-    public function editManager(string $access_token, array $params = array()) {
-        return $this->request->post('groups.editManager', $access_token, $params);
+    public function editManager(array $params = array()) {
+        return $this->http->post('groups.editManager', $params);
     }
 
     /**
      * Allows to invite friends to the community.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer group_id: Community ID.
      *      - integer user_id: User ID.
@@ -575,14 +575,14 @@ class Groups {
      * @throws VKApiLimitsException Out of limits
      *
      */
-    public function invite(string $access_token, array $params = array()) {
-        return $this->request->post('groups.invite', $access_token, $params);
+    public function invite(array $params = array()) {
+        return $this->http->post('groups.invite', $params);
     }
 
     /**
      * Allows to add a link to the community.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer group_id: Community ID.
      *      - string link: Link URL.
@@ -593,14 +593,14 @@ class Groups {
      * @throws VKApiException in case of API error
      *
      */
-    public function addLink(string $access_token, array $params = array()) {
-        return $this->request->post('groups.addLink', $access_token, $params);
+    public function addLink(array $params = array()) {
+        return $this->http->post('groups.addLink', $params);
     }
 
     /**
      * Allows to delete a link from the community.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer group_id: Community ID.
      *      - integer link_id: Link ID.
@@ -610,14 +610,14 @@ class Groups {
      * @throws VKApiException in case of API error
      *
      */
-    public function deleteLink(string $access_token, array $params = array()) {
-        return $this->request->post('groups.deleteLink', $access_token, $params);
+    public function deleteLink(array $params = array()) {
+        return $this->http->post('groups.deleteLink', $params);
     }
 
     /**
      * Allows to edit a link in the community.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer group_id: Community ID.
      *      - integer link_id: Link ID.
@@ -628,14 +628,14 @@ class Groups {
      * @throws VKApiException in case of API error
      *
      */
-    public function editLink(string $access_token, array $params = array()) {
-        return $this->request->post('groups.editLink', $access_token, $params);
+    public function editLink(array $params = array()) {
+        return $this->http->post('groups.editLink', $params);
     }
 
     /**
      * Allows to reorder links in the community.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer group_id: Community ID.
      *      - integer link_id: Link ID.
@@ -646,14 +646,14 @@ class Groups {
      * @throws VKApiException in case of API error
      *
      */
-    public function reorderLink(string $access_token, array $params = array()) {
-        return $this->request->post('groups.reorderLink', $access_token, $params);
+    public function reorderLink(array $params = array()) {
+        return $this->http->post('groups.reorderLink', $params);
     }
 
     /**
      * Removes a user from the community.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer group_id: Community ID.
      *      - integer user_id: User ID.
@@ -663,14 +663,14 @@ class Groups {
      * @throws VKApiException in case of API error
      *
      */
-    public function removeUser(string $access_token, array $params = array()) {
-        return $this->request->post('groups.removeUser', $access_token, $params);
+    public function removeUser(array $params = array()) {
+        return $this->http->post('groups.removeUser', $params);
     }
 
     /**
      * Allows to approve join request to the community.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer group_id: Community ID.
      *      - integer user_id: User ID.
@@ -681,14 +681,14 @@ class Groups {
      * @throws VKApiLimitsException Out of limits
      *
      */
-    public function approveRequest(string $access_token, array $params = array()) {
-        return $this->request->post('groups.approveRequest', $access_token, $params);
+    public function approveRequest(array $params = array()) {
+        return $this->http->post('groups.approveRequest', $params);
     }
 
     /**
      * Returns Callback API confirmation code for the community.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer group_id: Community ID.
      *
@@ -697,14 +697,14 @@ class Groups {
      * @throws VKApiException in case of API error
      *
      */
-    public function getCallbackConfirmationCode(string $access_token, array $params = array()) {
-        return $this->request->post('groups.getCallbackConfirmationCode', $access_token, $params);
+    public function getCallbackConfirmationCode(array $params = array()) {
+        return $this->http->post('groups.getCallbackConfirmationCode', $params);
     }
 
     /**
      * Returns [vk.com/dev/callback_api|Callback API] notifications settings.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer group_id: Community ID.
      *      - integer server_id: Server ID.
@@ -714,14 +714,14 @@ class Groups {
      * @throws VKApiException in case of API error
      *
      */
-    public function getCallbackSettings(string $access_token, array $params = array()) {
-        return $this->request->post('groups.getCallbackSettings', $access_token, $params);
+    public function getCallbackSettings(array $params = array()) {
+        return $this->http->post('groups.getCallbackSettings', $params);
     }
 
     /**
      * Allow to set notifications settings for group.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer group_id: Community ID.
      *      - integer server_id: Server ID.
@@ -767,14 +767,14 @@ class Groups {
      * @throws VKApiException in case of API error
      *
      */
-    public function setCallbackSettings(string $access_token, array $params = array()) {
-        return $this->request->post('groups.setCallbackSettings', $access_token, $params);
+    public function setCallbackSettings(array $params = array()) {
+        return $this->http->post('groups.setCallbackSettings', $params);
     }
 
     /**
      * Returns the data needed to query a Long Poll server for events
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer group_id: Community ID
      *
@@ -783,14 +783,14 @@ class Groups {
      * @throws VKApiException in case of API error
      *
      */
-    public function getLongPollServer(string $access_token, array $params = array()) {
-        return $this->request->post('groups.getLongPollServer', $access_token, $params);
+    public function getLongPollServer(array $params = array()) {
+        return $this->http->post('groups.getLongPollServer', $params);
     }
 
     /**
      * Returns Long Poll notification settings
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer group_id: Community ID.
      *
@@ -799,14 +799,14 @@ class Groups {
      * @throws VKApiException in case of API error
      *
      */
-    public function getLongPollSettings(string $access_token, array $params = array()) {
-        return $this->request->post('groups.getLongPollSettings', $access_token, $params);
+    public function getLongPollSettings(array $params = array()) {
+        return $this->http->post('groups.getLongPollSettings', $params);
     }
 
     /**
      * Sets Long Poll notification settings
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer group_id: Community ID.
      *      - boolean enabled: Enable Bots Long Poll ('0' — disabled, '1' — enabled).
@@ -853,7 +853,7 @@ class Groups {
      * @throws VKApiException in case of API error
      *
      */
-    public function setLongPollSettings(string $access_token, array $params = array()) {
-        return $this->request->post('groups.setLongPollSettings', $access_token, $params);
+    public function setLongPollSettings(array $params = array()) {
+        return $this->http->post('groups.setLongPollSettings', $params);
     }
 }

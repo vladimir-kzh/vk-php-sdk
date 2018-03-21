@@ -2,29 +2,29 @@
 
 namespace VK\Actions;
 
-use VK\Client\VKApiRequest;
+use VK\Client\VKHttpClient;
 use VK\Exceptions\VKApiException;
 use VK\Exceptions\VKClientException;
 
 class Fave {
 
     /**
-     * @var VKApiRequest
+     * @var VKHttpClient
      */
-    private $request;
+    private $http;
 
     /**
      * Fave constructor.
-     * @param VKApiRequest $request
+     * @param VKHttpClient $http
      */
-    public function __construct(VKApiRequest $request) {
-        $this->request = $request;
+    public function __construct(VKHttpClient $http) {
+        $this->http = $http;
     }
 
     /**
      * Returns a list of users whom the current user has bookmarked.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer offset: Offset needed to return a specific subset of users.
      *      - integer count: Number of users to return.
@@ -34,14 +34,14 @@ class Fave {
      * @throws VKApiException in case of API error
      *
      */
-    public function getUsers(string $access_token, array $params = array()) {
-        return $this->request->post('fave.getUsers', $access_token, $params);
+    public function getUsers(array $params = array()) {
+        return $this->http->post('fave.getUsers', $params);
     }
 
     /**
      * Returns a list of photos that the current user has liked.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer offset: Offset needed to return a specific subset of photos.
      *      - integer count: Number of photos to return.
@@ -52,14 +52,14 @@ class Fave {
      * @throws VKApiException in case of API error
      *
      */
-    public function getPhotos(string $access_token, array $params = array()) {
-        return $this->request->post('fave.getPhotos', $access_token, $params);
+    public function getPhotos(array $params = array()) {
+        return $this->http->post('fave.getPhotos', $params);
     }
 
     /**
      * Returns a list of wall posts that the current user has liked.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer offset: Offset needed to return a specific subset of posts.
      *      - integer count: Number of posts to return.
@@ -71,14 +71,14 @@ class Fave {
      * @throws VKApiException in case of API error
      *
      */
-    public function getPosts(string $access_token, array $params = array()) {
-        return $this->request->post('fave.getPosts', $access_token, $params);
+    public function getPosts(array $params = array()) {
+        return $this->http->post('fave.getPosts', $params);
     }
 
     /**
      * Returns a list of videos that the current user has liked.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer offset: Offset needed to return a specific subset of videos.
      *      - integer count: Number of videos to return.
@@ -90,14 +90,14 @@ class Fave {
      * @throws VKApiException in case of API error
      *
      */
-    public function getVideos(string $access_token, array $params = array()) {
-        return $this->request->post('fave.getVideos', $access_token, $params);
+    public function getVideos(array $params = array()) {
+        return $this->http->post('fave.getVideos', $params);
     }
 
     /**
      * Returns a list of links that the current user has bookmarked.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer offset: Offset needed to return a specific subset of users.
      *      - integer count: Number of results to return.
@@ -107,14 +107,14 @@ class Fave {
      * @throws VKApiException in case of API error
      *
      */
-    public function getLinks(string $access_token, array $params = array()) {
-        return $this->request->post('fave.getLinks', $access_token, $params);
+    public function getLinks(array $params = array()) {
+        return $this->http->post('fave.getLinks', $params);
     }
 
     /**
      * Returns market items bookmarked by current user.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer count: Number of results to return.
      *      - boolean extended: '1' – to return additional fields 'likes, can_comment, can_repost, photos'. By
@@ -125,14 +125,14 @@ class Fave {
      * @throws VKApiException in case of API error
      *
      */
-    public function getMarketItems(string $access_token, array $params = array()) {
-        return $this->request->post('fave.getMarketItems', $access_token, $params);
+    public function getMarketItems(array $params = array()) {
+        return $this->http->post('fave.getMarketItems', $params);
     }
 
     /**
      * Adds a profile to user faves.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer user_id: Profile ID.
      *
@@ -141,14 +141,14 @@ class Fave {
      * @throws VKApiException in case of API error
      *
      */
-    public function addUser(string $access_token, array $params = array()) {
-        return $this->request->post('fave.addUser', $access_token, $params);
+    public function addUser(array $params = array()) {
+        return $this->http->post('fave.addUser', $params);
     }
 
     /**
      * Removes a profile from user faves.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer user_id: Profile ID.
      *
@@ -157,14 +157,14 @@ class Fave {
      * @throws VKApiException in case of API error
      *
      */
-    public function removeUser(string $access_token, array $params = array()) {
-        return $this->request->post('fave.removeUser', $access_token, $params);
+    public function removeUser(array $params = array()) {
+        return $this->http->post('fave.removeUser', $params);
     }
 
     /**
      * Adds a community to user faves.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer group_id: Community ID.
      *
@@ -173,14 +173,14 @@ class Fave {
      * @throws VKApiException in case of API error
      *
      */
-    public function addGroup(string $access_token, array $params = array()) {
-        return $this->request->post('fave.addGroup', $access_token, $params);
+    public function addGroup(array $params = array()) {
+        return $this->http->post('fave.addGroup', $params);
     }
 
     /**
      * Removes a community from user faves.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer group_id: Community ID.
      *
@@ -189,14 +189,14 @@ class Fave {
      * @throws VKApiException in case of API error
      *
      */
-    public function removeGroup(string $access_token, array $params = array()) {
-        return $this->request->post('fave.removeGroup', $access_token, $params);
+    public function removeGroup(array $params = array()) {
+        return $this->http->post('fave.removeGroup', $params);
     }
 
     /**
      * Adds a link to user faves.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - string link: Link URL.
      *      - string text: Description text.
@@ -206,14 +206,14 @@ class Fave {
      * @throws VKApiException in case of API error
      *
      */
-    public function addLink(string $access_token, array $params = array()) {
-        return $this->request->post('fave.addLink', $access_token, $params);
+    public function addLink(array $params = array()) {
+        return $this->http->post('fave.addLink', $params);
     }
 
     /**
      * Removes link from the user's faves.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - string link_id: Link ID (can be obtained by [vk.com/dev/faves.getLinks|faves.getLinks] method).
      *
@@ -222,7 +222,7 @@ class Fave {
      * @throws VKApiException in case of API error
      *
      */
-    public function removeLink(string $access_token, array $params = array()) {
-        return $this->request->post('fave.removeLink', $access_token, $params);
+    public function removeLink(array $params = array()) {
+        return $this->http->post('fave.removeLink', $params);
     }
 }

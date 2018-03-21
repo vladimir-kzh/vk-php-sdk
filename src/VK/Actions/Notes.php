@@ -2,7 +2,7 @@
 
 namespace VK\Actions;
 
-use VK\Client\VKApiRequest;
+use VK\Client\VKHttpClient;
 use VK\Exceptions\Api\VKApiAccessCommentException;
 use VK\Exceptions\Api\VKApiAccessNoteCommentException;
 use VK\Exceptions\Api\VKApiAccessNoteException;
@@ -13,22 +13,22 @@ use VK\Exceptions\VKClientException;
 class Notes {
 
     /**
-     * @var VKApiRequest
+     * @var VKHttpClient
      */
-    private $request;
+    private $http;
 
     /**
      * Notes constructor.
-     * @param VKApiRequest $request
+     * @param VKHttpClient $http
      */
-    public function __construct(VKApiRequest $request) {
-        $this->request = $request;
+    public function __construct(VKHttpClient $http) {
+        $this->http = $http;
     }
 
     /**
      * Returns a list of notes created by a user.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - array note_ids: Note IDs.
      *      - integer user_id: Note owner ID.
@@ -40,14 +40,14 @@ class Notes {
      * @throws VKApiParamNoteIdException Note not found
      *
      */
-    public function get(string $access_token, array $params = array()) {
-        return $this->request->post('notes.get', $access_token, $params);
+    public function get(array $params = array()) {
+        return $this->http->post('notes.get', $params);
     }
 
     /**
      * Returns a note by its ID.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer note_id: Note ID.
      *      - integer owner_id: Note owner ID.
@@ -59,14 +59,14 @@ class Notes {
      * @throws VKApiParamNoteIdException Note not found
      *
      */
-    public function getById(string $access_token, array $params = array()) {
-        return $this->request->post('notes.getById', $access_token, $params);
+    public function getById(array $params = array()) {
+        return $this->http->post('notes.getById', $params);
     }
 
     /**
      * Creates a new note for the current user.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - string title: Note title.
      *      - string text: Note text.
@@ -78,14 +78,14 @@ class Notes {
      * @throws VKApiException in case of API error
      *
      */
-    public function add(string $access_token, array $params = array()) {
-        return $this->request->post('notes.add', $access_token, $params);
+    public function add(array $params = array()) {
+        return $this->http->post('notes.add', $params);
     }
 
     /**
      * Edits a note of the current user.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer note_id: Note ID.
      *      - string title: Note title.
@@ -99,14 +99,14 @@ class Notes {
      * @throws VKApiParamNoteIdException Note not found
      *
      */
-    public function edit(string $access_token, array $params = array()) {
-        return $this->request->post('notes.edit', $access_token, $params);
+    public function edit(array $params = array()) {
+        return $this->http->post('notes.edit', $params);
     }
 
     /**
      * Deletes a note of the current user.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer note_id: Note ID.
      *
@@ -116,14 +116,14 @@ class Notes {
      * @throws VKApiParamNoteIdException Note not found
      *
      */
-    public function delete(string $access_token, array $params = array()) {
-        return $this->request->post('notes.delete', $access_token, $params);
+    public function delete(array $params = array()) {
+        return $this->http->post('notes.delete', $params);
     }
 
     /**
      * Returns a list of comments on a note.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer note_id: Note ID.
      *      - integer owner_id: Note owner ID.
@@ -135,14 +135,14 @@ class Notes {
      * @throws VKApiAccessNoteException Access to note denied
      *
      */
-    public function getComments(string $access_token, array $params = array()) {
-        return $this->request->post('notes.getComments', $access_token, $params);
+    public function getComments(array $params = array()) {
+        return $this->http->post('notes.getComments', $params);
     }
 
     /**
      * Adds a new comment on a note.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer note_id: Note ID.
      *      - integer owner_id: Note owner ID.
@@ -158,14 +158,14 @@ class Notes {
      * @throws VKApiAccessNoteCommentException You can't comment this note
      *
      */
-    public function createComment(string $access_token, array $params = array()) {
-        return $this->request->post('notes.createComment', $access_token, $params);
+    public function createComment(array $params = array()) {
+        return $this->http->post('notes.createComment', $params);
     }
 
     /**
      * Edits a comment on a note.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer comment_id: Comment ID.
      *      - integer owner_id: Note owner ID.
@@ -177,14 +177,14 @@ class Notes {
      * @throws VKApiAccessCommentException Access to comment denied
      *
      */
-    public function editComment(string $access_token, array $params = array()) {
-        return $this->request->post('notes.editComment', $access_token, $params);
+    public function editComment(array $params = array()) {
+        return $this->http->post('notes.editComment', $params);
     }
 
     /**
      * Deletes a comment on a note.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer comment_id: Comment ID.
      *      - integer owner_id: Note owner ID.
@@ -196,14 +196,14 @@ class Notes {
      * @throws VKApiAccessCommentException Access to comment denied
      *
      */
-    public function deleteComment(string $access_token, array $params = array()) {
-        return $this->request->post('notes.deleteComment', $access_token, $params);
+    public function deleteComment(array $params = array()) {
+        return $this->http->post('notes.deleteComment', $params);
     }
 
     /**
      * Restores a deleted comment on a note.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer comment_id: Comment ID.
      *      - integer owner_id: Note owner ID.
@@ -214,7 +214,7 @@ class Notes {
      * @throws VKApiAccessCommentException Access to comment denied
      *
      */
-    public function restoreComment(string $access_token, array $params = array()) {
-        return $this->request->post('notes.restoreComment', $access_token, $params);
+    public function restoreComment(array $params = array()) {
+        return $this->http->post('notes.restoreComment', $params);
     }
 }

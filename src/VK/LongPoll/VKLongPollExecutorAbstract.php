@@ -2,16 +2,14 @@
 
 namespace VK\LongPoll;
 
+use Http\Client\Exception\TransferException;
+use VK\Client\VKHttpClient;
 use VK\Exceptions\LongPoll\VKLongPollInformationLostException;
 use VK\Exceptions\LongPoll\VKLongPollServerKeyExpiredException;
 use VK\Exceptions\LongPoll\VKLongPollServerTsException;
 use VK\Exceptions\VKLongPollException;
-use VK\Client\VKApiClient;
 use VK\Exceptions\VKApiException;
 use VK\Exceptions\VKClientException;
-use VK\TransportClient\Curl\CurlHttpClient;
-use VK\TransportClient\TransportClientResponse;
-use VK\TransportClient\TransportRequestException;
 
 abstract class VKLongPollExecutorAbstract
 {
@@ -21,7 +19,6 @@ abstract class VKLongPollExecutorAbstract
     protected const PARAM_WAIT = 'wait';
     protected const VALUE_ACT = 'a_check';
 
-    protected const EVENTS_FAILED = 'failed';
     protected const EVENTS_TS = 'ts';
     protected const EVENTS_UPDATES = 'updates';
 
@@ -38,28 +35,23 @@ abstract class VKLongPollExecutorAbstract
     protected const HTTP_STATUS_CODE_OK = 200;
     protected const DEFAULT_WAIT = 10;
 
-    protected $api_client;
-    protected $access_token;
-    protected $http_client;
+    protected $httpClient;
+
     protected $server;
     protected $last_ts = null;
     protected $wait;
 
     /**
      * CallbackApiLongPollExecutor constructor.
-     * @param VKApiClient $api_client
-     * @param string $access_token
+     * @param VKHttpClient $httpClient
      * @param int $wait
      */
     public function __construct(
-        VKApiClient $api_client,
-        string $access_token,
+        VKHttpClient $httpClient,
         int $wait = self::DEFAULT_WAIT
     )
     {
-        $this->api_client = $api_client;
-        $this->http_client = new CurlHttpClient(static::CONNECTION_TIMEOUT);
-        $this->access_token = $access_token;
+        $this->httpClient = $httpClient;
         $this->wait = $wait;
     }
 
@@ -89,11 +81,9 @@ abstract class VKLongPollExecutorAbstract
 
         try {
 
-            $response = $this->getEvents($this->server[static::SERVER_URL], $this->server[static::SERVER_KEY], $ts);
-            foreach ($response[static::EVENTS_UPDATES] as $event) {
-                $this->handleEvent($event);
-            }
-            $this->last_ts = $response[static::EVENTS_TS];
+            $events = $this->getEvents($this->server[static::SERVER_URL], $this->server[static::SERVER_KEY], $ts);
+            $this->handleEvents($events);
+            $this->last_ts = $events[static::EVENTS_TS];
 
         } catch (VKLongPollServerKeyExpiredException|VKLongPollInformationLostException $e) {
 
@@ -106,6 +96,13 @@ abstract class VKLongPollExecutorAbstract
         }
 
         return $this->last_ts;
+    }
+
+    protected function handleEvents(array $events)
+    {
+        foreach ($events[static::EVENTS_UPDATES] as $event) {
+            $this->handleEvent($event);
+        }
     }
 
     /**
@@ -143,62 +140,14 @@ abstract class VKLongPollExecutorAbstract
         );
 
         try {
-            $response = $this->http_client->get($host, $params);
-        } catch (TransportRequestException $e) {
+            if (substr($host, 0, 4) !== 'http') {
+                $host = 'https://' . $host;
+            }
+            $response = $this->httpClient->get($host, $params);
+        } catch (TransferException $e) {
             throw new VKClientException($e);
         }
 
-        return $this->parseResponse($response);
-    }
-
-    /**
-     * Decodes the LongPoll response and checks its status code and whether it has a failed key.
-     *
-     * @param TransportClientResponse $response
-     * @return mixed
-     * @throws VKLongPollException
-     */
-    private function parseResponse(TransportClientResponse $response)
-    {
-        $this->checkHttpStatus($response);
-
-        $body = $response->getBody();
-        $decode_body = $this->decodeBody($body);
-
-        if (isset($decode_body[static::EVENTS_FAILED])) {
-            throw VKLongPollException::make($decode_body);
-        }
-
-        return $decode_body;
-    }
-
-    /**
-     * Decodes body.
-     *
-     * @param string $body
-     * @return mixed
-     */
-    protected function decodeBody(string $body)
-    {
-        $decoded_body = json_decode($body, true);
-
-        if ($decoded_body === null || !is_array($decoded_body)) {
-            $decoded_body = [];
-        }
-
-        return $decoded_body;
-    }
-
-    /**
-     * Check http status of response
-     *
-     * @param TransportClientResponse $response
-     * @throws VKClientException
-     */
-    protected function checkHttpStatus(TransportClientResponse $response)
-    {
-        if ($response->getHttpStatus() != static::HTTP_STATUS_CODE_OK) {
-            throw new VKClientException('Invalid http status: ' . $response->getHttpStatus());
-        }
+        return $response;
     }
 }

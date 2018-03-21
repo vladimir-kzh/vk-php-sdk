@@ -2,29 +2,29 @@
 
 namespace VK\Actions;
 
-use VK\Client\VKApiRequest;
+use VK\Client\VKHttpClient;
 use VK\Exceptions\VKApiException;
 use VK\Exceptions\VKClientException;
 
 class Search {
 
     /**
-     * @var VKApiRequest
+     * @var VKHttpClient
      */
-    private $request;
+    private $http;
 
     /**
      * Search constructor.
-     * @param VKApiRequest $request
+     * @param VKHttpClient $http
      */
-    public function __construct(VKApiRequest $request) {
-        $this->request = $request;
+    public function __construct(VKHttpClient $http) {
+        $this->http = $http;
     }
 
     /**
      * Allows the programmer to do a quick search for any substring.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - string q: Search query string.
      *      - integer offset: Offset for querying specific result subset
@@ -37,7 +37,7 @@ class Search {
      * @throws VKApiException in case of API error
      *
      */
-    public function getHints(string $access_token, array $params = array()) {
-        return $this->request->post('search.getHints', $access_token, $params);
+    public function getHints(array $params = array()) {
+        return $this->http->post('search.getHints', $params);
     }
 }

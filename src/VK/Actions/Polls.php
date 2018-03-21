@@ -3,7 +3,7 @@
 namespace VK\Actions;
 
 use VK\Actions\Enums\PollsGetVotersNameCase;
-use VK\Client\VKApiRequest;
+use VK\Client\VKHttpClient;
 use VK\Exceptions\VKApiException;
 use VK\Exceptions\Api\VKApiPollsAccessException;
 use VK\Exceptions\Api\VKApiPollsAnswerIdException;
@@ -13,22 +13,22 @@ use VK\Exceptions\VKClientException;
 class Polls {
 
     /**
-     * @var VKApiRequest
+     * @var VKHttpClient
      */
-    private $request;
+    private $http;
 
     /**
      * Polls constructor.
-     * @param VKApiRequest $request
+     * @param VKHttpClient $http
      */
-    public function __construct(VKApiRequest $request) {
-        $this->request = $request;
+    public function __construct(VKHttpClient $http) {
+        $this->http = $http;
     }
 
     /**
      * Returns detailed information about a poll by its ID.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: ID of the user or community that owns the poll. Use a negative value to designate a
      *        community ID.
@@ -41,14 +41,14 @@ class Polls {
      * @throws VKApiPollsAccessException Access to poll denied
      *
      */
-    public function getById(string $access_token, array $params = array()) {
-        return $this->request->post('polls.getById', $access_token, $params);
+    public function getById(array $params = array()) {
+        return $this->http->post('polls.getById', $params);
     }
 
     /**
      * Adds the current user's vote to the selected answer in the poll.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: ID of the user or community that owns the poll. Use a negative value to designate a
      *        community ID.
@@ -64,14 +64,14 @@ class Polls {
      * @throws VKApiPollsPollIdException Invalid poll id
      *
      */
-    public function addVote(string $access_token, array $params = array()) {
-        return $this->request->post('polls.addVote', $access_token, $params);
+    public function addVote(array $params = array()) {
+        return $this->http->post('polls.addVote', $params);
     }
 
     /**
      * Deletes the current user's vote from the selected answer in the poll.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: ID of the user or community that owns the poll. Use a negative value to designate a
      *        community ID.
@@ -87,14 +87,14 @@ class Polls {
      * @throws VKApiPollsPollIdException Invalid poll id
      *
      */
-    public function deleteVote(string $access_token, array $params = array()) {
-        return $this->request->post('polls.deleteVote', $access_token, $params);
+    public function deleteVote(array $params = array()) {
+        return $this->http->post('polls.deleteVote', $params);
     }
 
     /**
      * Returns a list of IDs of users who selected specific answers in the poll.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: ID of the user or community that owns the poll. Use a negative value to designate a
      *        community ID.
@@ -122,14 +122,14 @@ class Polls {
      * @throws VKApiPollsPollIdException Invalid poll id
      *
      */
-    public function getVoters(string $access_token, array $params = array()) {
-        return $this->request->post('polls.getVoters', $access_token, $params);
+    public function getVoters(array $params = array()) {
+        return $this->http->post('polls.getVoters', $params);
     }
 
     /**
      * Creates polls that can be attached to the users' or communities' posts.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - string question: question text
      *      - boolean is_anonymous: '1' – anonymous poll, participants list is hidden,, '0' – public poll,
@@ -144,14 +144,14 @@ class Polls {
      * @throws VKApiException in case of API error
      *
      */
-    public function create(string $access_token, array $params = array()) {
-        return $this->request->post('polls.create', $access_token, $params);
+    public function create(array $params = array()) {
+        return $this->http->post('polls.create', $params);
     }
 
     /**
      * Edits created polls
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: poll owner id
      *      - integer poll_id: edited poll's id
@@ -166,7 +166,7 @@ class Polls {
      * @throws VKApiException in case of API error
      *
      */
-    public function edit(string $access_token, array $params = array()) {
-        return $this->request->post('polls.edit', $access_token, $params);
+    public function edit(array $params = array()) {
+        return $this->http->post('polls.edit', $params);
     }
 }

@@ -6,7 +6,7 @@ use VK\Actions\Enums\MarketGetCommentsSort;
 use VK\Actions\Enums\MarketReportCommentReason;
 use VK\Actions\Enums\MarketReportReason;
 use VK\Actions\Enums\MarketSearchRev;
-use VK\Client\VKApiRequest;
+use VK\Client\VKHttpClient;
 use VK\Exceptions\Api\VKApiAccessMarketException;
 use VK\Exceptions\VKApiException;
 use VK\Exceptions\Api\VKApiMarketAlbumNotFoundException;
@@ -22,22 +22,22 @@ use VK\Exceptions\VKClientException;
 class Market {
 
     /**
-     * @var VKApiRequest
+     * @var VKHttpClient
      */
-    private $request;
+    private $http;
 
     /**
      * Market constructor.
-     * @param VKApiRequest $request
+     * @param VKHttpClient $http
      */
-    public function __construct(VKApiRequest $request) {
-        $this->request = $request;
+    public function __construct(VKHttpClient $http) {
+        $this->http = $http;
     }
 
     /**
      * Returns items list for a community.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: ID of an item owner community, "Note that community id in the 'owner_id' parameter
      *        should be negative number. For example 'owner_id'=-1 matches the [vk.com/apiclub|VK API] community "
@@ -51,14 +51,14 @@ class Market {
      * @throws VKApiException in case of API error
      *
      */
-    public function get(string $access_token, array $params = array()) {
-        return $this->request->post('market.get', $access_token, $params);
+    public function get(array $params = array()) {
+        return $this->http->post('market.get', $params);
     }
 
     /**
      * Returns information about market items by their ids.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - array item_ids: Comma-separated ids list: {user id}_{item id}. If an item belongs to a community
      *        -{community id} is used. " 'Videos' value example: , '-4363_136089719,13245770_137352259'"
@@ -70,14 +70,14 @@ class Market {
      * @throws VKApiException in case of API error
      *
      */
-    public function getById(string $access_token, array $params = array()) {
-        return $this->request->post('market.getById', $access_token, $params);
+    public function getById(array $params = array()) {
+        return $this->http->post('market.getById', $params);
     }
 
     /**
      * Searches market items in a community's catalog
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: ID of an items owner community.
      *      - string q: Search query, for example "pink slippers".
@@ -96,14 +96,14 @@ class Market {
      * @throws VKApiException in case of API error
      *
      */
-    public function search(string $access_token, array $params = array()) {
-        return $this->request->post('market.search', $access_token, $params);
+    public function search(array $params = array()) {
+        return $this->http->post('market.search', $params);
     }
 
     /**
      * Returns community's collections list.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: ID of an items owner community.
      *      - integer offset: Offset needed to return a specific subset of results.
@@ -114,14 +114,14 @@ class Market {
      * @throws VKApiException in case of API error
      *
      */
-    public function getAlbums(string $access_token, array $params = array()) {
-        return $this->request->post('market.getAlbums', $access_token, $params);
+    public function getAlbums(array $params = array()) {
+        return $this->http->post('market.getAlbums', $params);
     }
 
     /**
      * Returns items album's data
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: identifier of an album owner community, "Note that community id in the 'owner_id'
      *        parameter should be negative number. For example 'owner_id'=-1 matches the [vk.com/apiclub|VK API] community
@@ -133,14 +133,14 @@ class Market {
      * @throws VKApiException in case of API error
      *
      */
-    public function getAlbumById(string $access_token, array $params = array()) {
-        return $this->request->post('market.getAlbumById', $access_token, $params);
+    public function getAlbumById(array $params = array()) {
+        return $this->http->post('market.getAlbumById', $params);
     }
 
     /**
      * Creates a new comment for an item.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: ID of an item owner community.
      *      - integer item_id: Item ID.
@@ -160,14 +160,14 @@ class Market {
      * @throws VKApiException in case of API error
      *
      */
-    public function createComment(string $access_token, array $params = array()) {
-        return $this->request->post('market.createComment', $access_token, $params);
+    public function createComment(array $params = array()) {
+        return $this->http->post('market.createComment', $params);
     }
 
     /**
      * Returns comments list for an item.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: ID of an item owner community
      *      - integer item_id: Item ID.
@@ -186,14 +186,14 @@ class Market {
      * @throws VKApiMarketCommentsClosedException Comments for this market are closed
      *
      */
-    public function getComments(string $access_token, array $params = array()) {
-        return $this->request->post('market.getComments', $access_token, $params);
+    public function getComments(array $params = array()) {
+        return $this->http->post('market.getComments', $params);
     }
 
     /**
      * Deletes an item's comment
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: identifier of an item owner community, "Note that community id in the 'owner_id'
      *        parameter should be negative number. For example 'owner_id'=-1 matches the [vk.com/apiclub|VK API] community
@@ -205,14 +205,14 @@ class Market {
      * @throws VKApiException in case of API error
      *
      */
-    public function deleteComment(string $access_token, array $params = array()) {
-        return $this->request->post('market.deleteComment', $access_token, $params);
+    public function deleteComment(array $params = array()) {
+        return $this->http->post('market.deleteComment', $params);
     }
 
     /**
      * Restores a recently deleted comment
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: identifier of an item owner community, "Note that community id in the 'owner_id'
      *        parameter should be negative number. For example 'owner_id'=-1 matches the [vk.com/apiclub|VK API] community
@@ -224,14 +224,14 @@ class Market {
      * @throws VKApiException in case of API error
      *
      */
-    public function restoreComment(string $access_token, array $params = array()) {
-        return $this->request->post('market.restoreComment', $access_token, $params);
+    public function restoreComment(array $params = array()) {
+        return $this->http->post('market.restoreComment', $params);
     }
 
     /**
      * Chages item comment's text
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: ID of an item owner community.
      *      - integer comment_id: Comment ID.
@@ -247,14 +247,14 @@ class Market {
      * @throws VKApiException in case of API error
      *
      */
-    public function editComment(string $access_token, array $params = array()) {
-        return $this->request->post('market.editComment', $access_token, $params);
+    public function editComment(array $params = array()) {
+        return $this->http->post('market.editComment', $params);
     }
 
     /**
      * Sends a complaint to the item's comment.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: ID of an item owner community.
      *      - integer comment_id: Comment ID.
@@ -268,14 +268,14 @@ class Market {
      * @throws VKApiException in case of API error
      *
      */
-    public function reportComment(string $access_token, array $params = array()) {
-        return $this->request->post('market.reportComment', $access_token, $params);
+    public function reportComment(array $params = array()) {
+        return $this->http->post('market.reportComment', $params);
     }
 
     /**
      * Returns a list of market categories.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer count: Number of results to return.
      *      - integer offset: Offset needed to return a specific subset of results.
@@ -285,14 +285,14 @@ class Market {
      * @throws VKApiException in case of API error
      *
      */
-    public function getCategories(string $access_token, array $params = array()) {
-        return $this->request->post('market.getCategories', $access_token, $params);
+    public function getCategories(array $params = array()) {
+        return $this->http->post('market.getCategories', $params);
     }
 
     /**
      * Sends a complaint to the item.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: ID of an item owner community.
      *      - integer item_id: Item ID.
@@ -306,14 +306,14 @@ class Market {
      * @throws VKApiException in case of API error
      *
      */
-    public function report(string $access_token, array $params = array()) {
-        return $this->request->post('market.report', $access_token, $params);
+    public function report(array $params = array()) {
+        return $this->http->post('market.report', $params);
     }
 
     /**
      * Ads a new item to the market.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: ID of an item owner community.
      *      - string name: Item name.
@@ -331,14 +331,14 @@ class Market {
      * @throws VKApiMarketTooManyItemsException Too many items
      *
      */
-    public function add(string $access_token, array $params = array()) {
-        return $this->request->post('market.add', $access_token, $params);
+    public function add(array $params = array()) {
+        return $this->http->post('market.add', $params);
     }
 
     /**
      * Edits an item.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: ID of an item owner community.
      *      - integer item_id: Item ID.
@@ -357,14 +357,14 @@ class Market {
      * @throws VKApiMarketItemNotFoundException Item not found
      *
      */
-    public function edit(string $access_token, array $params = array()) {
-        return $this->request->post('market.edit', $access_token, $params);
+    public function edit(array $params = array()) {
+        return $this->http->post('market.edit', $params);
     }
 
     /**
      * Deletes an item.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: ID of an item owner community.
      *      - integer item_id: Item ID.
@@ -375,14 +375,14 @@ class Market {
      * @throws VKApiAccessMarketException Access denied
      *
      */
-    public function delete(string $access_token, array $params = array()) {
-        return $this->request->post('market.delete', $access_token, $params);
+    public function delete(array $params = array()) {
+        return $this->http->post('market.delete', $params);
     }
 
     /**
      * Restores recently deleted item
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: ID of an item owner community.
      *      - integer item_id: Deleted item ID.
@@ -394,14 +394,14 @@ class Market {
      * @throws VKApiMarketRestoreTooLateException Too late for restore
      *
      */
-    public function restore(string $access_token, array $params = array()) {
-        return $this->request->post('market.restore', $access_token, $params);
+    public function restore(array $params = array()) {
+        return $this->http->post('market.restore', $params);
     }
 
     /**
      * Changes item place in a collection.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: ID of an item owner community.
      *      - integer album_id: ID of a collection to reorder items in. Set 0 to reorder full items list.
@@ -417,14 +417,14 @@ class Market {
      * @throws VKApiMarketItemNotFoundException Item not found
      *
      */
-    public function reorderItems(string $access_token, array $params = array()) {
-        return $this->request->post('market.reorderItems', $access_token, $params);
+    public function reorderItems(array $params = array()) {
+        return $this->http->post('market.reorderItems', $params);
     }
 
     /**
      * Reorders the collections list.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: ID of an item owner community.
      *      - integer album_id: Collection ID.
@@ -438,14 +438,14 @@ class Market {
      * @throws VKApiMarketAlbumNotFoundException Album not found
      *
      */
-    public function reorderAlbums(string $access_token, array $params = array()) {
-        return $this->request->post('market.reorderAlbums', $access_token, $params);
+    public function reorderAlbums(array $params = array()) {
+        return $this->http->post('market.reorderAlbums', $params);
     }
 
     /**
      * Creates new collection of items
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: ID of an item owner community.
      *      - string title: Collection title.
@@ -458,14 +458,14 @@ class Market {
      * @throws VKApiMarketTooManyAlbumsException Too many albums
      *
      */
-    public function addAlbum(string $access_token, array $params = array()) {
-        return $this->request->post('market.addAlbum', $access_token, $params);
+    public function addAlbum(array $params = array()) {
+        return $this->http->post('market.addAlbum', $params);
     }
 
     /**
      * Edits a collection of items
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: ID of an collection owner community.
      *      - integer album_id: Collection ID.
@@ -479,14 +479,14 @@ class Market {
      * @throws VKApiMarketAlbumNotFoundException Album not found
      *
      */
-    public function editAlbum(string $access_token, array $params = array()) {
-        return $this->request->post('market.editAlbum', $access_token, $params);
+    public function editAlbum(array $params = array()) {
+        return $this->http->post('market.editAlbum', $params);
     }
 
     /**
      * Deletes a collection of items.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: ID of an collection owner community.
      *      - integer album_id: Collection ID.
@@ -497,14 +497,14 @@ class Market {
      * @throws VKApiMarketAlbumNotFoundException Album not found
      *
      */
-    public function deleteAlbum(string $access_token, array $params = array()) {
-        return $this->request->post('market.deleteAlbum', $access_token, $params);
+    public function deleteAlbum(array $params = array()) {
+        return $this->http->post('market.deleteAlbum', $params);
     }
 
     /**
      * Removes an item from one or multiple collections.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: ID of an item owner community.
      *      - integer item_id: Item ID.
@@ -517,14 +517,14 @@ class Market {
      * @throws VKApiMarketItemNotFoundException Item not found
      *
      */
-    public function removeFromAlbum(string $access_token, array $params = array()) {
-        return $this->request->post('market.removeFromAlbum', $access_token, $params);
+    public function removeFromAlbum(array $params = array()) {
+        return $this->http->post('market.removeFromAlbum', $params);
     }
 
     /**
      * Adds an item to one or multiple collections.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: ID of an item owner community.
      *      - integer item_id: Item ID.
@@ -539,7 +539,7 @@ class Market {
      * @throws VKApiMarketItemAlreadyAddedException Item already added to album
      *
      */
-    public function addToAlbum(string $access_token, array $params = array()) {
-        return $this->request->post('market.addToAlbum', $access_token, $params);
+    public function addToAlbum(array $params = array()) {
+        return $this->http->post('market.addToAlbum', $params);
     }
 }

@@ -3,7 +3,7 @@
 namespace VK\Actions;
 
 use VK\Actions\Enums\PlacesSearchRadius;
-use VK\Client\VKApiRequest;
+use VK\Client\VKHttpClient;
 use VK\Exceptions\Api\VKApiAccessCheckinException;
 use VK\Exceptions\VKApiException;
 use VK\Exceptions\Api\VKApiSameCheckinException;
@@ -12,22 +12,22 @@ use VK\Exceptions\VKClientException;
 class Places {
 
     /**
-     * @var VKApiRequest
+     * @var VKHttpClient
      */
-    private $request;
+    private $http;
 
     /**
      * Places constructor.
-     * @param VKApiRequest $request
+     * @param VKHttpClient $http
      */
-    public function __construct(VKApiRequest $request) {
-        $this->request = $request;
+    public function __construct(VKHttpClient $http) {
+        $this->http = $http;
     }
 
     /**
      * Adds a new location to the location database.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer type: ID of the location's type (e.g., '1' — Home, '2' — Work). To get location type IDs,
      *        use the [vk.com/dev/places.getTypes|places.getTypes] method.
@@ -45,14 +45,14 @@ class Places {
      * @throws VKApiException in case of API error
      *
      */
-    public function add(string $access_token, array $params = array()) {
-        return $this->request->post('places.add', $access_token, $params);
+    public function add(array $params = array()) {
+        return $this->http->post('places.add', $params);
     }
 
     /**
      * Returns information about locations by their IDs.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - array places: Location IDs.
      *
@@ -61,14 +61,14 @@ class Places {
      * @throws VKApiException in case of API error
      *
      */
-    public function getById(string $access_token, array $params = array()) {
-        return $this->request->post('places.getById', $access_token, $params);
+    public function getById(array $params = array()) {
+        return $this->http->post('places.getById', $params);
     }
 
     /**
      * Returns a list of locations that match the search criteria.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - string q: Search query string.
      *      - integer city: City ID.
@@ -86,14 +86,14 @@ class Places {
      * @throws VKApiException in case of API error
      *
      */
-    public function search(string $access_token, array $params = array()) {
-        return $this->request->post('places.search', $access_token, $params);
+    public function search(array $params = array()) {
+        return $this->http->post('places.search', $params);
     }
 
     /**
      * Checks a user in at the specified location.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer place_id: Location ID.
      *      - string text: Text of the comment on the check-in (255 characters maximum, line breaks not supported).
@@ -110,14 +110,14 @@ class Places {
      * @throws VKApiSameCheckinException You have sent same checkin in last 10 minutes
      *
      */
-    public function checkin(string $access_token, array $params = array()) {
-        return $this->request->post('places.checkin', $access_token, $params);
+    public function checkin(array $params = array()) {
+        return $this->http->post('places.checkin', $params);
     }
 
     /**
      * Returns a list of user check-ins at locations according to the set parameters.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - number latitude: Geographical latitude of the initial search point, in degrees (from '-90' to '90').
      *      - number longitude: Geographical longitude of the initial search point, in degrees (from '-180' to
@@ -141,14 +141,14 @@ class Places {
      * @throws VKApiAccessCheckinException Access to checkins denied
      *
      */
-    public function getCheckins(string $access_token, array $params = array()) {
-        return $this->request->post('places.getCheckins', $access_token, $params);
+    public function getCheckins(array $params = array()) {
+        return $this->http->post('places.getCheckins', $params);
     }
 
     /**
      * Returns a list of all types of locations.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *
      * @return mixed
@@ -156,7 +156,7 @@ class Places {
      * @throws VKApiException in case of API error
      *
      */
-    public function getTypes(string $access_token, array $params = array()) {
-        return $this->request->post('places.getTypes', $access_token, $params);
+    public function getTypes(array $params = array()) {
+        return $this->http->post('places.getTypes', $params);
     }
 }

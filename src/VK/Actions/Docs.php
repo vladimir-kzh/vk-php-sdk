@@ -2,7 +2,7 @@
 
 namespace VK\Actions;
 
-use VK\Client\VKApiRequest;
+use VK\Client\VKHttpClient;
 use VK\Exceptions\VKApiException;
 use VK\Exceptions\Api\VKApiParamDocAccessException;
 use VK\Exceptions\Api\VKApiParamDocDeleteAccessException;
@@ -14,22 +14,22 @@ use VK\Exceptions\VKClientException;
 class Docs {
 
     /**
-     * @var VKApiRequest
+     * @var VKHttpClient
      */
-    private $request;
+    private $http;
 
     /**
      * Docs constructor.
-     * @param VKApiRequest $request
+     * @param VKHttpClient $http
      */
-    public function __construct(VKApiRequest $request) {
-        $this->request = $request;
+    public function __construct(VKHttpClient $http) {
+        $this->http = $http;
     }
 
     /**
      * Returns detailed information about user or community documents.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer count: Number of documents to return. By default, all documents.
      *      - integer offset: Offset needed to return a specific subset of documents.
@@ -41,14 +41,14 @@ class Docs {
      * @throws VKApiException in case of API error
      *
      */
-    public function get(string $access_token, array $params = array()) {
-        return $this->request->post('docs.get', $access_token, $params);
+    public function get(array $params = array()) {
+        return $this->http->post('docs.get', $params);
     }
 
     /**
      * Returns information about documents by their IDs.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - array docs: Document IDs. Example: , "66748_91488,66748_91455",
      *
@@ -57,14 +57,14 @@ class Docs {
      * @throws VKApiException in case of API error
      *
      */
-    public function getById(string $access_token, array $params = array()) {
-        return $this->request->post('docs.getById', $access_token, $params);
+    public function getById(array $params = array()) {
+        return $this->http->post('docs.getById', $params);
     }
 
     /**
      * Returns the server address for document upload.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer group_id: Community ID (if the document will be uploaded to the community).
      *
@@ -73,14 +73,14 @@ class Docs {
      * @throws VKApiException in case of API error
      *
      */
-    public function getUploadServer(string $access_token, array $params = array()) {
-        return $this->request->post('docs.getUploadServer', $access_token, $params);
+    public function getUploadServer(array $params = array()) {
+        return $this->http->post('docs.getUploadServer', $params);
     }
 
     /**
      * Returns the server address for document upload onto a user's or community's wall.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer group_id: Community ID (if the document will be uploaded to the community).
      *
@@ -89,14 +89,14 @@ class Docs {
      * @throws VKApiException in case of API error
      *
      */
-    public function getWallUploadServer(string $access_token, array $params = array()) {
-        return $this->request->post('docs.getWallUploadServer', $access_token, $params);
+    public function getWallUploadServer(array $params = array()) {
+        return $this->http->post('docs.getWallUploadServer', $params);
     }
 
     /**
      * Saves a document after [vk.com/dev/upload_files_2|uploading it to a server].
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - string file: This parameter is returned when the file is [vk.com/dev/upload_files_2|uploaded to the
      *        server].
@@ -109,14 +109,14 @@ class Docs {
      * @throws VKApiSaveFileException Couldn't save file
      *
      */
-    public function save(string $access_token, array $params = array()) {
-        return $this->request->post('docs.save', $access_token, $params);
+    public function save(array $params = array()) {
+        return $this->http->post('docs.save', $params);
     }
 
     /**
      * Deletes a user or community document.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: ID of the user or community that owns the document. Use a negative value to
      *        designate a community ID.
@@ -129,14 +129,14 @@ class Docs {
      * @throws VKApiParamDocIdException Invalid document id
      *
      */
-    public function delete(string $access_token, array $params = array()) {
-        return $this->request->post('docs.delete', $access_token, $params);
+    public function delete(array $params = array()) {
+        return $this->http->post('docs.delete', $params);
     }
 
     /**
      * Copies a document to a user's or community's document list.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: ID of the user or community that owns the document. Use a negative value to
      *        designate a community ID.
@@ -149,14 +149,14 @@ class Docs {
      * @throws VKApiException in case of API error
      *
      */
-    public function add(string $access_token, array $params = array()) {
-        return $this->request->post('docs.add', $access_token, $params);
+    public function add(array $params = array()) {
+        return $this->http->post('docs.add', $params);
     }
 
     /**
      * Returns documents types available for current user.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: ID of the user or community that owns the documents. Use a negative value to
      *        designate a community ID.
@@ -166,14 +166,14 @@ class Docs {
      * @throws VKApiException in case of API error
      *
      */
-    public function getTypes(string $access_token, array $params = array()) {
-        return $this->request->post('docs.getTypes', $access_token, $params);
+    public function getTypes(array $params = array()) {
+        return $this->http->post('docs.getTypes', $params);
     }
 
     /**
      * Returns a list of documents matching the search criteria.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - string q: Search query string.
      *      - boolean search_own:
@@ -185,14 +185,14 @@ class Docs {
      * @throws VKApiException in case of API error
      *
      */
-    public function search(string $access_token, array $params = array()) {
-        return $this->request->post('docs.search', $access_token, $params);
+    public function search(array $params = array()) {
+        return $this->http->post('docs.search', $params);
     }
 
     /**
      * Edits a document.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: User ID or community ID. Use a negative value to designate a community ID.
      *      - integer doc_id: Document ID.
@@ -207,7 +207,7 @@ class Docs {
      * @throws VKApiParamDocTitleException Invalid document title
      *
      */
-    public function edit(string $access_token, array $params = array()) {
-        return $this->request->post('docs.edit', $access_token, $params);
+    public function edit(array $params = array()) {
+        return $this->http->post('docs.edit', $params);
     }
 }

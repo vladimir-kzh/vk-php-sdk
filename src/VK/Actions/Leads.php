@@ -3,7 +3,7 @@
 namespace VK\Actions;
 
 use VK\Actions\Enums\LeadsGetUsersStatus;
-use VK\Client\VKApiRequest;
+use VK\Client\VKHttpClient;
 use VK\Exceptions\Api\VKApiActionFailedException;
 use VK\Exceptions\VKApiException;
 use VK\Exceptions\Api\VKApiLimitsException;
@@ -14,22 +14,22 @@ use VK\Exceptions\VKClientException;
 class Leads {
 
     /**
-     * @var VKApiRequest
+     * @var VKHttpClient
      */
-    private $request;
+    private $http;
 
     /**
      * Leads constructor.
-     * @param VKApiRequest $request
+     * @param VKHttpClient $http
      */
-    public function __construct(VKApiRequest $request) {
-        $this->request = $request;
+    public function __construct(VKHttpClient $http) {
+        $this->http = $http;
     }
 
     /**
      * Completes the lead started by user.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - string vk_sid: Session obtained as GET parameter when session started.
      *      - string secret: Secret key from the lead testing interface.
@@ -42,14 +42,14 @@ class Leads {
      * @throws VKApiVotesException Not enough votes
      *
      */
-    public function complete(string $access_token, array $params = array()) {
-        return $this->request->post('leads.complete', $access_token, $params);
+    public function complete(array $params = array()) {
+        return $this->http->post('leads.complete', $params);
     }
 
     /**
      * Creates new session for the user passing the offer.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer lead_id: Lead ID.
      *      - string secret: Secret key from the lead testing interface.
@@ -60,14 +60,14 @@ class Leads {
      * @throws VKApiLimitsException Out of limits
      *
      */
-    public function start(string $access_token, array $params = array()) {
-        return $this->request->post('leads.start', $access_token, $params);
+    public function start(array $params = array()) {
+        return $this->http->post('leads.start', $params);
     }
 
     /**
      * Returns lead stats data.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer lead_id: Lead ID.
      *      - string secret: Secret key obtained from the lead testing interface.
@@ -79,14 +79,14 @@ class Leads {
      * @throws VKApiException in case of API error
      *
      */
-    public function getStats(string $access_token, array $params = array()) {
-        return $this->request->post('leads.getStats', $access_token, $params);
+    public function getStats(array $params = array()) {
+        return $this->http->post('leads.getStats', $params);
     }
 
     /**
      * Returns a list of last user actions for the offer.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer offer_id: Offer ID.
      *      - string secret: Secret key obtained in the lead testing interface.
@@ -103,14 +103,14 @@ class Leads {
      * @throws VKApiException in case of API error
      *
      */
-    public function getUsers(string $access_token, array $params = array()) {
-        return $this->request->post('leads.getUsers', $access_token, $params);
+    public function getUsers(array $params = array()) {
+        return $this->http->post('leads.getUsers', $params);
     }
 
     /**
      * Checks if the user can start the lead.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer lead_id: Lead ID.
      *      - integer test_result: Value to be return in 'result' field when test mode is used.
@@ -123,14 +123,14 @@ class Leads {
      * @throws VKApiActionFailedException Unable to process action
      *
      */
-    public function checkUser(string $access_token, array $params = array()) {
-        return $this->request->post('leads.checkUser', $access_token, $params);
+    public function checkUser(array $params = array()) {
+        return $this->http->post('leads.checkUser', $params);
     }
 
     /**
      * Counts the metric event.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - string data: Metric data obtained in the lead interface.
      *
@@ -140,7 +140,7 @@ class Leads {
      * @throws VKApiParamException One of the parameters specified was missing or invalid
      *
      */
-    public function metricHit(string $access_token, array $params = array()) {
-        return $this->request->post('leads.metricHit', $access_token, $params);
+    public function metricHit(array $params = array()) {
+        return $this->http->post('leads.metricHit', $params);
     }
 }

@@ -3,7 +3,7 @@
 namespace VK\Actions;
 
 use VK\Actions\Enums\OrdersChangeStateAction;
-use VK\Client\VKApiRequest;
+use VK\Client\VKHttpClient;
 use VK\Exceptions\Api\VKApiActionFailedException;
 use VK\Exceptions\VKApiException;
 use VK\Exceptions\Api\VKApiLimitsException;
@@ -13,22 +13,22 @@ use VK\Exceptions\VKClientException;
 class Orders {
 
     /**
-     * @var VKApiRequest
+     * @var VKHttpClient
      */
-    private $request;
+    private $http;
 
     /**
      * Orders constructor.
-     * @param VKApiRequest $request
+     * @param VKHttpClient $http
      */
-    public function __construct(VKApiRequest $request) {
-        $this->request = $request;
+    public function __construct(VKHttpClient $http) {
+        $this->http = $http;
     }
 
     /**
      * Returns a list of orders.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer count: number of returned orders.
      *      - boolean test_mode: if this parameter is set to 1, this method returns a list of test mode orders. By
@@ -39,14 +39,14 @@ class Orders {
      * @throws VKApiException in case of API error
      *
      */
-    public function get(string $access_token, array $params = array()) {
-        return $this->request->post('orders.get', $access_token, $params);
+    public function get(array $params = array()) {
+        return $this->http->post('orders.get', $params);
     }
 
     /**
      * Returns information about orders by their IDs.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer order_id: order ID.
      *      - array order_ids: order IDs (when information about several orders is requested).
@@ -58,14 +58,14 @@ class Orders {
      * @throws VKApiException in case of API error
      *
      */
-    public function getById(string $access_token, array $params = array()) {
-        return $this->request->post('orders.getById', $access_token, $params);
+    public function getById(array $params = array()) {
+        return $this->http->post('orders.getById', $params);
     }
 
     /**
      * Changes order status.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer order_id: order ID.
      *      - OrdersChangeStateAction action: action to be done with the order. Available actions: *cancel — to
@@ -83,14 +83,14 @@ class Orders {
      * @throws VKApiActionFailedException Unable to process action
      *
      */
-    public function changeState(string $access_token, array $params = array()) {
-        return $this->request->post('orders.changeState', $access_token, $params);
+    public function changeState(array $params = array()) {
+        return $this->http->post('orders.changeState', $params);
     }
 
     /**
      *
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer user_id:
      *      - array votes:
@@ -101,7 +101,7 @@ class Orders {
      * @throws VKApiParamException One of the parameters specified was missing or invalid
      *
      */
-    public function getAmount(string $access_token, array $params = array()) {
-        return $this->request->post('orders.getAmount', $access_token, $params);
+    public function getAmount(array $params = array()) {
+        return $this->http->post('orders.getAmount', $params);
     }
 }

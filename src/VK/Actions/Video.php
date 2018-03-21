@@ -6,7 +6,7 @@ use VK\Actions\Enums\VideoGetCommentsSort;
 use VK\Actions\Enums\VideoReportCommentReason;
 use VK\Actions\Enums\VideoReportReason;
 use VK\Actions\Enums\VideoSearchSort;
-use VK\Client\VKApiRequest;
+use VK\Client\VKHttpClient;
 use VK\Exceptions\Api\VKApiAccessVideoException;
 use VK\Exceptions\Api\VKApiAlbumsLimitException;
 use VK\Exceptions\VKApiException;
@@ -19,22 +19,22 @@ use VK\Exceptions\VKClientException;
 class Video {
 
     /**
-     * @var VKApiRequest
+     * @var VKHttpClient
      */
-    private $request;
+    private $http;
 
     /**
      * Video constructor.
-     * @param VKApiRequest $request
+     * @param VKHttpClient $http
      */
-    public function __construct(VKApiRequest $request) {
-        $this->request = $request;
+    public function __construct(VKHttpClient $http) {
+        $this->http = $http;
     }
 
     /**
      * Returns detailed information about videos.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: ID of the user or community that owns the video(s).
      *      - array videos: Video IDs, in the following format: "<owner_id>_<media_id>,<owner_id>_<media_id>", Use
@@ -50,14 +50,14 @@ class Video {
      * @throws VKApiAccessVideoException Access denied
      *
      */
-    public function get(string $access_token, array $params = array()) {
-        return $this->request->post('video.get', $access_token, $params);
+    public function get(array $params = array()) {
+        return $this->http->post('video.get', $params);
     }
 
     /**
      * Edits information about a video on a user or community page.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: ID of the user or community that owns the video.
      *      - integer video_id: Video ID.
@@ -75,14 +75,14 @@ class Video {
      * @throws VKApiException in case of API error
      *
      */
-    public function edit(string $access_token, array $params = array()) {
-        return $this->request->post('video.edit', $access_token, $params);
+    public function edit(array $params = array()) {
+        return $this->http->post('video.edit', $params);
     }
 
     /**
      * Adds a video to a user or community page.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer target_id: identifier of a user or community to add a video to. Use a negative value to
      *        designate a community ID.
@@ -97,14 +97,14 @@ class Video {
      * @throws VKApiVideoAlreadyAddedException This video is already added
      *
      */
-    public function add(string $access_token, array $params = array()) {
-        return $this->request->post('video.add', $access_token, $params);
+    public function add(array $params = array()) {
+        return $this->http->post('video.add', $params);
     }
 
     /**
      * Returns a server address (required for upload) and video data.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - string name: Name of the video.
      *      - string description: Description of the video.
@@ -130,14 +130,14 @@ class Video {
      * @throws VKApiWallAdsPublishedException Advertisement post was recently added
      *
      */
-    public function save(string $access_token, array $params = array()) {
-        return $this->request->post('video.save', $access_token, $params);
+    public function save(array $params = array()) {
+        return $this->http->post('video.save', $params);
     }
 
     /**
      * Deletes a video from a user or community page.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer video_id: Video ID.
      *      - integer owner_id: ID of the user or community that owns the video.
@@ -148,14 +148,14 @@ class Video {
      * @throws VKApiException in case of API error
      *
      */
-    public function delete(string $access_token, array $params = array()) {
-        return $this->request->post('video.delete', $access_token, $params);
+    public function delete(array $params = array()) {
+        return $this->http->post('video.delete', $params);
     }
 
     /**
      * Restores a previously deleted video.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer video_id: Video ID.
      *      - integer owner_id: ID of the user or community that owns the video.
@@ -165,14 +165,14 @@ class Video {
      * @throws VKApiException in case of API error
      *
      */
-    public function restore(string $access_token, array $params = array()) {
-        return $this->request->post('video.restore', $access_token, $params);
+    public function restore(array $params = array()) {
+        return $this->http->post('video.restore', $params);
     }
 
     /**
      * Returns a list of videos under the set search criterion.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - string q: Search query string (e.g., 'The Beatles').
      *      - VideoSearchSort sort: Sort order: '1' — by duration, '2' — by relevance, '0' — by date added
@@ -193,14 +193,14 @@ class Video {
      * @throws VKApiException in case of API error
      *
      */
-    public function search(string $access_token, array $params = array()) {
-        return $this->request->post('video.search', $access_token, $params);
+    public function search(array $params = array()) {
+        return $this->http->post('video.search', $params);
     }
 
     /**
      * Returns list of videos in which the user is tagged.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer user_id: User ID.
      *      - integer offset: Offset needed to return a specific subset of videos.
@@ -212,14 +212,14 @@ class Video {
      * @throws VKApiException in case of API error
      *
      */
-    public function getUserVideos(string $access_token, array $params = array()) {
-        return $this->request->post('video.getUserVideos', $access_token, $params);
+    public function getUserVideos(array $params = array()) {
+        return $this->http->post('video.getUserVideos', $params);
     }
 
     /**
      * Returns a list of video albums owned by a user or community.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: ID of the user or community that owns the video album(s).
      *      - integer offset: Offset needed to return a specific subset of video albums.
@@ -233,14 +233,14 @@ class Video {
      * @throws VKApiAccessVideoException Access denied
      *
      */
-    public function getAlbums(string $access_token, array $params = array()) {
-        return $this->request->post('video.getAlbums', $access_token, $params);
+    public function getAlbums(array $params = array()) {
+        return $this->http->post('video.getAlbums', $params);
     }
 
     /**
      * Returns video album info
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: identifier of a user or community to add a video to. Use a negative value to
      *        designate a community ID.
@@ -252,14 +252,14 @@ class Video {
      * @throws VKApiAccessVideoException Access denied
      *
      */
-    public function getAlbumById(string $access_token, array $params = array()) {
-        return $this->request->post('video.getAlbumById', $access_token, $params);
+    public function getAlbumById(array $params = array()) {
+        return $this->http->post('video.getAlbumById', $params);
     }
 
     /**
      * Creates an empty album for videos.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer group_id: Community ID (if the album will be created in a community).
      *      - string title: Album title.
@@ -273,14 +273,14 @@ class Video {
      * @throws VKApiAlbumsLimitException Albums number limit is reached
      *
      */
-    public function addAlbum(string $access_token, array $params = array()) {
-        return $this->request->post('video.addAlbum', $access_token, $params);
+    public function addAlbum(array $params = array()) {
+        return $this->http->post('video.addAlbum', $params);
     }
 
     /**
      * Edits the title of a video album.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer group_id: Community ID (if the album edited is owned by a community).
      *      - integer album_id: Album ID.
@@ -294,14 +294,14 @@ class Video {
      * @throws VKApiAccessVideoException Access denied
      *
      */
-    public function editAlbum(string $access_token, array $params = array()) {
-        return $this->request->post('video.editAlbum', $access_token, $params);
+    public function editAlbum(array $params = array()) {
+        return $this->http->post('video.editAlbum', $params);
     }
 
     /**
      * Deletes a video album.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer group_id: Community ID (if the album is owned by a community).
      *      - integer album_id: Album ID.
@@ -312,14 +312,14 @@ class Video {
      * @throws VKApiAccessVideoException Access denied
      *
      */
-    public function deleteAlbum(string $access_token, array $params = array()) {
-        return $this->request->post('video.deleteAlbum', $access_token, $params);
+    public function deleteAlbum(array $params = array()) {
+        return $this->http->post('video.deleteAlbum', $params);
     }
 
     /**
      * Reorders the album in the list of user video albums.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: ID of the user or community that owns the albums..
      *      - integer album_id: Album ID.
@@ -332,14 +332,14 @@ class Video {
      * @throws VKApiAccessVideoException Access denied
      *
      */
-    public function reorderAlbums(string $access_token, array $params = array()) {
-        return $this->request->post('video.reorderAlbums', $access_token, $params);
+    public function reorderAlbums(array $params = array()) {
+        return $this->http->post('video.reorderAlbums', $params);
     }
 
     /**
      * Reorders the video in the video album.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer target_id: ID of the user or community that owns the album with videos.
      *      - integer album_id: ID of the video album.
@@ -358,14 +358,14 @@ class Video {
      * @throws VKApiAccessVideoException Access denied
      *
      */
-    public function reorderVideos(string $access_token, array $params = array()) {
-        return $this->request->post('video.reorderVideos', $access_token, $params);
+    public function reorderVideos(array $params = array()) {
+        return $this->http->post('video.reorderVideos', $params);
     }
 
     /**
      *
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer target_id:
      *      - integer album_id:
@@ -380,14 +380,14 @@ class Video {
      * @throws VKApiVideoAlreadyAddedException This video is already added
      *
      */
-    public function addToAlbum(string $access_token, array $params = array()) {
-        return $this->request->post('video.addToAlbum', $access_token, $params);
+    public function addToAlbum(array $params = array()) {
+        return $this->http->post('video.addToAlbum', $params);
     }
 
     /**
      *
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer target_id:
      *      - integer album_id:
@@ -401,14 +401,14 @@ class Video {
      * @throws VKApiAccessVideoException Access denied
      *
      */
-    public function removeFromAlbum(string $access_token, array $params = array()) {
-        return $this->request->post('video.removeFromAlbum', $access_token, $params);
+    public function removeFromAlbum(array $params = array()) {
+        return $this->http->post('video.removeFromAlbum', $params);
     }
 
     /**
      *
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer target_id:
      *      - integer owner_id:
@@ -421,14 +421,14 @@ class Video {
      * @throws VKApiAccessVideoException Access denied
      *
      */
-    public function getAlbumsByVideo(string $access_token, array $params = array()) {
-        return $this->request->post('video.getAlbumsByVideo', $access_token, $params);
+    public function getAlbumsByVideo(array $params = array()) {
+        return $this->http->post('video.getAlbumsByVideo', $params);
     }
 
     /**
      * Returns a list of comments on a video.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: ID of the user or community that owns the video.
      *      - integer video_id: Video ID.
@@ -447,14 +447,14 @@ class Video {
      * @throws VKApiVideoCommentsClosedException Comments for this video are closed
      *
      */
-    public function getComments(string $access_token, array $params = array()) {
-        return $this->request->post('video.getComments', $access_token, $params);
+    public function getComments(array $params = array()) {
+        return $this->http->post('video.getComments', $params);
     }
 
     /**
      * Adds a new comment on a video.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: ID of the user or community that owns the video.
      *      - integer video_id: Video ID.
@@ -473,14 +473,14 @@ class Video {
      * @throws VKApiException in case of API error
      *
      */
-    public function createComment(string $access_token, array $params = array()) {
-        return $this->request->post('video.createComment', $access_token, $params);
+    public function createComment(array $params = array()) {
+        return $this->http->post('video.createComment', $params);
     }
 
     /**
      * Deletes a comment on a video.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: ID of the user or community that owns the video.
      *      - integer comment_id: ID of the comment to be deleted.
@@ -490,14 +490,14 @@ class Video {
      * @throws VKApiException in case of API error
      *
      */
-    public function deleteComment(string $access_token, array $params = array()) {
-        return $this->request->post('video.deleteComment', $access_token, $params);
+    public function deleteComment(array $params = array()) {
+        return $this->http->post('video.deleteComment', $params);
     }
 
     /**
      * Restores a previously deleted comment on a video.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: ID of the user or community that owns the video.
      *      - integer comment_id: ID of the deleted comment.
@@ -507,14 +507,14 @@ class Video {
      * @throws VKApiException in case of API error
      *
      */
-    public function restoreComment(string $access_token, array $params = array()) {
-        return $this->request->post('video.restoreComment', $access_token, $params);
+    public function restoreComment(array $params = array()) {
+        return $this->http->post('video.restoreComment', $params);
     }
 
     /**
      * Edits the text of a comment on a video.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: ID of the user or community that owns the video.
      *      - integer comment_id: Comment ID.
@@ -529,14 +529,14 @@ class Video {
      * @throws VKApiException in case of API error
      *
      */
-    public function editComment(string $access_token, array $params = array()) {
-        return $this->request->post('video.editComment', $access_token, $params);
+    public function editComment(array $params = array()) {
+        return $this->http->post('video.editComment', $params);
     }
 
     /**
      * Returns a list of tags on a video.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: ID of the user or community that owns the video.
      *      - integer video_id: Video ID.
@@ -546,14 +546,14 @@ class Video {
      * @throws VKApiException in case of API error
      *
      */
-    public function getTags(string $access_token, array $params = array()) {
-        return $this->request->post('video.getTags', $access_token, $params);
+    public function getTags(array $params = array()) {
+        return $this->http->post('video.getTags', $params);
     }
 
     /**
      * Adds a tag on a video.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer user_id: ID of the user to be tagged.
      *      - integer owner_id: ID of the user or community that owns the video.
@@ -565,14 +565,14 @@ class Video {
      * @throws VKApiException in case of API error
      *
      */
-    public function putTag(string $access_token, array $params = array()) {
-        return $this->request->post('video.putTag', $access_token, $params);
+    public function putTag(array $params = array()) {
+        return $this->http->post('video.putTag', $params);
     }
 
     /**
      * Removes a tag from a video.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer tag_id: Tag ID.
      *      - integer owner_id: ID of the user or community that owns the video.
@@ -583,14 +583,14 @@ class Video {
      * @throws VKApiException in case of API error
      *
      */
-    public function removeTag(string $access_token, array $params = array()) {
-        return $this->request->post('video.removeTag', $access_token, $params);
+    public function removeTag(array $params = array()) {
+        return $this->http->post('video.removeTag', $params);
     }
 
     /**
      * Returns a list of videos with tags that have not been viewed.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer offset: Offset needed to return a specific subset of videos.
      *      - integer count: Number of videos to return.
@@ -600,14 +600,14 @@ class Video {
      * @throws VKApiException in case of API error
      *
      */
-    public function getNewTags(string $access_token, array $params = array()) {
-        return $this->request->post('video.getNewTags', $access_token, $params);
+    public function getNewTags(array $params = array()) {
+        return $this->http->post('video.getNewTags', $params);
     }
 
     /**
      * Reports (submits a complaint about) a video.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: ID of the user or community that owns the video.
      *      - integer video_id: Video ID.
@@ -622,14 +622,14 @@ class Video {
      * @throws VKApiException in case of API error
      *
      */
-    public function report(string $access_token, array $params = array()) {
-        return $this->request->post('video.report', $access_token, $params);
+    public function report(array $params = array()) {
+        return $this->http->post('video.report', $params);
     }
 
     /**
      * Reports (submits a complaint about) a comment on a video.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: ID of the user or community that owns the video.
      *      - integer comment_id: ID of the comment being reported.
@@ -642,14 +642,14 @@ class Video {
      * @throws VKApiException in case of API error
      *
      */
-    public function reportComment(string $access_token, array $params = array()) {
-        return $this->request->post('video.reportComment', $access_token, $params);
+    public function reportComment(array $params = array()) {
+        return $this->http->post('video.reportComment', $params);
     }
 
     /**
      * Returns video catalog
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer count: number of catalog blocks to return.
      *      - integer items_count: number of videos in each block.
@@ -664,14 +664,14 @@ class Video {
      * @throws VKApiException in case of API error
      *
      */
-    public function getCatalog(string $access_token, array $params = array()) {
-        return $this->request->post('video.getCatalog', $access_token, $params);
+    public function getCatalog(array $params = array()) {
+        return $this->http->post('video.getCatalog', $params);
     }
 
     /**
      * Returns a separate catalog section
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - string section_id: 'id' value returned with a block by the '' method.
      *      - string from: 'next' value returned with a block by the '' method.
@@ -684,14 +684,14 @@ class Video {
      * @throws VKApiException in case of API error
      *
      */
-    public function getCatalogSection(string $access_token, array $params = array()) {
-        return $this->request->post('video.getCatalogSection', $access_token, $params);
+    public function getCatalogSection(array $params = array()) {
+        return $this->http->post('video.getCatalogSection', $params);
     }
 
     /**
      * Hides a video catalog section from a user.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer section_id: 'id' value returned with a block to hide by the '' method.
      *
@@ -700,7 +700,7 @@ class Video {
      * @throws VKApiException in case of API error
      *
      */
-    public function hideCatalogSection(string $access_token, array $params = array()) {
-        return $this->request->post('video.hideCatalogSection', $access_token, $params);
+    public function hideCatalogSection(array $params = array()) {
+        return $this->http->post('video.hideCatalogSection', $params);
     }
 }

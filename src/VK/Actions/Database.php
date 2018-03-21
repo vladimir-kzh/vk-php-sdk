@@ -2,29 +2,29 @@
 
 namespace VK\Actions;
 
-use VK\Client\VKApiRequest;
+use VK\Client\VKHttpClient;
 use VK\Exceptions\VKApiException;
 use VK\Exceptions\VKClientException;
 
 class Database {
 
     /**
-     * @var VKApiRequest
+     * @var VKHttpClient
      */
-    private $request;
+    private $http;
 
     /**
      * Database constructor.
-     * @param VKApiRequest $request
+     * @param VKHttpClient $http
      */
-    public function __construct(VKApiRequest $request) {
-        $this->request = $request;
+    public function __construct(VKHttpClient $http) {
+        $this->http = $http;
     }
 
     /**
      * Returns a list of countries.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - boolean need_all: '1' — to return a full list of all countries, '0' — to return a list of
      *        countries near the current user's country (default).
@@ -37,14 +37,14 @@ class Database {
      * @throws VKApiException in case of API error
      *
      */
-    public function getCountries(string $access_token, array $params = array()) {
-        return $this->request->post('database.getCountries', $access_token, $params);
+    public function getCountries(array $params = array()) {
+        return $this->http->post('database.getCountries', $params);
     }
 
     /**
      * Returns a list of regions.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer country_id: Country ID, received in [vk.com/dev/database.getCountries|database.getCountries]
      *        method.
@@ -57,14 +57,14 @@ class Database {
      * @throws VKApiException in case of API error
      *
      */
-    public function getRegions(string $access_token, array $params = array()) {
-        return $this->request->post('database.getRegions', $access_token, $params);
+    public function getRegions(array $params = array()) {
+        return $this->http->post('database.getRegions', $params);
     }
 
     /**
      * Returns information about streets by their IDs.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - array street_ids: Street IDs.
      *
@@ -73,14 +73,14 @@ class Database {
      * @throws VKApiException in case of API error
      *
      */
-    public function getStreetsById(string $access_token, array $params = array()) {
-        return $this->request->post('database.getStreetsById', $access_token, $params);
+    public function getStreetsById(array $params = array()) {
+        return $this->http->post('database.getStreetsById', $params);
     }
 
     /**
      * Returns information about countries by their IDs.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - array country_ids: Country IDs.
      *
@@ -89,14 +89,14 @@ class Database {
      * @throws VKApiException in case of API error
      *
      */
-    public function getCountriesById(string $access_token, array $params = array()) {
-        return $this->request->post('database.getCountriesById', $access_token, $params);
+    public function getCountriesById(array $params = array()) {
+        return $this->http->post('database.getCountriesById', $params);
     }
 
     /**
      * Returns a list of cities.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer country_id: Country ID.
      *      - integer region_id: Region ID.
@@ -111,14 +111,14 @@ class Database {
      * @throws VKApiException in case of API error
      *
      */
-    public function getCities(string $access_token, array $params = array()) {
-        return $this->request->post('database.getCities', $access_token, $params);
+    public function getCities(array $params = array()) {
+        return $this->http->post('database.getCities', $params);
     }
 
     /**
      * Returns information about cities by their IDs.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - array city_ids: City IDs.
      *
@@ -127,14 +127,14 @@ class Database {
      * @throws VKApiException in case of API error
      *
      */
-    public function getCitiesById(string $access_token, array $params = array()) {
-        return $this->request->post('database.getCitiesById', $access_token, $params);
+    public function getCitiesById(array $params = array()) {
+        return $this->http->post('database.getCitiesById', $params);
     }
 
     /**
      * Returns a list of higher education institutions.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - string q: Search query.
      *      - integer country_id: Country ID.
@@ -147,14 +147,14 @@ class Database {
      * @throws VKApiException in case of API error
      *
      */
-    public function getUniversities(string $access_token, array $params = array()) {
-        return $this->request->post('database.getUniversities', $access_token, $params);
+    public function getUniversities(array $params = array()) {
+        return $this->http->post('database.getUniversities', $params);
     }
 
     /**
      * Returns a list of schools.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - string q: Search query.
      *      - integer city_id: City ID.
@@ -166,14 +166,14 @@ class Database {
      * @throws VKApiException in case of API error
      *
      */
-    public function getSchools(string $access_token, array $params = array()) {
-        return $this->request->post('database.getSchools', $access_token, $params);
+    public function getSchools(array $params = array()) {
+        return $this->http->post('database.getSchools', $params);
     }
 
     /**
      * Returns a list of school classes specified for the country.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer country_id: Country ID.
      *
@@ -182,14 +182,14 @@ class Database {
      * @throws VKApiException in case of API error
      *
      */
-    public function getSchoolClasses(string $access_token, array $params = array()) {
-        return $this->request->post('database.getSchoolClasses', $access_token, $params);
+    public function getSchoolClasses(array $params = array()) {
+        return $this->http->post('database.getSchoolClasses', $params);
     }
 
     /**
      * Returns a list of faculties (i.e., university departments).
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer university_id: University ID.
      *      - integer offset: Offset needed to return a specific subset of faculties.
@@ -200,14 +200,14 @@ class Database {
      * @throws VKApiException in case of API error
      *
      */
-    public function getFaculties(string $access_token, array $params = array()) {
-        return $this->request->post('database.getFaculties', $access_token, $params);
+    public function getFaculties(array $params = array()) {
+        return $this->http->post('database.getFaculties', $params);
     }
 
     /**
      * Returns list of chairs on a specified faculty.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer faculty_id: id of the faculty to get chairs from
      *      - integer offset: offset required to get a certain subset of chairs
@@ -218,7 +218,7 @@ class Database {
      * @throws VKApiException in case of API error
      *
      */
-    public function getChairs(string $access_token, array $params = array()) {
-        return $this->request->post('database.getChairs', $access_token, $params);
+    public function getChairs(array $params = array()) {
+        return $this->http->post('database.getChairs', $params);
     }
 }

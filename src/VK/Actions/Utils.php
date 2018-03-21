@@ -3,29 +3,29 @@
 namespace VK\Actions;
 
 use VK\Actions\Enums\UtilsGetLinkStatsInterval;
-use VK\Client\VKApiRequest;
+use VK\Client\VKHttpClient;
 use VK\Exceptions\VKApiException;
 use VK\Exceptions\VKClientException;
 
 class Utils {
 
     /**
-     * @var VKApiRequest
+     * @var VKHttpClient
      */
-    private $request;
+    private $http;
 
     /**
      * Utils constructor.
-     * @param VKApiRequest $request
+     * @param VKHttpClient $http
      */
-    public function __construct(VKApiRequest $request) {
-        $this->request = $request;
+    public function __construct(VKHttpClient $http) {
+        $this->http = $http;
     }
 
     /**
      * Checks whether a link is blocked in VK.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - string url: Link to check (e.g., 'http://google.com').
      *
@@ -34,14 +34,14 @@ class Utils {
      * @throws VKApiException in case of API error
      *
      */
-    public function checkLink(string $access_token, array $params = array()) {
-        return $this->request->post('utils.checkLink', $access_token, $params);
+    public function checkLink(array $params = array()) {
+        return $this->http->post('utils.checkLink', $params);
     }
 
     /**
      * Deletes shortened link from user's list.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - string key: Link key (characters after vk.cc/).
      *
@@ -50,14 +50,14 @@ class Utils {
      * @throws VKApiException in case of API error
      *
      */
-    public function deleteFromLastShortened(string $access_token, array $params = array()) {
-        return $this->request->post('utils.deleteFromLastShortened', $access_token, $params);
+    public function deleteFromLastShortened(array $params = array()) {
+        return $this->http->post('utils.deleteFromLastShortened', $params);
     }
 
     /**
      * Returns a list of user's shortened links.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer count: Number of links to return.
      *      - integer offset: Offset needed to return a specific subset of links.
@@ -67,14 +67,14 @@ class Utils {
      * @throws VKApiException in case of API error
      *
      */
-    public function getLastShortenedLinks(string $access_token, array $params = array()) {
-        return $this->request->post('utils.getLastShortenedLinks', $access_token, $params);
+    public function getLastShortenedLinks(array $params = array()) {
+        return $this->http->post('utils.getLastShortenedLinks', $params);
     }
 
     /**
      * Returns stats data for shortened link.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - string key: Link key (characters after vk.cc/).
      *      - string access_key: Access key for private link stats.
@@ -89,14 +89,14 @@ class Utils {
      * @throws VKApiException in case of API error
      *
      */
-    public function getLinkStats(string $access_token, array $params = array()) {
-        return $this->request->post('utils.getLinkStats', $access_token, $params);
+    public function getLinkStats(array $params = array()) {
+        return $this->http->post('utils.getLinkStats', $params);
     }
 
     /**
      * Allows to receive a link shortened via vk.cc.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - string url: URL to be shortened.
      *      - boolean private: 1 — private stats, 0 — public stats.
@@ -106,14 +106,14 @@ class Utils {
      * @throws VKApiException in case of API error
      *
      */
-    public function getShortLink(string $access_token, array $params = array()) {
-        return $this->request->post('utils.getShortLink', $access_token, $params);
+    public function getShortLink(array $params = array()) {
+        return $this->http->post('utils.getShortLink', $params);
     }
 
     /**
      * Detects a type of object (e.g., user, community, application) and its ID by screen name.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - string screen_name: Screen name of the user, community (e.g., 'apiclub,' 'andrew', or
      *        'rules_of_war'), or application.
@@ -123,14 +123,14 @@ class Utils {
      * @throws VKApiException in case of API error
      *
      */
-    public function resolveScreenName(string $access_token, array $params = array()) {
-        return $this->request->post('utils.resolveScreenName', $access_token, $params);
+    public function resolveScreenName(array $params = array()) {
+        return $this->http->post('utils.resolveScreenName', $params);
     }
 
     /**
      * Returns the current time of the VK server.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *
      * @return mixed
@@ -138,7 +138,7 @@ class Utils {
      * @throws VKApiException in case of API error
      *
      */
-    public function getServerTime(string $access_token, array $params = array()) {
-        return $this->request->post('utils.getServerTime', $access_token, $params);
+    public function getServerTime(array $params = array()) {
+        return $this->http->post('utils.getServerTime', $params);
     }
 }

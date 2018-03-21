@@ -6,7 +6,7 @@ use VK\Actions\Enums\MessagesGetChatNameCase;
 use VK\Actions\Enums\MessagesGetChatUsersNameCase;
 use VK\Actions\Enums\MessagesGetHistoryAttachmentsMediaType;
 use VK\Actions\Enums\MessagesGetHistoryRev;
-use VK\Client\VKApiRequest;
+use VK\Client\VKHttpClient;
 use VK\Exceptions\VKApiException;
 use VK\Exceptions\Api\VKApiFloodException;
 use VK\Exceptions\Api\VKApiLimitsException;
@@ -22,22 +22,22 @@ use VK\Exceptions\VKClientException;
 class Messages {
 
     /**
-     * @var VKApiRequest
+     * @var VKHttpClient
      */
-    private $request;
+    private $http;
 
     /**
      * Messages constructor.
-     * @param VKApiRequest $request
+     * @param VKHttpClient $http
      */
-    public function __construct(VKApiRequest $request) {
-        $this->request = $request;
+    public function __construct(VKHttpClient $http) {
+        $this->http = $http;
     }
 
     /**
      * Returns a list of the current user's incoming or outgoing private messages.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - boolean out: '1' — to return outgoing messages, '0' — to return incoming messages (default)
      *      - integer offset: Offset needed to return a specific subset of messages.
@@ -57,14 +57,14 @@ class Messages {
      * @throws VKApiException in case of API error
      *
      */
-    public function get(string $access_token, array $params = array()) {
-        return $this->request->post('messages.get', $access_token, $params);
+    public function get(array $params = array()) {
+        return $this->http->post('messages.get', $params);
     }
 
     /**
      * Returns a list of the current user's conversations.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer offset: Offset needed to return a specific subset of conversations.
      *      - integer count: Number of conversations to return.
@@ -81,14 +81,14 @@ class Messages {
      * @throws VKApiException in case of API error
      *
      */
-    public function getDialogs(string $access_token, array $params = array()) {
-        return $this->request->post('messages.getDialogs', $access_token, $params);
+    public function getDialogs(array $params = array()) {
+        return $this->http->post('messages.getDialogs', $params);
     }
 
     /**
      * Returns messages by their IDs.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - array message_ids: Message IDs.
      *
@@ -97,14 +97,14 @@ class Messages {
      * @throws VKApiException in case of API error
      *
      */
-    public function getById(string $access_token, array $params = array()) {
-        return $this->request->post('messages.getById', $access_token, $params);
+    public function getById(array $params = array()) {
+        return $this->http->post('messages.getById', $params);
     }
 
     /**
      * Returns a list of the current user's private messages that match search criteria.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - string q: Search query string.
      *      - integer peer_id: Destination ID. "For user: 'User ID', e.g. '12345'. For chat: '2000000000' +
@@ -121,14 +121,14 @@ class Messages {
      * @throws VKApiException in case of API error
      *
      */
-    public function search(string $access_token, array $params = array()) {
-        return $this->request->post('messages.search', $access_token, $params);
+    public function search(array $params = array()) {
+        return $this->http->post('messages.search', $params);
     }
 
     /**
      * Returns message history for the specified user or group chat.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer offset: Offset needed to return a specific subset of messages.
      *      - integer count: Number of messages to return.
@@ -144,14 +144,14 @@ class Messages {
      * @throws VKApiException in case of API error
      *
      */
-    public function getHistory(string $access_token, array $params = array()) {
-        return $this->request->post('messages.getHistory', $access_token, $params);
+    public function getHistory(array $params = array()) {
+        return $this->http->post('messages.getHistory', $params);
     }
 
     /**
      * Returns media files from the dialog or group chat.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer peer_id: Peer ID. ", For group chat: '2000000000 + chat ID' , , For community: '-community
      *        ID'"
@@ -168,14 +168,14 @@ class Messages {
      * @throws VKApiException in case of API error
      *
      */
-    public function getHistoryAttachments(string $access_token, array $params = array()) {
-        return $this->request->post('messages.getHistoryAttachments', $access_token, $params);
+    public function getHistoryAttachments(array $params = array()) {
+        return $this->http->post('messages.getHistoryAttachments', $params);
     }
 
     /**
      * Sends a message.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer user_id: User ID (by default — current user).
      *      - integer random_id: Unique identifier to avoid resending the message.
@@ -207,14 +207,14 @@ class Messages {
      * @throws VKApiMessagesForwardException Can't forward these messages
      *
      */
-    public function send(string $access_token, array $params = array()) {
-        return $this->request->post('messages.send', $access_token, $params);
+    public function send(array $params = array()) {
+        return $this->http->post('messages.send', $params);
     }
 
     /**
      * Deletes one or more messages.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - array message_ids: Message IDs.
      *      - boolean spam: '1' — to mark message as spam.
@@ -224,14 +224,14 @@ class Messages {
      * @throws VKApiException in case of API error
      *
      */
-    public function delete(string $access_token, array $params = array()) {
-        return $this->request->post('messages.delete', $access_token, $params);
+    public function delete(array $params = array()) {
+        return $this->http->post('messages.delete', $params);
     }
 
     /**
      * Deletes all private messages in a conversation.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - string user_id: User ID. To clear a chat history use 'chat_id'
      *      - integer peer_id: Destination ID. "For user: 'User ID', e.g. '12345'. For chat: '2000000000' +
@@ -245,14 +245,14 @@ class Messages {
      * @throws VKApiException in case of API error
      *
      */
-    public function deleteDialog(string $access_token, array $params = array()) {
-        return $this->request->post('messages.deleteDialog', $access_token, $params);
+    public function deleteDialog(array $params = array()) {
+        return $this->http->post('messages.deleteDialog', $params);
     }
 
     /**
      * Restores a deleted message.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer message_id: ID of a previously-deleted message to restore.
      *
@@ -261,14 +261,14 @@ class Messages {
      * @throws VKApiException in case of API error
      *
      */
-    public function restore(string $access_token, array $params = array()) {
-        return $this->request->post('messages.restore', $access_token, $params);
+    public function restore(array $params = array()) {
+        return $this->http->post('messages.restore', $params);
     }
 
     /**
      * Marks messages as read.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - array message_ids: IDs of messages to mark as read.
      *      - string peer_id: Destination ID. "For user: 'User ID', e.g. '12345'. For chat: '2000000000' +
@@ -280,14 +280,14 @@ class Messages {
      * @throws VKApiException in case of API error
      *
      */
-    public function markAsRead(string $access_token, array $params = array()) {
-        return $this->request->post('messages.markAsRead', $access_token, $params);
+    public function markAsRead(array $params = array()) {
+        return $this->http->post('messages.markAsRead', $params);
     }
 
     /**
      * Marks and unmarks messages as important (starred).
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - array message_ids: IDs of messages to mark as important.
      *      - boolean important: '1' — to add a star (mark as important), '0' — to remove the star
@@ -297,14 +297,14 @@ class Messages {
      * @throws VKApiException in case of API error
      *
      */
-    public function markAsImportant(string $access_token, array $params = array()) {
-        return $this->request->post('messages.markAsImportant', $access_token, $params);
+    public function markAsImportant(array $params = array()) {
+        return $this->http->post('messages.markAsImportant', $params);
     }
 
     /**
      * Marks and unmarks dialogs as important.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - array peer_id: IDs of messages to mark as important.
      *      - boolean important: '1' — to add a star (mark as important), '0' — to remove the star
@@ -314,14 +314,14 @@ class Messages {
      * @throws VKApiException in case of API error
      *
      */
-    public function markAsImportantDialog(string $access_token, array $params = array()) {
-        return $this->request->post('messages.markAsImportantDialog', $access_token, $params);
+    public function markAsImportantDialog(array $params = array()) {
+        return $this->http->post('messages.markAsImportantDialog', $params);
     }
 
     /**
      * Marks and unmarks dialogs as unanswered.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - array peer_id: IDs of messages to mark as important.
      *      - boolean important: '1' — to add a star (mark as important), '0' — to remove the star
@@ -331,14 +331,14 @@ class Messages {
      * @throws VKApiException in case of API error
      *
      */
-    public function markAsUnansweredDialog(string $access_token, array $params = array()) {
-        return $this->request->post('messages.markAsUnansweredDialog', $access_token, $params);
+    public function markAsUnansweredDialog(array $params = array()) {
+        return $this->http->post('messages.markAsUnansweredDialog', $params);
     }
 
     /**
      * Returns data required for connection to a Long Poll server.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer lp_version: Long poll version
      *      - boolean need_pts: '1' — to return the 'pts' field, needed for the
@@ -349,14 +349,14 @@ class Messages {
      * @throws VKApiException in case of API error
      *
      */
-    public function getLongPollServer(string $access_token, array $params = array()) {
-        return $this->request->post('messages.getLongPollServer', $access_token, $params);
+    public function getLongPollServer(array $params = array()) {
+        return $this->http->post('messages.getLongPollServer', $params);
     }
 
     /**
      * Returns updates in user's private messages.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer ts: Last value of the 'ts' parameter returned from the Long Poll server or by using
      *        [vk.com/dev/messages.getLongPollHistory|messages.getLongPollHistory] method.
@@ -378,14 +378,14 @@ class Messages {
      * @throws VKApiException in case of API error
      *
      */
-    public function getLongPollHistory(string $access_token, array $params = array()) {
-        return $this->request->post('messages.getLongPollHistory', $access_token, $params);
+    public function getLongPollHistory(array $params = array()) {
+        return $this->http->post('messages.getLongPollHistory', $params);
     }
 
     /**
      * Returns information about a chat.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer chat_id: Chat ID.
      *      - array chat_ids: Chat IDs.
@@ -400,14 +400,14 @@ class Messages {
      * @throws VKApiException in case of API error
      *
      */
-    public function getChat(string $access_token, array $params = array()) {
-        return $this->request->post('messages.getChat', $access_token, $params);
+    public function getChat(array $params = array()) {
+        return $this->http->post('messages.getChat', $params);
     }
 
     /**
      * Creates a chat with several participants.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - array user_ids: IDs of the users to be added to the chat.
      *      - string title: Chat title.
@@ -418,14 +418,14 @@ class Messages {
      * @throws VKApiFloodException Flood control
      *
      */
-    public function createChat(string $access_token, array $params = array()) {
-        return $this->request->post('messages.createChat', $access_token, $params);
+    public function createChat(array $params = array()) {
+        return $this->http->post('messages.createChat', $params);
     }
 
     /**
      * Edits the title of a chat.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer chat_id: Chat ID.
      *      - string title: New title of the chat.
@@ -435,14 +435,14 @@ class Messages {
      * @throws VKApiException in case of API error
      *
      */
-    public function editChat(string $access_token, array $params = array()) {
-        return $this->request->post('messages.editChat', $access_token, $params);
+    public function editChat(array $params = array()) {
+        return $this->http->post('messages.editChat', $params);
     }
 
     /**
      * Returns a list of IDs of users participating in a chat.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer chat_id: Chat ID.
      *      - array chat_ids: Chat IDs.
@@ -457,14 +457,14 @@ class Messages {
      * @throws VKApiException in case of API error
      *
      */
-    public function getChatUsers(string $access_token, array $params = array()) {
-        return $this->request->post('messages.getChatUsers', $access_token, $params);
+    public function getChatUsers(array $params = array()) {
+        return $this->http->post('messages.getChatUsers', $params);
     }
 
     /**
      * Changes the status of a user as typing in a conversation.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - string user_id: User ID.
      *      - string type: 'typing' — user has started to type.
@@ -476,14 +476,14 @@ class Messages {
      * @throws VKApiException in case of API error
      *
      */
-    public function setActivity(string $access_token, array $params = array()) {
-        return $this->request->post('messages.setActivity', $access_token, $params);
+    public function setActivity(array $params = array()) {
+        return $this->http->post('messages.setActivity', $params);
     }
 
     /**
      * Returns a list of the current user's conversations that match search criteria.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - string q: Search query string.
      *      - integer limit: Maximum number of results.
@@ -494,14 +494,14 @@ class Messages {
      * @throws VKApiException in case of API error
      *
      */
-    public function searchDialogs(string $access_token, array $params = array()) {
-        return $this->request->post('messages.searchDialogs', $access_token, $params);
+    public function searchDialogs(array $params = array()) {
+        return $this->http->post('messages.searchDialogs', $params);
     }
 
     /**
      * Adds a new user to a chat.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer chat_id: Chat ID.
      *      - integer user_id: ID of the user to be added to the chat.
@@ -512,15 +512,15 @@ class Messages {
      * @throws VKApiLimitsException Out of limits
      *
      */
-    public function addChatUser(string $access_token, array $params = array()) {
-        return $this->request->post('messages.addChatUser', $access_token, $params);
+    public function addChatUser(array $params = array()) {
+        return $this->http->post('messages.addChatUser', $params);
     }
 
     /**
      * Allows the current user to leave a chat or, if the current user started the chat, allows the user to remove
      * another user from the chat.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer chat_id: Chat ID.
      *      - string user_id: ID of the user to be removed from the chat.
@@ -530,14 +530,14 @@ class Messages {
      * @throws VKApiException in case of API error
      *
      */
-    public function removeChatUser(string $access_token, array $params = array()) {
-        return $this->request->post('messages.removeChatUser', $access_token, $params);
+    public function removeChatUser(array $params = array()) {
+        return $this->http->post('messages.removeChatUser', $params);
     }
 
     /**
      * Returns a user's current status and date of last activity.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer user_id: User ID.
      *
@@ -546,14 +546,14 @@ class Messages {
      * @throws VKApiException in case of API error
      *
      */
-    public function getLastActivity(string $access_token, array $params = array()) {
-        return $this->request->post('messages.getLastActivity', $access_token, $params);
+    public function getLastActivity(array $params = array()) {
+        return $this->http->post('messages.getLastActivity', $params);
     }
 
     /**
      * Sets a previously-uploaded picture as the cover picture of a chat.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - string file: Upload URL from the 'response' field returned by the
      *        [vk.com/dev/photos.getChatUploadServer|photos.getChatUploadServer] method upon successfully uploading an
@@ -566,14 +566,14 @@ class Messages {
      * @throws VKApiPhotoChangedException Original photo was changed
      *
      */
-    public function setChatPhoto(string $access_token, array $params = array()) {
-        return $this->request->post('messages.setChatPhoto', $access_token, $params);
+    public function setChatPhoto(array $params = array()) {
+        return $this->http->post('messages.setChatPhoto', $params);
     }
 
     /**
      * Deletes a chat's cover picture.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer chat_id: Chat ID.
      *
@@ -582,14 +582,14 @@ class Messages {
      * @throws VKApiException in case of API error
      *
      */
-    public function deleteChatPhoto(string $access_token, array $params = array()) {
-        return $this->request->post('messages.deleteChatPhoto', $access_token, $params);
+    public function deleteChatPhoto(array $params = array()) {
+        return $this->http->post('messages.deleteChatPhoto', $params);
     }
 
     /**
      * Denies sending message from community to the current user.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer group_id: Group ID.
      *
@@ -598,14 +598,14 @@ class Messages {
      * @throws VKApiException in case of API error
      *
      */
-    public function denyMessagesFromGroup(string $access_token, array $params = array()) {
-        return $this->request->post('messages.denyMessagesFromGroup', $access_token, $params);
+    public function denyMessagesFromGroup(array $params = array()) {
+        return $this->http->post('messages.denyMessagesFromGroup', $params);
     }
 
     /**
      * Allows sending messages from community to the current user.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer group_id: Group ID.
      *
@@ -614,14 +614,14 @@ class Messages {
      * @throws VKApiException in case of API error
      *
      */
-    public function allowMessagesFromGroup(string $access_token, array $params = array()) {
-        return $this->request->post('messages.allowMessagesFromGroup', $access_token, $params);
+    public function allowMessagesFromGroup(array $params = array()) {
+        return $this->http->post('messages.allowMessagesFromGroup', $params);
     }
 
     /**
      * Returns information whether sending messages from the community to current user is allowed.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer group_id: Group ID.
      *      - integer user_id: User ID.
@@ -631,7 +631,7 @@ class Messages {
      * @throws VKApiException in case of API error
      *
      */
-    public function isMessagesFromGroupAllowed(string $access_token, array $params = array()) {
-        return $this->request->post('messages.isMessagesFromGroupAllowed', $access_token, $params);
+    public function isMessagesFromGroupAllowed(array $params = array()) {
+        return $this->http->post('messages.isMessagesFromGroupAllowed', $params);
     }
 }

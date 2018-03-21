@@ -6,7 +6,7 @@ use VK\Actions\Enums\NewsfeedGetBannedNameCase;
 use VK\Actions\Enums\NewsfeedIgnoreItemType;
 use VK\Actions\Enums\NewsfeedUnignoreItemType;
 use VK\Actions\Enums\NewsfeedUnsubscribeType;
-use VK\Client\VKApiRequest;
+use VK\Client\VKHttpClient;
 use VK\Exceptions\VKApiException;
 use VK\Exceptions\Api\VKApiTooManyListsException;
 use VK\Exceptions\VKClientException;
@@ -14,22 +14,22 @@ use VK\Exceptions\VKClientException;
 class Newsfeed {
 
     /**
-     * @var VKApiRequest
+     * @var VKHttpClient
      */
-    private $request;
+    private $http;
 
     /**
      * Newsfeed constructor.
-     * @param VKApiRequest $request
+     * @param VKHttpClient $http
      */
-    public function __construct(VKApiRequest $request) {
-        $this->request = $request;
+    public function __construct(VKHttpClient $http) {
+        $this->http = $http;
     }
 
     /**
      * Returns data required to show newsfeed for the current user.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - array filters: Filters to apply: 'post' — new wall posts, 'photo' — new photos, 'photo_tag' —
      *        new photo tags, 'wall_photo' — new wall photos, 'friend' — new friends, 'note' — new notes
@@ -56,14 +56,14 @@ class Newsfeed {
      * @throws VKApiException in case of API error
      *
      */
-    public function get(string $access_token, array $params = array()) {
-        return $this->request->post('newsfeed.get', $access_token, $params);
+    public function get(array $params = array()) {
+        return $this->http->post('newsfeed.get', $params);
     }
 
     /**
      * , Returns a list of newsfeeds recommended to the current user.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer start_time: Earliest timestamp (in Unix time) of a news item to return. By default, 24 hours
      *        ago.
@@ -80,14 +80,14 @@ class Newsfeed {
      * @throws VKApiException in case of API error
      *
      */
-    public function getRecommended(string $access_token, array $params = array()) {
-        return $this->request->post('newsfeed.getRecommended', $access_token, $params);
+    public function getRecommended(array $params = array()) {
+        return $this->http->post('newsfeed.getRecommended', $params);
     }
 
     /**
      * Returns a list of comments in the current user's newsfeed.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer count: Number of comments to return. For auto feed, you can use the 'new_offset' parameter
      *        returned by this method.
@@ -110,14 +110,14 @@ class Newsfeed {
      * @throws VKApiException in case of API error
      *
      */
-    public function getComments(string $access_token, array $params = array()) {
-        return $this->request->post('newsfeed.getComments', $access_token, $params);
+    public function getComments(array $params = array()) {
+        return $this->http->post('newsfeed.getComments', $params);
     }
 
     /**
      * Returns a list of posts on user walls in which the current user is mentioned.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer owner_id: Owner ID.
      *      - integer start_time: Earliest timestamp (in Unix time) of a post to return. By default, 24 hours ago.
@@ -130,14 +130,14 @@ class Newsfeed {
      * @throws VKApiException in case of API error
      *
      */
-    public function getMentions(string $access_token, array $params = array()) {
-        return $this->request->post('newsfeed.getMentions', $access_token, $params);
+    public function getMentions(array $params = array()) {
+        return $this->http->post('newsfeed.getMentions', $params);
     }
 
     /**
      * Returns a list of users and communities banned from the current user's newsfeed.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - boolean extended: '1' — return extra information about users and communities
      *      - array fields: Profile fields to return.
@@ -151,14 +151,14 @@ class Newsfeed {
      * @throws VKApiException in case of API error
      *
      */
-    public function getBanned(string $access_token, array $params = array()) {
-        return $this->request->post('newsfeed.getBanned', $access_token, $params);
+    public function getBanned(array $params = array()) {
+        return $this->http->post('newsfeed.getBanned', $params);
     }
 
     /**
      * Prevents news from specified users and communities from appearing in the current user's newsfeed.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - array user_ids:
      *      - array group_ids:
@@ -168,14 +168,14 @@ class Newsfeed {
      * @throws VKApiException in case of API error
      *
      */
-    public function addBan(string $access_token, array $params = array()) {
-        return $this->request->post('newsfeed.addBan', $access_token, $params);
+    public function addBan(array $params = array()) {
+        return $this->http->post('newsfeed.addBan', $params);
     }
 
     /**
      * Allows news from previously banned users and communities to be shown in the current user's newsfeed.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - array user_ids:
      *      - array group_ids:
@@ -185,14 +185,14 @@ class Newsfeed {
      * @throws VKApiException in case of API error
      *
      */
-    public function deleteBan(string $access_token, array $params = array()) {
-        return $this->request->post('newsfeed.deleteBan', $access_token, $params);
+    public function deleteBan(array $params = array()) {
+        return $this->http->post('newsfeed.deleteBan', $params);
     }
 
     /**
      * Hides an item from the newsfeed.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - NewsfeedIgnoreItemType type: Item type. Possible values: *'wall' – post on the wall,, *'tag' –
      *        tag on a photo,, *'profilephoto' – profile photo,, *'video' – video,, *'audio' – audio.
@@ -206,14 +206,14 @@ class Newsfeed {
      * @throws VKApiException in case of API error
      *
      */
-    public function ignoreItem(string $access_token, array $params = array()) {
-        return $this->request->post('newsfeed.ignoreItem', $access_token, $params);
+    public function ignoreItem(array $params = array()) {
+        return $this->http->post('newsfeed.ignoreItem', $params);
     }
 
     /**
      * Returns a hidden item to the newsfeed.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - NewsfeedUnignoreItemType type: Item type. Possible values: *'wall' – post on the wall,, *'tag' –
      *        tag on a photo,, *'profilephoto' – profile photo,, *'video' – video,, *'audio' – audio.
@@ -227,14 +227,14 @@ class Newsfeed {
      * @throws VKApiException in case of API error
      *
      */
-    public function unignoreItem(string $access_token, array $params = array()) {
-        return $this->request->post('newsfeed.unignoreItem', $access_token, $params);
+    public function unignoreItem(array $params = array()) {
+        return $this->http->post('newsfeed.unignoreItem', $params);
     }
 
     /**
      * Returns search results by statuses.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - string q: Search query string (e.g., 'New Year').
      *      - boolean extended: '1' — to return additional information about the user or community that placed
@@ -255,14 +255,14 @@ class Newsfeed {
      * @throws VKApiException in case of API error
      *
      */
-    public function search(string $access_token, array $params = array()) {
-        return $this->request->post('newsfeed.search', $access_token, $params);
+    public function search(array $params = array()) {
+        return $this->http->post('newsfeed.search', $params);
     }
 
     /**
      * Returns a list of newsfeeds followed by the current user.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - array list_ids: numeric list identifiers.
      *      - boolean extended: Return additional list info
@@ -272,14 +272,14 @@ class Newsfeed {
      * @throws VKApiException in case of API error
      *
      */
-    public function getLists(string $access_token, array $params = array()) {
-        return $this->request->post('newsfeed.getLists', $access_token, $params);
+    public function getLists(array $params = array()) {
+        return $this->http->post('newsfeed.getLists', $params);
     }
 
     /**
      * Creates and edits user newsfeed lists
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer list_id: numeric list identifier (if not sent, will be set automatically).
      *      - string title: list name.
@@ -293,14 +293,14 @@ class Newsfeed {
      * @throws VKApiTooManyListsException Too many feed lists
      *
      */
-    public function saveList(string $access_token, array $params = array()) {
-        return $this->request->post('newsfeed.saveList', $access_token, $params);
+    public function saveList(array $params = array()) {
+        return $this->http->post('newsfeed.saveList', $params);
     }
 
     /**
      *
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer list_id:
      *
@@ -309,14 +309,14 @@ class Newsfeed {
      * @throws VKApiException in case of API error
      *
      */
-    public function deleteList(string $access_token, array $params = array()) {
-        return $this->request->post('newsfeed.deleteList', $access_token, $params);
+    public function deleteList(array $params = array()) {
+        return $this->http->post('newsfeed.deleteList', $params);
     }
 
     /**
      * Unsubscribes the current user from specified newsfeeds.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - NewsfeedUnsubscribeType type: Type of object from which to unsubscribe: 'note' — note, 'photo' —
      *        photo, 'post' — post on user wall or community wall, 'topic' — topic, 'video' — video
@@ -329,14 +329,14 @@ class Newsfeed {
      * @throws VKApiException in case of API error
      *
      */
-    public function unsubscribe(string $access_token, array $params = array()) {
-        return $this->request->post('newsfeed.unsubscribe', $access_token, $params);
+    public function unsubscribe(array $params = array()) {
+        return $this->http->post('newsfeed.unsubscribe', $params);
     }
 
     /**
      * Returns communities and users that current user is suggested to follow.
      *
-     * @param $access_token string
+     *
      * @param $params array
      *      - integer offset: offset required to choose a particular subset of communities or users.
      *      - integer count: amount of communities or users to return.
@@ -349,7 +349,7 @@ class Newsfeed {
      * @throws VKApiException in case of API error
      *
      */
-    public function getSuggestedSources(string $access_token, array $params = array()) {
-        return $this->request->post('newsfeed.getSuggestedSources', $access_token, $params);
+    public function getSuggestedSources(array $params = array()) {
+        return $this->http->post('newsfeed.getSuggestedSources', $params);
     }
 }
