@@ -2,11 +2,10 @@
 
 namespace VK\OAuth;
 
+use Http\Client\Exception\TransferException;
+use VK\Client\VKHttpClient;
 use VK\Exceptions\VKClientException;
 use VK\Exceptions\VKOAuthException;
-use VK\TransportClient\Curl\CurlHttpClient;
-use VK\TransportClient\TransportClientResponse;
-use VK\TransportClient\TransportRequestException;
 
 class VKOAuth {
     protected const VERSION = '5.69';
@@ -23,9 +22,6 @@ class VKOAuth {
     private const PARAM_CODE = 'code';
     private const PARAM_REVOKE = 'revoke';
 
-    private const RESPONSE_KEY_ERROR = 'error';
-    private const RESPONSE_KEY_ERROR_DESCRIPTION = 'error_description';
-
     protected const HOST = 'https://oauth.vk.com';
     private const ENDPOINT_AUTHORIZE = '/authorize';
     private const ENDPOINT_ACCESS_TOKEN = '/access_token';
@@ -34,9 +30,9 @@ class VKOAuth {
     protected const HTTP_STATUS_CODE_OK = 200;
 
     /**
-     * @var CurlHttpClient
+     * @var VKHttpClient
      */
-    private $http_client;
+    private $vkHttpClient;
 
     /**
      * @var string
@@ -51,10 +47,11 @@ class VKOAuth {
     /**
      * VKOAuth constructor.
      *
+     * @param VKHttpClient $vkHttpClient
      * @param string $version
      */
-    public function __construct(string $version = self::VERSION) {
-        $this->http_client = new CurlHttpClient(static::CONNECTION_TIMEOUT);
+    public function __construct(VKHttpClient $vkHttpClient, string $version = self::VERSION) {
+        $this->vkHttpClient = $vkHttpClient;
         $this->version = $version;
         $this->host = static::HOST;
     }
@@ -122,62 +119,14 @@ class VKOAuth {
         );
 
         try {
-            $response = $this->http_client->get($this->host . static::ENDPOINT_ACCESS_TOKEN, $params);
-        } catch (TransportRequestException $e) {
+            $response = $this->vkHttpClient->get($this->host . static::ENDPOINT_ACCESS_TOKEN, $params);
+        } catch (VKClientException $e) {
+            throw new VKOAuthException("OAuth error. {$e->getMessage()}");
+        } catch (TransferException $e) {
             throw new VKClientException($e);
         }
 
-        return $this->checkOAuthResponse($response);
+        return $response;
     }
 
-    /**
-     * Decodes the authorization response and checks its status code and whether it has an error.
-     *
-     * @param TransportClientResponse $response
-     *
-     * @return mixed
-     *
-     * @throws VKClientException
-     * @throws VKOAuthException
-     */
-    protected function checkOAuthResponse(TransportClientResponse $response) {
-        $this->checkHttpStatus($response);
-
-        $body = $response->getBody();
-        $decode_body = $this->decodeBody($body);
-
-        if (isset($decode_body[static::RESPONSE_KEY_ERROR])) {
-            throw new VKOAuthException("{$decode_body[static::RESPONSE_KEY_ERROR_DESCRIPTION]}. OAuth error {$decode_body[static::RESPONSE_KEY_ERROR]}");
-        }
-
-        return $decode_body;
-    }
-
-    /**
-     * Decodes body.
-     *
-     * @param string $body
-     *
-     * @return mixed
-     */
-    protected function decodeBody(string $body) {
-        $decoded_body = json_decode($body, true);
-
-        if ($decoded_body === null || !is_array($decoded_body)) {
-            $decoded_body = [];
-        }
-
-        return $decoded_body;
-    }
-
-    /**
-     * @param TransportClientResponse $response
-     *
-     * @throws VKClientException
-     */
-    protected function checkHttpStatus(TransportClientResponse $response) {
-        if ($response->getHttpStatus() != static::HTTP_STATUS_CODE_OK) {
-            throw new VKClientException("Invalid http status: {$response->getHttpStatus()}");
-        }
-    }
 }

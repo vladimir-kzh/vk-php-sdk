@@ -8,6 +8,7 @@ use Http\Message\UriFactory;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;
 use VK\Exceptions\Api\ExceptionMapper;
+use VK\Exceptions\VKApiException;
 use VK\Exceptions\VKClientException;
 use VK\Exceptions\VKLongPollException;
 
@@ -26,6 +27,7 @@ class VKHttpClient
     protected const HTTP_STATUS_CODE_OK = 200;
 
     private const KEY_ERROR = 'error';
+    private const KEY_ERROR_DESCRIPTION = 'error_description';
     private const KEY_RESPONSE = 'response';
     private const KEY_FAILED = 'failed';
 
@@ -143,8 +145,12 @@ class VKHttpClient
 
         if (isset($decodeBody[static::KEY_ERROR])) {
             $error = $decodeBody[static::KEY_ERROR];
-            $api_error = new VKApiError($error);
-            throw ExceptionMapper::parse($api_error);
+            if (is_array($error)) {
+                $api_error = new VKApiError($error);
+                throw ExceptionMapper::parse($api_error);
+            } else {
+                throw new VKClientException("Error {$decodeBody[static::KEY_ERROR]}. {$decodeBody[static::KEY_ERROR_DESCRIPTION]}");
+            }
         } elseif (isset($decodeBody[static::KEY_FAILED])) {
             throw VKLongPollException::make($decodeBody);
         }
